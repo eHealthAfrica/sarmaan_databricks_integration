@@ -20,9 +20,11 @@ pip install -r requirements.txt
 cp .env.example .env   # then fill in PG_PASSWORD, KOBO_TOKEN and the data folders
 ```
 
+Mapping files are in `map/amr/`, `map/pharmacy/` and `map/mortality/`. See [docs/SCHEMA.md](docs/SCHEMA.md) for what each pipeline reads and writes.
+
 AMR order: run household, then mother, then child (child and mother pull codes from the parent sheets).
 
 ## Security
 
 - Credentials come only from environment variables or `.env`, which is git-ignored. On Databricks, use a secret scope.
-- Data files (`*.xlsx`, `*.csv`, `*.pdf`) are git-ignored because they contain personal and health data. Mapping CSVs live in the data folder, not in this repo.
+- Data files (`*.xlsx`, `*.csv`, `*.pdf`) are git-ignored because they contain personal and health data. The only CSVs committed are the column mappings in `map/`, which contain no survey data.

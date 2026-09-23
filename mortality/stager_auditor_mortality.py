@@ -14,9 +14,11 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 # Set MORTALITY_DIR in .env to point at your data folder, or pass the input file as a CLI arg:
 #   python stager_auditor_mortality.py "path\to\kobo_export.xlsx"
 MORTALITY_DIR = os.getenv("MORTALITY_DIR", r"C:\Users\victoria.akinyemi\Desktop\Projects\Mortality\database")
+# mapping CSVs live in the repo's map/ folder
+MAP_DIR = os.getenv("MAP_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "map"))
 DEFAULT_INPUT_FILE = os.path.join(MORTALITY_DIR, "kobo_exports", "mortality_export.xlsx")
 
-MAPPING_DIR = os.path.join(MORTALITY_DIR, "mapping")
+MAPPING_DIR = os.path.join(MAP_DIR, "mortality")
 HOUSEHOLD_MAP_FILE = os.path.join(MAPPING_DIR, "household_map.csv")
 FEMALE_MAP_FILE = os.path.join(MAPPING_DIR, "female_map.csv")
 PREGNANCY_MAP_FILE = os.path.join(MAPPING_DIR, "pregnancy_map.csv")

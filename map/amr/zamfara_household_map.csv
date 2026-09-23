@@ -1,0 +1,311 @@
+﻿kobo_name,db_name,action
+,id,keep
+start,start_time,keep
+end,end_time,keep
+username,enumerator_name,keep
+phonenumber,enumerator_phone_number,keep
+Q1. Household head agrees to be interviewed,household_head_consent,keep
+Date of Consent,date_of_consent,keep
+Was there a witness present?,witness,keep
+witness_name_proper,witness_name,keep
+Start time,start_timme,keep
+state_name,state,keep
+Confirm your LGA,lga,keep
+Confirm your ward,ward,keep
+Confirm your community,community,keep
+,household_no_category,keep
+name_parent_proper,household_consent_name,keep
+Choose the settlement type,settlement_type,keep
+Q8. Language of communication,language_communication,keep
+Kindly input your language of communication not on the list above,other_language_communication,keep
+_Q9. GPS coordinates (capture from device)_latitude,latitude,keep
+_Q9. GPS coordinates (capture from device)_longitude,longitude,keep
+Q10. Cycle,cycle,keep
+Q6. Household number,household_number,keep
+unique_code,household_code,keep
+,household_status,keep
+Q1. Are you the head of the household?,head_household,keep
+household_headname_proper,household_name,keep
+Q3. Gender of the head of the household?,gender_head_household,keep
+Q4. Age as at last birthday of head of the Household,household_age,keep
+name_questionnaire_proper,related_to_head_household_name,keep
+Q6. Does ${name_questionnaire} usually live here?,related_to_head_household_live,keep
+Q7. Did ${name_questionnaire} stay here last night?,related_to_head_household_stay,keep
+Q8. Age as at last birthday of ${name_questionnaire}?,related_to_head_household_age,keep
+Q9. Gender of person answering the household questionnaire,related_to_head_household_gender,keep
+Q10. What is the relationship with the head of the household?,related_to_head_household,keep
+Kindly specify your relationship to the household head,related_to_head_household_others,keep
+"Q11. Have you had any form of education?
+Kin taba shiga makaranta?",education,keep
+"Q12. Was it Quranic or Western?
+Makarantar Islamiyya ko boko?/Quranic Education",education_type_quranic,keep
+"Q12. Was it Quranic or Western?
+Makarantar Islamiyya ko boko?/Western Education",education_type_western,keep
+"Q13. What is the highest level of school you attended: primary, secondary, or higher?
+Menene zurfin ilimin ki?	
+Makarantar firamare, ko sakandare, ko fiye da haka?",school_level,keep
+"Q14. What is the highest class you completed at that level? If completed less than one year at that level, record '00'.
+A wanne aji kika kammala samun wannan ilmi?",school_level_primary,keep
+"Q14. What is the highest class you completed at that level? If completed less than one year at that level, record '00'.
+A wanne aji kika kammala samun wannan ilmi?.1",school_level_secondary,keep
+,school_level_tertiary,keep
+"Q16. Do you own a mobile phone?
+Ki na  da wayar hannu?",own_mobile_phone,keep
+"Q17. Is your mobile phone a smart phone?
+Wayar ki babbar waya ce?",smart_mobile_phone,keep
+Q18. Does your household have a television?,television,keep
+Q19. Does your household have an electric iron?,electric_iron,keep
+Q20. Does your household have a fan?,fan,keep
+Q21. Does your household have a refrigerator?,refrigerator,keep
+Q22. Does your household have electricity?,electricity,keep
+Q23. Does your household have a generator?,generator,keep
+Q24. Does any member of the household have a bank account?,bank_account,keep
+Q25. Does any member of the household have a watch?,watch,keep
+Q33. What is the main material of the floor?,floor_material,keep
+Kindly specify the kind of floor material not on the above list,floor_material_others,keep
+Q35. What type of cooking stove is mainly used for cooking?,cooking_stove,keep
+Kindly select any other cooking stove not on the list above,cooking_stove_others,keep
+Q36. What is the main source of drinking water for members of your household?,drinking_water_source,keep
+Kindly specify any other water source not mentioned above,drinking_water_source_others,keep
+Q37. What is the main source of water used by your household for other purposes such as cooking and handwashing?,cooking_water_source,keep
+Kindly specify any other water source not listed above,cooking_water_source_others,keep
+Q38. Number of sleeping rooms in the house?,no_sleeping_rooms,keep
+Q39. What kind of toilet facility do members of your household usually use,toilet_facility_type,keep
+Kindly specify any other toilet facility not mentioned above,toilet_facility_type_others,keep
+Q40. Do you share this toilet facility with other households?,shared_toilet_facility,keep
+Q41. Where is this toilet facility located?,toilet_facility_location,keep
+Q42. How is rubbish (solid waste) disposed of?,waste_disposal,keep
+Kindly specify any other way that rubbish is disposed of not on this list,waste_disposal_others,keep
+Q43. Can you please show me where members of your household most often wash their hands?,household_handwash_use,keep
+Kindly specify any other places that you wash your hands not list above,household_handwash_use_others,keep
+"Q44. If there is a washing place, what are the things observed?",household_handwash_observed,keep
+Q45. Total Number of persons in household,total_no_persons_household,keep
+Q46. How many of the caregivers/mothers have children 0-59 months?,no_wives_0_59_months,keep
+Q47. How many children in the household are 0-59 months of age?,no_children_0_59_months,keep
+Q48. How many children in the household are 1-59 months of age?,no_children_1_59_months,keep
+Q49. How many children in the household are 0 - 28 days of age?,no_children_0_28_days,keep
+Q50. How many mothers/caregivers are to be enrolled for this survey?,no_wives_caregivers,keep
+Please take a picture of the sample manifest showing the name and ID of the eligible children for this household here_URL,manifest_url,keep
+_uuid,household_uuid,keep
+_submission_time,end_timme,keep
+_id,submission_id,keep
+,concatenated_id,keep
+_index,index,keep
+,health_facility_name,keep
+Q3a. Marital status of head of household,marital_status_head_household,keep
+Signature of person completing the household questionnaire_URL,person_completed_household_questionnaire_signature_url,keep
+"Do you have a phone number?
+Kanada lamba waya ne?",have_phone_number,keep
+"Phone number
+Lamba waya",phone_number,keep
+Q15. Household head’s occupation,household_head_occupation,keep
+"Q26.Does your household have any of the following (Donkey,Camel,Cattle,Horse)?",donkey,keep
+Q27. Does your household have truck?,truck,keep
+Q28. Does your household have bicycle?,bicycle,keep
+Q29. Does your household have tricycle?,tricycle,keep
+Q30. Does your household have computer?,computer,keep
+Q31. Does your household have table?,table_,keep
+Q32. Does your household have air condition?,aircondition,keep
+Q34. What is the main material  of the wall ?,wall_material,keep
+Kindly specify the kind of wall material not on the above list,wall_material_others,keep
+,household_number2,keep
+start-geopoint,,drop
+_start-geopoint_latitude,,drop
+_start-geopoint_longitude,,drop
+_start-geopoint_altitude,,drop
+_start-geopoint_precision,,drop
+deviceid,,drop
+concat_user,,drop
+🛑 Missing user name,,drop
+🛑 Missing phone number,,drop
+🛑 Incorrect phone date/time,,drop
+🛑 Incorrect phone date/time,,drop
+confirm user and phone number,,drop
+confirm enumerator and phone number,,drop
+## **THE LOGIN CREDENTIALS ARE WRONG. CHECK THE USERNAME AND PHONE NUMBER AGAIN. ALSO REACHOUT TO YOUR M&E COORDINATOR OR LGA COORDINATOR**,,drop
+## **SAFETY AND ANTIMICROBIAL RESISTANCE OF MASS ADMINISTRATION OF AZITHROMYCIN IN CHILDREN 1- 59 MONTHS IN NIGERIA [SARMAAN II PROJECT]**,,drop
+#### **Case Report Form**,,drop
+"Have you fully explained this research to the household members and given sufficient information, including risks and benefits, to make an informed decision?",,drop
+**STOP the interview** and obtain the Informed Consent,,drop
+Q9. GPS coordinates (capture from device),,drop
+_Q9. GPS coordinates (capture from device)_altitude,,drop
+_Q9. GPS coordinates (capture from device)_precision,,drop
+unique,,drop
+Household ID is: ${unique_code},,drop
+Does your household own any of the following?,,drop
+I will like to ask you some questions about the persons in this house.,,drop
+child_left,,drop
+Please take a picture of the sample manifest showing the name and ID of the eligible children for this household here,,drop
+Comments,,drop
+**Thank the respondent and kindly move to another household.**,,drop
+_validation_status,,drop
+_notes,,drop
+_status,,drop
+_submitted_by,,drop
+__version__,,drop
+_tags,,drop
+meta/rootUuid,,drop
+hh_name,,drop
+audit,,drop
+audit_URL,,drop
+form_version,,drop
+start_iso,,drop
+end_iso,,drop
+"🛑 **Enumerator not recognized**
+
+Your Kobo login (${concat_user}) does not match any enumerator in the roster. The form will not auto-fill your LGA or assignment.
+
+→ Please contact your LGA coordinator. You may have logged in with a wrong account, or your details may not yet be in the enumerator file.",,drop
+Q5. Select your enumerator ID,,drop
+Batch (A or B),,drop
+Assigned settlement code,,drop
+Assigned settlement name,,drop
+enum_lga_code,,drop
+enum_role,,drop
+enum_phone,,drop
+enum_name_cdd,,drop
+enum_name,,drop
+**How are you completing this form?**,,drop
+"Title of the Research: SAFETY AND ANTIMICROBIAL RESISTANCE OF MASS ADMINISTRATION OF AZITHROMYCIN IN CHILDREN 1- 59 MONTHS IN NIGERIA [SARMAAN II PROJECT] 
+Ta’ken Wannan Bincike (اَلسَّلَامُ عَلَيْكُم): Tsaro da juriyar ƙwayoyin cuta ga magunguna a cikin raba Azithromycin ga yara yan wata daya (1) zuwa watanni hamsin da tara (59) a Najeriya (Aikin SARMAAN II)
+بِنْبُكِي أَلْمَاكَن مَايَكَتُو لَفِيا تَفَسَر نَاجِيرِيا
+دُومِن أَذَب كُو وَتَن مَاتَن أَرَيْرُومَايِسَن
+غَا يَار مَاسُ وَت طَي )1 (Azithromycin)
+زُو وَتِّبِي خَمَسَن دَتَر )59( أَنْفَانِسَ
+.كَرَفَشَن أَيَكَن (SARMAAN II)
+Name(s) and Affiliation(s) of Researchers (Sunan me bincik): Professor (Farfesa) Oliver Ezechi
+Sponsor(s) of Research (Daukar nauyi): Federal Ministry of Health (Ma’aikatar Lafiya ta Tarayyan Najeriya)
+Summary of Study Information (Takaitaccen bayanin wannan bincike) (بَيَانَن وَتَن بِنْبُكَن): 
+1.	This study is being conducted by FMoH through SARMAAN in Nigeria to see if giving children a medicine called Azithromycin (AZM) can help reduce childhood illnesses and deaths as well as monitor antimicrobial resistance pattern. 
+(Gudanar da wannan bincike alhakin  maaikatar lafiya ta tarayya ne domin a duba ko ba wa yara magani mai suna Azithromycin (AZM) zai taimaka wajen rage cututtuka da mace-macen yara, tare da sa ido kan juriyar ƙwayoyin cuta ga wannan maganin)
+١ - كُو وَتَن مَاتَن زَي رَغِي يَاوَن مِنَّ مِتِّي غَ يَار
+
+2.	The study will take place in eleven states where child deaths are high: Kebbi, Katsina, Sokoto, Bauchi, Adamawa, Kano, Yobe, Gombe, Zamfara, Jigawa and Kaduna. (wannan binciken zai gudana ne  a jihohi goma sha ɗaya in da mace macen kananan yara na fi yawa: Kebbi, Katsina, Sokoto, Bauchi, Adamawa, Kano, Yobe, Gombe, Zamfara, Jigawa da kuma Kaduna.)
+٢ - أَيَكَن زَي غِرَان :- هُوكِيتُوم كِيسَم كَانُوم كَادُونَ، بَقِّيم، أَدَمَاوَ، بُويِي، جِيغَوَا، كَتَبِنَام دَ زَمْفَارَ
+
+3.	All children aged 1 - 59 months in all the households, settlements, ward and LGAs will receive the medicine for free. However, for the research component, data and samples (nasopharyngeal and rectal samples) will be collected from children 1-59 months in 4,200 households 
+(Dukan yara yan wata daya (1) zuwa watanni hamsin da tara (59) za su karɓi wannan maganin kyauta, a gidaje, shiyoyi, gunduma da karamar hukuma. Amma don bangaren bincike, za a tattara bayanai da samfurori (samples) daga yaran a gidaje 4,200)
+٣ - رَا بَادَ وَتَن مَاتَن كُوتَا غَايَر وَت طَي (1) زُو وَتَن خَمَسَن دَيَار (59) أُغَادِجِيم، أَنْغُونَتَن غَندُومَا دَ قِنَان حَكُومُومِي وَ أَمَّا زَاءَ أَيَّشَ سَمْعُورِي(Samples)
+أَيَّشَ سَمْعُورِي
+دَا أَغَادِجِي دُوبُو حُطُو دَطَرِي يَبُو (4200)
+
+4.	The study is at no cost to participants, and the interview will take about 25 minutes, with minimal risks in sample collection (nasopharyngeal and rectal) from eligible children. 
+(Binciken kyauta ne, tattaunawa za ta ɗauki minti 25, kuma ba asaran wani haɗari ko cutarwa yayin ɗaukar samfurorin a wurin yaran da suka chanchanta)
+٤ - خَنُوت زَاي وَتَن بِنْبَكَن، زَاي حِبَرَتَ مِن (25) يَيْن دُوكَر سَمْعُورِي
+
+5.	The study will help improve child survival, if it eventually becomes a policy. 
+(Binciken zai taimaka wajen inganta rayuwar yara idan ya zama tsari)
+٥ - زَي تَيَّمَكَا وَجَن إَنَفَش رِيبُوز يَار
+
+6.	All personal information will be kept private, and only authorised researchers will have access to study information. 
+(Za a kiyaye bayanan sirri, kuma masu bincike da aka ba izini kaɗai za su gani)
+٦ - زَاءُ رِقَتِي أَسِرَت كَّو
+
+7.	Participation is completely voluntary, and you can stop at any time without any consequences. 
+(Shiga cikin bincike se in mutun ya na so, kuma za ka iya janyewa a kowane lokaci)
+٧ - بَادُولِي سَيَّاءَن مِنُم إِن مِنُم يَان سُو كَمَّاكَن إِي أَجِيبَوَا ذُكَ سَنَد خَسُّو",,drop
+Witness Name,,drop
+Q2. State,,drop
+Q3. Local Government Area,,drop
+Q4. Ward,,drop
+Q5. Community Name,,drop
+"📍 **Your administrative location (auto-filled)**
+
+- **State:** ${state_name} (${states})
+- **LGA:** ${lga_name} (${lgas})
+- **Enumerator:** ${enum_name_cdd} (${enum_role})
+
+Now select your **Ward** below.",,drop
+settlement_match,,drop
+⚠️ **WARNING:** You selected **${community_label}** but you are assigned to **${enum_settlement_label}**. Please verify with your supervisor before continuing.,,drop
+team_count,,drop
+Q7. Name of household head giving consent or designee,,drop
+gps_desk_lat,,drop
+gps_desk_lon,,drop
+gps_desk,,drop
+gps,,drop
+bbox_min_lat,,drop
+bbox_max_lat,,drop
+bbox_min_lon,,drop
+bbox_max_lon,,drop
+polygon_inside,,drop
+polygon_message,,drop
+${polygon_message},,drop
+"⚠️Confirm the following response 
+LGA: ${lga_name},
+Ward: ${ward_name},
+Community: ${community_label},
+Household number: ${unique},
+Household ID: ${unique_code}
+Boundary check: ${polygon_message}",,drop
+Q2. Name of the head of the household?,,drop
+Q5. Name of person completing the household questionnaire,,drop
+Signature of person completing the household questionnaire,,drop
+count_mothers_actual,,drop
+count_mothers_with_u5,,drop
+count_children_actual,,drop
+sum_mother_neonates,,drop
+mothers_count_match,,drop
+wives_1_59_match,,drop
+children_loop_match,,drop
+neonates_match,,drop
+any_count_mismatch,,drop
+sum_mother_no_u5,,drop
+child_count_match,,drop
+repeat_integrity_ok,,drop
+"🛑 **DATA INTEGRITY ISSUE**
+
+The number of mother or child entries does not match what was declared/sampled:
+
+- **Mother entries:** ${count_mothers_actual} | **Declared (Q50):** ${mothers_count}
+- **Child entries:** ${count_children_actual} | **Sampled (sum of Q56):** ${sum_mother_no_u5}
+
+Set Q50 or any Q56 to a higher number than the loops show, then re-set them to the correct value to clear orphan entries.",,drop
+"## 📋 Review captured data
+
+Please review the data summary below before submitting. Tap **Back** to make corrections.",,drop
+"### 🆔 Identifiers
+- **Household ID:** ${unique_code}
+- **State:** ${states}
+- **LGA:** ${lga_name}
+- **Ward:** ${ward_name}
+- **Community:** ${community_label}
+- **Cycle:** ${cycle}
+- **Settlement type:** ${settlement_type}",,drop
+"### ✍️ Consent
+- **Consent given:** ${household_head_consent}
+- **Date of consent:** ${date_of_consent}
+- **Witness:** ${witness}",,drop
+"### 👤 Household Head
+- **Name:** ${household_headname_proper}
+- **Gender:** ${gender_hh}
+- **Age:** ${age_hhead}
+- **Education:** ${hh_education_level}
+- **Occupation:** ${occupation_h}
+- **Owns mobile phone:** ${own_phone}",,drop
+"### 🏠 Household Composition
+
+**Declared totals (Q45–Q50):**
+- **Total persons:** ${no_household}
+- **Caregivers/mothers (1-59m):** ${no_wives_1_59}
+- **Mothers in household:** ${mothers_count}
+- **Children 0-59m:** ${no_0_59}
+- **Children 1-59m:** ${no_u5}
+- **Children 0-28d:** ${no_28days}
+
+**Collected in the loops:**
+- **Mothers entered in loop:** ${count_mothers_actual} _(declared: ${mothers_count})_
+- **Mothers with 1-59m children:** ${count_mothers_with_u5} _(declared: ${no_wives_1_59})_
+- **Sum of 1-59m across mothers:** ${sum_mother_no_u5} _(declared: ${no_u5})_
+- **Children entered in loop:** ${count_children_actual} _(declared: ${no_u5})_
+- **Sum of 0-28d across mothers:** ${sum_mother_neonates} _(declared: ${no_28days})_",,drop
+"### 📍 Location
+- **GPS:** ${gps}
+- **Boundary check:** ${polygon_message}",,drop
+⚠️ **Count mismatches detected.** Please review the items below and either correct the household totals or revisit the mother/child loops.,,drop
+"• **Mothers loop ≠ declared:** entered ${count_mothers_actual}, declared ${mothers_count} (Q50).",,drop
+"• **Caregivers with 1-59m children ≠ Q46:** observed ${count_mothers_with_u5}, declared ${no_wives_1_59}.",,drop
+🛑 **Q56 sum issue:** Sum of children 1-59m sampled across mothers = **${sum_mother_no_u5}**. Study design caps this at **2** (or Q48 = ${no_u5} if smaller). Adjust each mother's Q56 to comply.,,drop
+"• **Child rows entered ≠ sampled count:** ${count_children_actual} child records, expected ${sum_mother_no_u5} (sum of Q56 across mothers, capped at 2).",,drop
+"• **Neonates (0-28d) ≠ Q49:** sum across mothers ${sum_mother_neonates}, declared ${no_28days}.",,drop
+"⚠️ **WARNING:** GPS reading is outside the selected ward boundary. Please verify location, ward selection, and GPS accuracy before submitting.",,drop

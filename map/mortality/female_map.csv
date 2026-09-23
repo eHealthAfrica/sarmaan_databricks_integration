@@ -1,0 +1,83 @@
+kobo_name,db_name,action,transform,notes
+,state,keep,derived:from_household,joined in from parent household record via household_code
+,lga,keep,derived:from_household,joined in from parent household record via household_code
+,ward,keep,derived:from_household,joined in from parent household record via household_code
+,community,keep,derived:from_household,joined in from parent household record via household_code
+household_id,household_code,keep,none,
+female_position,female_id,keep,int_cast,confirmed 1:1 match against db (position within household)
+mother_id,mother_code,keep,none,confirmed 1:1 direct match against db - already composite formatted by Kobo
+female_name,female_name,keep,none,
+birth_year,birth_year,keep,none,
+birth_month,birth_month,keep,label_recode:month_name,
+age,female_age,keep,none,
+birth_day,female_dob,keep,none,
+mothers_age,,drop,none,not present in db_females_mortality (db has no mothers_age column)
+school_001,education,keep,yesno_titlecase,
+q_women_western/quranic,school_level_quranic,keep,binary_yesno,"1.0->Yes, 0.0->No"
+q_women_western/western,school_level_western,keep,binary_yesno,"1.0->Yes, 0.0->No"
+hh_women_education_level,school_level_cat,keep,label_recode:school_level_cat,"primary->Primary, secondary->Secondary, higher_e->Higher"
+duration_level_pri_001,school_level_attained_primary_secondary,keep,int_cast,
+duration_level_sec_001,school_level_attained_higher,keep,int_cast,
+living_status,children_living_together,keep,yesno_titlecase,
+living_sons,sons_living_together,keep,int_cast,
+living_daughter,daughters_living_together,keep,int_cast,
+living_status1,children_living_elsewhere,keep,yesno_titlecase,
+living_sons1,sons_living_elsewhere,keep,int_cast,
+living_daughter1,daughters_living_elsewhere,keep,int_cast,
+birthing_status,children_alive_later_died,keep,yesno_titlecase,
+birthing_status,birthing_status,keep,yesno_titlecase,same kobo source column also feeds children_alive_later_died - db has both target columns
+dead_sons,boys_alive_later_died,keep,int_cast,
+dead_daughter,girls_alive_later_died,keep,int_cast,
+c_alive,sum_children_alive,keep,int_cast,
+c_dead,sum_children_dead,keep,int_cast,
+c_count,sum_alive_dead_children,keep,int_cast,
+birthing_status1,confirm_birthing_no,keep,yesno_titlecase,
+missed_preg,miscarriage_abortion_pregnancy,keep,yesno_titlecase,
+misscarraige_count,miscarriage_abortion_count,keep,int_cast,
+misscarraige_count,miscarriage_count,keep,int_cast,same source column feeds both miscarriage_abortion_count and miscarriage_count in db - verify with Victoria this isn't a db duplication
+p_count,total_pregnancies,keep,int_cast,
+p_id,pregnancy_id,keep,int_cast,
+agg_child_still_alive,agg_child_still_alive,keep,int_cast,
+agg_child_alive_death,agg_child_alive_death,keep,int_cast,
+agg_dead_miscarrage,agg_dead_miscarrage,keep,int_cast,
+preg_status,pregnancy_status,keep,yesno_titlecase,
+preg_report_1,pregnancy_report,keep,simple_capitalize,
+preg_length_1,pregnancy_length_weeks,keep,int_cast,
+preg_length_2,pregnancy_length_months,keep,int_cast,
+preg_decision,pregnancy_decision,keep,yesno_titlecase,
+children,future_pregnancies,keep,label_recode:future_pregnancies,"later->Later, no_more->'No more/none'"
+_submission__uuid,female_uuid,keep,none,root submission uuid (shared with household_uuid)
+_parent_index,parent_index,keep,none,= household's own _index
+_index,index,keep,none,female row's own kobo index
+_submission__id,submission_id,keep,none,= household submission_id
+,concatenated_id,keep,derived:fk_to_household,female_uuid + '_' + parent_index = household's own concatenated_id
+female_info,,drop,none,not present in db_females_mortality
+note76,,drop,none,not present in db_females_mortality
+current_year,,drop,none,not present in db_females_mortality
+current_month,,drop,none,not present in db_females_mortality
+note1000000,,drop,none,not present in db_females_mortality
+confirm_1,,drop,none,not present in db_females_mortality
+confirm_2,,drop,none,not present in db_females_mortality
+confirm_2_001,,drop,none,not present in db_females_mortality
+total_live_births1,,drop,none,not present in db_females_mortality
+confirm,,drop,none,not present in db_females_mortality
+missed_preg_no,,drop,none,not present in db_females_mortality
+total_preg_outcome,,drop,none,not present in db_females_mortality
+confimation,,drop,none,not present in db_females_mortality
+note99,,drop,none,not present in db_females_mortality
+checkin,,drop,none,not present in db_females_mortality
+note7,,drop,none,not present in db_females_mortality
+aggregate_summary_history,,drop,none,not present in db_females_mortality
+alive_check,,drop,none,not present in db_females_mortality
+death_check,,drop,none,not present in db_females_mortality
+misscarriage_check,,drop,none,not present in db_females_mortality
+note88,,drop,none,not present in db_females_mortality
+preg_status_note,,drop,none,not present in db_females_mortality
+_parent_table_name,,drop,none,not present in db_females_mortality
+_submission__submission_time,,drop,none,not present in db_females_mortality
+_submission__validation_status,,drop,none,not present in db_females_mortality
+_submission__notes,,drop,none,not present in db_females_mortality
+_submission__status,,drop,none,not present in db_females_mortality
+_submission__submitted_by,,drop,none,not present in db_females_mortality
+_submission___version__,,drop,none,not present in db_females_mortality
+_submission__tags,,drop,none,not present in db_females_mortality

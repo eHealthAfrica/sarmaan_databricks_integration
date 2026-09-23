@@ -15,8 +15,10 @@ load_dotenv()
 # ─── CONFIGURATION ──────────────────────────────────────────────────────────
 SARMAAN_DIR = os.getenv("SARMAAN_DIR", r"C:\Users\victoria.akinyemi\Desktop\Projects\SARMAAN\SARMAAN 2\database")
 KOBO_TOKEN = os.getenv("KOBO_TOKEN")  # Kobo API token - set in .env, never hardcode
+# mapping CSVs live in the repo's map/ folder
+MAP_DIR = os.getenv("MAP_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "map"))
 
-MAPPING_FILE = os.path.join(SARMAAN_DIR, "zamfara_household_map.csv")
+MAPPING_FILE = os.path.join(MAP_DIR, "amr", "zamfara_household_map.csv")
 
 KOBO_EXPORT_URL = "https://kf.kobotoolbox.org/api/v2/assets/aks5TQaYbfgGvhCigjGAvp/export-settings/esBAy9ZfJutvuffFDgu3Bqt/data.xlsx"
 KOBO_SHEET = "SARMAAN II BASELINE ZAMFARA ..."

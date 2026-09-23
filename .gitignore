@@ -11,6 +11,8 @@ secrets/
 *.xlsx
 *.xls
 *.csv
+# ...except the column mappings in map/ (no survey data)
+!map/**/*.csv
 *.pdf
 pipeline_output/
 kobo_exports/

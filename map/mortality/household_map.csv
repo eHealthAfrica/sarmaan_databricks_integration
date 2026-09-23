@@ -1,0 +1,157 @@
+kobo_name,db_name,action,transform,notes
+starttime,start_time,keep,datetime_full_utc,full submission start timestamp
+endtime,end_time,keep,datetime_full_utc,full submission end timestamp
+username,enumerator_name,keep,none,
+phonenumber,enumerator_phone_number,keep,none,
+enum_id,enum_id,keep,none,
+signed_consent,consent,keep,yesno_titlecase,
+household_head_consent,household_head_consent,keep,yesno_titlecase,
+name_parent,household_consent_name,keep,none,
+date_of_consent,date_of_consent,keep,date_truncate,truncate to date
+witness,witness,keep,yesno_titlecase,
+witness_name,witness_name,keep,none,
+start_time,start_timme,keep,datetime_short_tz,short time-of-day field (db has typo start_timme)
+states,state,keep,none,
+lgas,lga,keep,simple_capitalize,"coalesce(lgas, lga_confirm, lgas_k) - form has 3 versions of LGA field"
+lga_confirm,lga,drop,simple_capitalize,used only as coalesce input for lga
+lgas_k,lga,drop,simple_capitalize,used only as coalesce input for lga
+ward,ward,review,underscore_to_space,form also has wards and ward_confirm - confirm which is authoritative
+wards,ward,review,underscore_to_space,possible alternate ward field - verify vs ward
+ward_confirm,ward,review,underscore_to_space,possible alternate ward field - verify vs ward
+community_confirm,community,keep,underscore_to_space,e.g. Adaya_Pri_Sch -> Adaya Pri Sch
+community_name,community,drop,coalesce_input,"raw community code, only used as community_confirm fallback"
+check_hh,community,review,coalesce_input,text field sometimes holding community name when community_confirm is blank - needs review for legacy submissions
+settlement_cluster,settlement_cluster,keep,underscore_to_space,
+female_count,women_15_49,keep,none,
+latitude,latitude,keep,none,
+longitude,longitude,keep,none,
+hh_category,household_no_category,keep,hh_category_range,"e.g. 1100 -> 001 - 100, 101200 -> 101 - 200"
+unique,household_number,keep,int_cast,drop leading zeros: 019 -> 19
+unique_code,household_code,keep,none,
+cycle,cycle,keep,simple_capitalize,
+settlement_type,settlement_type,keep,simple_capitalize,
+communication_language,language_communication,keep,simple_capitalize,
+other_communication_language,other_language_communication,keep,none,
+household_status,household_status,keep,label_recode:household_status,
+household_head,head_household,keep,yesno_titlecase,
+household_headname,household_name,keep,none,
+gender_hh,gender_head_household,keep,simple_capitalize,
+age_hhead,household_age,keep,int_cast,float->int e.g. 39.0 -> 39; populated when household_head=yes
+name_questionnaire,related_to_head_household_name,keep,none,
+live_here,related_to_head_household_live,keep,yesno_titlecase,
+stay_last_night,related_to_head_household_stay,keep,yesno_titlecase,
+age_hhhead,related_to_head_household_age,keep,int_cast,float->int; populated when respondent != household head
+gender_phh,related_to_head_household_gender,keep,simple_capitalize,
+household_relationship,related_to_head_household,keep,label_recode:relationship,
+other_household_relationship,related_to_head_household_others,keep,none,
+school,education,keep,yesno_titlecase,
+q_western/quranic,education_type_quranic,keep,binary_yesno,"1.0->Yes, 0.0->No"
+q_western/western,education_type_western,keep,binary_yesno,"1.0->Yes, 0.0->No"
+hh_education_level,school_level,keep,label_recode:school_level,
+duration_level_pri,school_level_primary,review,int_cast,"value distributions do not match db counts - likely wrong/incomplete source field, needs verification"
+duration_level_sec,school_level_secondary,review,int_cast,"value distributions do not match db counts - likely wrong/incomplete source field, needs verification"
+own_phone,own_mobile_phone,keep,yesno_titlecase,
+smart_phone,smart_mobile_phone,keep,yesno_titlecase,
+phone_no,respondent_phone_number,keep,strip_leading_zero,09062191096 -> 9062191096
+television,television,keep,yesno_titlecase,
+electric_iron,electric_iron,keep,yesno_titlecase,
+fan,fan,keep,yesno_titlecase,
+refrigerator,refrigerator,keep,yesno_titlecase,
+electricity,electricity,keep,yesno_titlecase,
+generator,generator,keep,yesno_titlecase,
+bank_account,bank_account,keep,yesno_titlecase,
+watch,watch,keep,yesno_titlecase,
+floor_material,floor_material,keep,label_recode:floor_material,
+other_floor_material,floor_material_others,keep,simple_capitalize,
+cooking_stove,cooking_stove,keep,label_recode:cooking_stove,
+cooking_stove_others,cooking_stove_others,keep,simple_capitalize,
+water_source,drinking_water_source,keep,label_recode:water_source,
+other_water_source,drinking_water_source_others,keep,none,
+water_source2,cooking_water_source,keep,label_recode:water_source,
+other_water_source2,cooking_water_source_others,keep,none,
+bedroom,no_sleeping_rooms,keep,none,
+toilet_facility,toilet_facility_type,keep,label_recode:toilet_facility,
+other_toilet_facility,toilet_facility_type_others,keep,none,
+shared_toilet,shared_toilet_facility,keep,yesno_titlecase,
+toilet_location,toilet_facility_location,keep,label_recode:toilet_facility_location,
+rubbish,waste_disposal,keep,label_recode:rubbish,
+rubbish_other,waste_disposal_others,keep,none,
+washing_hand,household_handwash_use,keep,label_recode:washing_hand,
+washing_hand_other,household_handwash_use_others,keep,none,
+washing_place,household_handwash_observed,keep,label_recode:washing_place,
+no_household,total_no_persons_household,keep,none,
+hh_females,current_women_10_55,keep,none,
+audio,audio,keep,none,
+audio_URL,audio_url,keep,none,
+_submission_time,end_timme,keep,submission_time_utc,"db end_timme is actually the server submission timestamp, not a form field"
+_uuid,household_uuid,keep,none,root submission uuid
+_index,index,keep,none,row's own kobo index
+_id,submission_id,keep,none,top-level kobo submission id
+,concatenated_id,keep,derived:household_pk,household_uuid + _ + index
+deviceid,,drop,none,not present in db_household_mortality
+start-geopoint,,drop,none,not present in db_household_mortality
+_start-geopoint_latitude,,drop,none,not present in db_household_mortality
+_start-geopoint_longitude,,drop,none,not present in db_household_mortality
+_start-geopoint_altitude,,drop,none,not present in db_household_mortality
+_start-geopoint_precision,,drop,none,not present in db_household_mortality
+audit,,drop,none,not present in db_household_mortality
+audit_URL,,drop,none,not present in db_household_mortality
+note_missing_username,,drop,none,not present in db_household_mortality
+note_missing_phone_number,,drop,none,not present in db_household_mortality
+note_incorrect_date_and_time,,drop,none,not present in db_household_mortality
+concat_user,,drop,none,not present in db_household_mortality
+user_confrim,,drop,none,not present in db_household_mortality
+concat_enu,,drop,none,not present in db_household_mortality
+cluster_no,,drop,none,not present in db_household_mortality
+role,,drop,none,not present in db_household_mortality
+name_supp,,drop,none,not present in db_household_mortality
+phone_supp,,drop,none,not present in db_household_mortality
+name_sup_2,,drop,none,not present in db_household_mortality
+phone_sup_2,,drop,none,not present in db_household_mortality
+clus_no,,drop,none,not present in db_household_mortality
+wrong_login,,drop,none,not present in db_household_mortality
+gps,,drop,none,not present in db_household_mortality
+_gps_latitude,,drop,none,not present in db_household_mortality
+_gps_longitude,,drop,none,not present in db_household_mortality
+_gps_altitude,,drop,none,not present in db_household_mortality
+_gps_precision,,drop,none,not present in db_household_mortality
+area,,drop,none,not present in db_household_mortality
+first_id_key,,drop,none,not present in db_household_mortality
+n_corner,,drop,none,not present in db_household_mortality
+result,,drop,none,not present in db_household_mortality
+perimeter,,drop,none,not present in db_household_mortality
+lat_ss,,drop,none,not present in db_household_mortality
+long_ss,,drop,none,not present in db_household_mortality
+note_gps_link,,drop,none,not present in db_household_mortality
+household_no1,,drop,none,not present in db_household_mortality
+household_no2,,drop,none,not present in db_household_mortality
+household_no3,,drop,none,not present in db_household_mortality
+household_no4,,drop,none,not present in db_household_mortality
+household_no5,,drop,none,not present in db_household_mortality
+household_no6,,drop,none,not present in db_household_mortality
+household_no7,,drop,none,not present in db_household_mortality
+household_no8,,drop,none,not present in db_household_mortality
+household_no9,,drop,none,not present in db_household_mortality
+household_no10,,drop,none,not present in db_household_mortality
+check_location,,drop,none,not present in db_household_mortality
+note_consent,,drop,none,not present in db_household_mortality
+note4,,drop,none,not present in db_household_mortality
+q_western,,drop,none,not present in db_household_mortality
+note6,,drop,none,not present in db_household_mortality
+note4400,,drop,none,not present in db_household_mortality
+consented_females,,drop,none,not present in db_household_mortality
+consented_counr,,drop,none,not present in db_household_mortality
+val_comment,,drop,none,not present in db_household_mortality
+note9001,,drop,none,not present in db_household_mortality
+audio - transcript (ha),,drop,none,not present in db_household_mortality
+audio - transcript (en),,drop,none,not present in db_household_mortality
+name_input,,drop,none,not present in db_household_mortality
+lc_gender,,drop,none,not present in db_household_mortality
+input_phone,,drop,none,not present in db_household_mortality
+_validation_status,,drop,none,not present in db_household_mortality
+_notes,,drop,none,not present in db_household_mortality
+_status,,drop,none,not present in db_household_mortality
+_submitted_by,,drop,none,not present in db_household_mortality
+__version__,,drop,none,not present in db_household_mortality
+_tags,,drop,none,not present in db_household_mortality
+meta/rootUuid,,drop,none,not present in db_household_mortality

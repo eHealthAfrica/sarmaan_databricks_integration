@@ -1,0 +1,53 @@
+﻿kobo_name,db_name,action
+,id,keep
+,state,keep
+,lga,keep
+,ward,keep
+,community,keep
+mother_id_001,mother_id,keep
+Household ID,household_code,keep
+Mother ID,mother_code,keep
+,household_code_pull,keep
+mother_name_proper,mother_name,keep
+Q52. Mother's age,mother_age,keep
+Q53. Mother`s Highest Educational Level,highest_level_education,keep
+Q54. Mother’s Occupation,occupation,keep
+Q55. Total Number of Children less than 1 month,no_children_less_1_month,keep
+Q56. Total Number of Children 1 - 59 months,no_children_1_59_month,keep
+,azithromycin_administered,keep
+,no_azithromycin_administered,keep
+,adverse_events,keep
+,excessive_vomiting,keep
+,abdominal_pain,keep
+,excessive_cry,keep
+,watery_stool,keep
+,constipation,keep
+,skin_rash,keep
+,skin_itching,keep
+,adverse_events_other,keep
+,adverse_events_other_specify,keep
+_submission__uuid,mother_uuid,keep
+_submission__id,submission_id,keep
+,concatenated_id,keep
+_index,index,keep
+_parent_index,parent_index,keep
+,cycle,keep
+Signature of mother ${mother_id_001}_URL,mother_signature_url,keep
+Father Name,father_name,keep
+Q53a. Mother's marital status,mother_marital_status,keep
+Signature of mother ${mother_id_001},,drop
+mother_id,,drop
+I would like to take the information of all the children (1-59 months).,,drop
+_parent_table_name,,drop
+_submission__submission_time,,drop
+_submission__validation_status,,drop
+_submission__notes,,drop
+_submission__status,,drop
+_submission__submitted_by,,drop
+_submission___version__,,drop
+_submission__tags,,drop
+_submission_meta/rootUuid,,drop
+Q51. Mother ${mother_id_001} name,,drop
+sum_so_far,,drop
+effective_cap,,drop
+remaining_for_household,,drop
