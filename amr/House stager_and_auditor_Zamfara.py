@@ -5,6 +5,7 @@ import io, os, sys, requests, pandas as pd
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 from sqlalchemy import create_engine, text
+from xml.sax.saxutils import escape
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -96,7 +97,7 @@ def generate_audit_report(df, output_path):
             warning_style = ParagraphStyle('Warning', parent=styles['Normal'], textColor=colors.red, fontName='Helvetica-Bold')
             story.append(Paragraph("CRITICAL: Duplicate Household Codes Found", styles["Heading2"]))
             dupe_list = ", ".join(dupes['household_code'].unique().astype(str))
-            story.append(Paragraph(f"The following codes appear multiple times: {dupe_list}", warning_style))
+            story.append(Paragraph(f"The following codes appear multiple times: {escape(dupe_list)}", warning_style))
             story.append(Spacer(1, 20))
 
     report_columns = [c for c in df.columns if c not in AUDIT_SKIP_LIST]
@@ -117,7 +118,7 @@ def generate_audit_report(df, output_path):
             ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
             ('FONTSIZE', (0, 0), (-1, -1), 8)
         ]))
-        story.append(KeepTogether([Paragraph(f"{col}", styles["Heading3"]), t]))
+        story.append(KeepTogether([Paragraph(escape(str(col)), styles["Heading3"]), t]))
         story.append(Spacer(1, 15))
 
     doc.build(story)
