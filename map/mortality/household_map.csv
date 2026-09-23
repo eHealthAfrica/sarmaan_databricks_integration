@@ -52,7 +52,7 @@ duration_level_pri,school_level_primary,review,int_cast,"value distributions do 
 duration_level_sec,school_level_secondary,review,int_cast,"value distributions do not match db counts - likely wrong/incomplete source field, needs verification"
 own_phone,own_mobile_phone,keep,yesno_titlecase,
 smart_phone,smart_mobile_phone,keep,yesno_titlecase,
-phone_no,respondent_phone_number,keep,strip_leading_zero,09062191096 -> 9062191096
+phone_no,respondent_phone_number,keep,strip_leading_zero,08000000000 -> 8000000000
 television,television,keep,yesno_titlecase,
 electric_iron,electric_iron,keep,yesno_titlecase,
 fan,fan,keep,yesno_titlecase,
