@@ -1,0 +1,7 @@
+pandas>=2.0
+openpyxl
+sqlalchemy>=2.0
+psycopg2-binary
+requests
+python-dotenv
+reportlab
