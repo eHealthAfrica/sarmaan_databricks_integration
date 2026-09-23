@@ -1,0 +1,106 @@
+kobo_name,db_name,action,transform,notes
+,state,keep,derived:from_household,joined in via household_code
+,lga,keep,derived:from_household,joined in via household_code
+,ward,keep,derived:from_household,joined in via household_code
+,community,keep,derived:from_household,joined in via household_code
+householdid,household_code,keep,none,
+motherid,mother_code,keep,none,
+c_id,pregnancy_id,keep,int_cast,"position of pregnancy within mother, 1-based"
+preg_id,pregnancy_code,keep,none,composite code e.g. B-11_14_4_9_014_01_01
+q113_pregnancy_type,pregnancy_form,keep,label_recode:pregnancy_type,"1->Single,2->Twins,3->Triplet,4->Quadruplets"
+q114_pregnancy_outcome,birth_form,keep,label_recode:pregnancy_outcome,"alive->'Born Alive', dead->'Born dead', miscarriage->'Miscarriage and Abortion'"
+,birth_status,keep,yesno_titlecase,no populated sample rows to confirm source - likely tied to q115_live_signs_at_birth | CONFIRMED via value-level validation against db sample
+q115_live_signs_at_birth,birth_status,keep,yesno_titlecase,"best-guess source, verify wording/labels with form logic | CONFIRMED via value-level validation against db sample"
+q116_child_name,child_alive_name,keep,none,
+q117_child_sex,child_alive_gender,keep,simple_capitalize,
+q117_child_sex_dup,child_alive_later_died_gender,review,none,no populated sample rows to confirm - name pattern suggests this pairing
+,child_age_category,keep,label_recode:child_age_category,no populated sample rows to confirm source | CONFIRMED via value-level validation against db sample
+q118_child_age_category,child_age_category,keep,label_recode:child_age_category,"best-guess source, verify with form logic | CONFIRMED via value-level validation against db sample"
+q119ai_dob_child_month_less_1,child_month_less_1_month,keep,label_recode:month_name,numeric month -> month name
+q119aii_dob_child_day_less_1,child_day_less_1_month,review,none,sample has 0 populated rows for this db column; source guessed from naming pattern - verify
+q119aiv_dob_child_less_1,child_dob_less_1_month,review,none,"composite DOB gets computed even outside its proper age branch in some rows, producing extra populated values vs db - needs a branch guard before going live"
+,child_year_alive_later_died,review,none,0 populated rows in sample - verify against form logic (likely one of the q129a_* fields)
+,child_month_alive_later_died,review,none,0 populated rows in sample - verify against form logic
+,child_day_alive_later_died,review,none,0 populated rows in sample - verify against form logic
+,child_dob_alive_later_died,review,none,0 populated rows in sample - verify against form logic
+date_birth12_year,child_year_alive_later_died,review,none,"best-guess source - only 3 non-null values in whole sheet, could not validate"
+date_birth12_month,child_month_alive_later_died,review,none,best-guess source - could not validate
+date_birth12_day,child_day_alive_later_died,review,none,best-guess source - could not validate
+date_birth12,child_dob_alive_later_died,review,none,best-guess source - could not validate
+,child_year_1_11_month,review,int_cast,0 populated rows in sample - verify against form logic
+q119aiii_dob_child_year_1_11m,child_year_1_11_month,review,int_cast,"name suggests this source, but empirically best-matched a different column in the sample (small-n coincidence) - verify"
+q119aii_dob_child_month_1_11m,child_month_1_11_month,keep,int_cast,
+q119ai_dob_child_day_1_11m,child_day_1_11_month,keep,int_cast,
+q119aiv_dob_child_1_11m,child_dob_1_11_month,review,none,"composite DOB gets computed even outside its proper age branch in some rows, producing extra populated values vs db - needs a branch guard before going live"
+,child_year_12_59_month,review,int_cast,0 populated rows in sample - verify against form logic
+q119aiii_dob_child_12_59m,child_year_12_59_month,review,int_cast,"best-guess source by naming pattern, could not validate"
+,child_month_12_59_month,review,int_cast,0 populated rows in sample - verify against form logic
+q119aii_dob_child_12_59m,child_month_12_59_month,review,int_cast,"best-guess source by naming pattern, could not validate"
+,child_day_12_59_month,review,int_cast,0 populated rows in sample - verify against form logic
+q119ai_dob_child_12_59m,child_day_12_59_month,review,int_cast,"best-guess source by naming pattern, could not validate"
+q119aiv_dob_child_12_59m,child_dob_12_59_month,review,none,"composite DOB gets computed even outside its proper age branch in some rows, producing extra populated values vs db - needs a branch guard before going live"
+q119aiii_dob_child_greaterThan5,child_year_greater_5_years,review,none,mapping does not validate against db sample (no overlapping populated values) - needs verification
+q119aii_dob_child_greaterThan5,child_month_greater_5_years,review,none,sample shows 0 populated rows for this pairing despite name match - verify | mapping does not validate against db sample (no overlapping populated values) - needs verification
+q119ai_dob_child_greaterThan5,child_day_greater_5_years,review,none,mapping does not validate against db sample (no overlapping populated values) - needs verification
+q120i_pregnancy_end_year,year_pregnancy_ended,keep,int_cast,
+q120ii_pregnancy_end_month,month_pregnancy_ended,keep,label_recode:month_name,numeric month -> month name
+q120iii_pregnancy_end_day,day_pregnancy_ended,keep,int_cast_dk99,
+,pregnancy_report,review,none,0 populated rows in sample; q121_pregnancy_duration_type actually maps to miscarriage_pregnancy_report empirically - verify if a separate 'pregnancy_report' source field exists
+q121_pregnancy_duration_type,miscarriage_pregnancy_report,keep,simple_capitalize,"empirically confirmed, despite the kobo field name suggesting 'duration'"
+,pregnancy_report_length_weeks,review,none,0 populated rows in sample - verify against form logic
+,pregnancy_report_length_months,review,none,0 populated rows in sample - verify against form logic
+q122_pregnancy_duration_weeks,miscarriage_pregnancy_length_weeks,keep,int_cast,
+q122_pregnancy_duration_months,miscarriage_pregnancy_length_months,keep,int_cast,
+q119aii_dob_child_day_less_1,child_age_less_1_month,keep,int_cast,confirmed empirically; same kobo col also feeds child_day_less_1_month in some branches - verify no overwrite conflicts
+less_1_11ms,child_age_less_1_11_month,keep,none,
+less_less_5,child_age_less_12_59_month,keep,none,
+greater_greater_5,child_age_greater_5_years,keep,none,
+q124_child_alive,child_still_alive,keep,yesno_titlecase,
+,child_age_1_11_last_birthday,review,none,0 populated rows in sample - verify against form logic (candidate: q123_age_months_last_birthday)
+q123_age_months_last_birthday,child_age_1_11_last_birthday,review,none,"best-guess source, could not validate"
+q125_age_at_last_birthday_month,child_age_1_to_more_than_5_years_last_birthday,keep,int_cast,confirmed empirically despite name mismatch
+,child_age_alive_later_died_category,keep,label_recode:child_age_alive_later_died_category,0 populated rows in sample - verify against form logic (candidate: q126_age_at_death_exact)
+q126_age_at_death_exact,child_age_alive_later_died_category,keep,label_recode:child_age_alive_later_died_category,"best-guess source, could not validate"
+q127a_age_at_death_months,child_age_months_alive_later_died,keep,int_cast,
+q127a_age_at_death_days_1,child_age_alive_later_died_less_1_month,keep,int_cast,
+,child_age_days_alive_later_died,review,none,0 populated rows in sample - verify against form logic (candidate: q127a_age_at_death_days_2)
+q127a_age_at_death_days_2,child_age_days_alive_later_died,review,none,"best-guess source, could not validate"
+q128_had_first_birthday,first_birthday,keep,yesno_titlecase,
+q129a_age_at_death_months_dup,child_age_alive_later_died_less_1_year,keep,int_cast,
+,child_age_alive_later_died_1_less_month,review,none,0 populated rows in sample - verify against form logic (candidate: q129a_age_at_death_days_dup)
+q129a_age_at_death_days_dup,child_age_alive_later_died_1_less_month,review,none,"best-guess source, could not validate"
+q129a_age_at_death_years,child_age_alive_later_died_greater_1_year,keep,int_cast,
+q129a_age_at_death_months_dup_dup,child_age_alive_later_died_less_2_year,keep,int_cast,
+q130_child_living_with_respondent,child_living_together,keep,yesno_titlecase,
+q131_child_ever_vaccinated,child_vaccinated,keep,label_recode:child_vaccinated,
+,child_ever_vaccinated,review,none,0 populated rows in sample - verify (candidate: q131_child_ever_vaccinated_dup)
+q131_child_ever_vaccinated_dup,child_ever_vaccinated,review,none,"best-guess source, could not validate"
+child_still_alive,child_alive_still,keep,binary_yesno,raw kobo field literally named 'child_still_alive' (separate from q124_child_alive)
+child_alive_death,child_alive_death,keep,binary_yesno,
+birth_form_dead,birth_form_dead,keep,binary_yesno,
+birth_form_miscarriage,birth_form_miscarriage,keep,binary_yesno,
+_index,index,keep,none,pregnancy row's own kobo index
+_parent_index,parent_index,keep,none,= mother's (female's) own _index
+_submission__uuid,pregnancy_uuid,keep,none,root submission uuid (shared with household_uuid/female_uuid)
+_submission__id,submission_id,keep,none,= household submission_id
+,concatenated_id,keep,derived:fk_to_female,pregnancy_uuid + '_' + parent_index = female's own index-based key
+twin_note,,drop,none,not present in db_pregnancy_mortality
+twin_note3,,drop,none,not present in db_pregnancy_mortality
+q119a_dob_child_less_1,,drop,none,not present in db_pregnancy_mortality
+q119ai_dob_child_day_less_1,,drop,none,not present in db_pregnancy_mortality
+q121_pregnancy_miscarriage_duration_type,,drop,none,not present in db_pregnancy_mortality
+q122_pregnancy_miscarriage_duration_weeks,,drop,none,not present in db_pregnancy_mortality
+q122_pregnancy_miscarriage_duration_months,,drop,none,not present in db_pregnancy_mortality
+less_less_1,,drop,none,not present in db_pregnancy_mortality
+q123_age_days_last_birthday,,drop,none,not present in db_pregnancy_mortality
+q123_age_less_5_last_birthday,,drop,none,not present in db_pregnancy_mortality
+q123_age_years_last_birthday,,drop,none,not present in db_pregnancy_mortality
+_parent_table_name,,drop,none,not present in db_pregnancy_mortality
+_submission__submission_time,,drop,none,not present in db_pregnancy_mortality
+_submission__validation_status,,drop,none,not present in db_pregnancy_mortality
+_submission__notes,,drop,none,not present in db_pregnancy_mortality
+_submission__status,,drop,none,not present in db_pregnancy_mortality
+_submission__submitted_by,,drop,none,not present in db_pregnancy_mortality
+_submission___version__,,drop,none,not present in db_pregnancy_mortality
+_submission__tags,,drop,none,not present in db_pregnancy_mortality
+_submission_meta/rootUuid,,drop,none,not present in db_pregnancy_mortality
