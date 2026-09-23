@@ -5,6 +5,7 @@ import sys, os
 import pandas as pd
 import openpyxl
 from datetime import datetime, timezone
+from xml.sax.saxutils import escape
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -490,7 +491,7 @@ def generate_audit_report(tables, warnings, output_path):
         warning_style = ParagraphStyle("Warning", parent=styles["Normal"], textColor=colors.red)
         story.append(Paragraph(f"CRITICAL / REVIEW ITEMS ({len(warnings)})", styles["Heading2"]))
         for w in warnings:
-            story.append(Paragraph(w, warning_style))
+            story.append(Paragraph(escape(w), warning_style))
         story.append(Spacer(1, 20))
     else:
         story.append(Paragraph("No warnings raised.", styles["Normal"]))
@@ -514,7 +515,7 @@ def generate_audit_report(tables, warnings, output_path):
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
                 ("FONTSIZE", (0, 0), (-1, -1), 8),
             ]))
-            story.append(KeepTogether([Paragraph(f"{col}", styles["Heading3"]), t]))
+            story.append(KeepTogether([Paragraph(escape(str(col)), styles["Heading3"]), t]))
             story.append(Spacer(1, 12))
 
     doc.build(story)

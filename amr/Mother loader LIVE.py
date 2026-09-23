@@ -3,7 +3,7 @@
 import os
 import sys
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, inspect, text
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 
@@ -34,14 +34,15 @@ def get_engine():
 
 def existing_ids(engine, id_col="concatenated_id"):
     """concatenated_id values already in the target table, so re-running the
-    loader on the same staging file doesn't create duplicate rows."""
-    try:
-        with engine.connect() as conn:
-            result = conn.execute(text(f'SELECT "{id_col}" FROM {TARGET_SCHEMA}.{TARGET_TABLE}'))
-            return {row[0] for row in result}
-    except Exception as e:
-        print(f"[{ts()}] WARNING: could not read existing ids ({e}). Proceeding without dedup check.")
+    loader on the same staging file doesn't create duplicate rows. A missing
+    table means nothing is loaded yet; any other error stops the load rather
+    than appending without the check."""
+    if not inspect(engine).has_table(TARGET_TABLE, schema=TARGET_SCHEMA):
+        print(f"[{ts()}] {TARGET_SCHEMA}.{TARGET_TABLE} does not exist yet - nothing to check against.")
         return set()
+    with engine.connect() as conn:
+        result = conn.execute(text(f'SELECT "{id_col}" FROM {TARGET_SCHEMA}.{TARGET_TABLE}'))
+        return {row[0] for row in result}
 
 def load_to_postgres():
     print(f"[{ts()}] PHASE 2: Loading edited data from {STAGING_EXCEL}...")
