@@ -4,6 +4,7 @@
 !.env.example
 *.pem
 *.key
+*.json
 secrets/
 .databrickscfg
 
@@ -13,10 +14,15 @@ secrets/
 *.csv
 # ...except the column mappings in map/ (no survey data)
 !map/**/*.csv
+!coverage/mappings/*.csv
+!coverage/mappings/*.xlsx
 *.pdf
 pipeline_output/
 kobo_exports/
 mapping/
+outputs/
+logs/
+*.log
 
 # Python
 __pycache__/

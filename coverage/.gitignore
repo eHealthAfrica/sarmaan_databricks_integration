@@ -1,0 +1,21 @@
+# Environment - never commit credentials
+.env
+.env.*
+!.env.example
+*.json
+*.pem
+*.key
+
+# Pipeline outputs and logs (contain survey data / record ids)
+outputs/
+logs/
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Temporary / OS files
+.DS_Store
+Thumbs.db
