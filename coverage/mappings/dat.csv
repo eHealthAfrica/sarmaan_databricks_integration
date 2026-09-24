@@ -1,0 +1,61 @@
+﻿state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count,RA Target
+Bauchi,Bauchi,Dambam,201,Dagauda,2011,Kankani Layin Kasin,20111,33,9
+Bauchi,Bauchi,Dambam,201,Dagauda,2011,Unguwar Baba Bala,20112,55,9
+Bauchi,Bauchi,Dambam,201,Dambam A,2012,Mabuga Turaki,20121,27,9
+Bauchi,Bauchi,Dambam,201,Dambam A,2012,Dada,20122,183,9
+Bauchi,Bauchi,Dambam,201,Dambam B,2013,Nasarawa,20131,159,9
+Bauchi,Bauchi,Dambam,201,Dambam B,2013,Bam,20132,50,9
+Bauchi,Bauchi,Dambam,201,Fagam,2014,Unguwar Alhaji,20141,83,9
+Bauchi,Bauchi,Dambam,201,Fagam,2014,Hausawa,20142,41,9
+Bauchi,Bauchi,Dambam,201,Fagarau,2015,Garin Barde,20151,67,9
+Bauchi,Bauchi,Dambam,201,Fagarau,2015,Fagarau,20152,94,9
+Bauchi,Bauchi,Darazo,202,Darazo East,2021,Kael,20211,28,10
+Bauchi,Bauchi,Darazo,202,Darazo East,2021,Fed Lowcost,20212,99,10
+Bauchi,Bauchi,Darazo,202,Darazo West,2022,Kanya,20221,121,10
+Bauchi,Bauchi,Darazo,202,Darazo West,2022,Kalari,20222,26,10
+Bauchi,Bauchi,Darazo,202,Gabarin East,2023,Burji,20231,30,10
+Bauchi,Bauchi,Darazo,202,Gabarin East,2023,Unguwar Sauke,20232,58,10
+Bauchi,Bauchi,Darazo,202,Gabarin West,2024,Duhuwa,20241,40,10
+Bauchi,Bauchi,Darazo,202,Gabarin West,2024,Salihawa,20242,30,10
+Bauchi,Bauchi,Darazo,202,Gabchiyari,2025,Rigar Jao,20251,43,10
+Bauchi,Bauchi,Darazo,202,Gabchiyari,2025,Yarima Ori,20252,27,10
+Bauchi,Bauchi,Itas Gadau,203,Abdallawa,2031,Bausa,20311,22,10
+Bauchi,Bauchi,Itas Gadau,203,Abdallawa,2031,Fango,20312,22,10
+Bauchi,Bauchi,Itas Gadau,203,Atafowa,2032,Hadibiya,20321,26,10
+Bauchi,Bauchi,Itas Gadau,203,Atafowa,2032,Shabewa,20322,25,10
+Bauchi,Bauchi,Itas Gadau,203,Bambal,2033,Talai,20331,72,10
+Bauchi,Bauchi,Itas Gadau,203,Bambal,2033,Dingere,20332,157,10
+Bauchi,Bauchi,Itas Gadau,203,Bilkicheri,2034,Gabashi,20341,107,10
+Bauchi,Bauchi,Itas Gadau,203,Bilkicheri,2034,Bilkicheri,20342,67,10
+Bauchi,Bauchi,Itas Gadau,203,Buzawa,2035,Ramin Kura,20351,59,10
+Bauchi,Bauchi,Itas Gadau,203,Buzawa,2035,Garin Malam Sabon Gari,20352,25,10
+Bauchi,Bauchi,Tafawa Balewa,204,Bula A,2041,Rugan Gambo,20411,26,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bula A,2041,Wuro Jiban,20412,40,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bula B,2042,Bakin Kura,20421,41,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bula B,2042,Gindin Dutse,20422,33,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bununu A,2043,Mailere,20431,27,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bununu A,2043,Shalangir,20432,21,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bununu B,2044,Gigyom,20441,36,9
+Bauchi,Bauchi,Tafawa Balewa,204,Bununu B,2044,Ginfukul,20442,30,9
+Bauchi,Bauchi,Tafawa Balewa,204,Dajin,2045,Layi,20451,23,9
+Bauchi,Bauchi,Tafawa Balewa,204,Dajin,2045,Jahun,20452,37,9
+Bauchi,Bauchi,Toro,205,Jama A,2051,Ringim Tattu,20511,42,9
+Bauchi,Bauchi,Toro,205,Jama A,2051,Tashar Itace,20512,61,9
+Bauchi,Bauchi,Toro,205,Lame,2052,Jira,20521,51,9
+Bauchi,Bauchi,Toro,205,Lame,2052,Gurawan Durugu,20522,33,9
+Bauchi,Bauchi,Toro,205,Mara,2053,Unguwar Makaranta,20531,85,9
+Bauchi,Bauchi,Toro,205,Mara,2053,Hardo Dawai,20532,22,9
+Bauchi,Bauchi,Toro,205,Palama,2054,Gadum,20541,31,9
+Bauchi,Bauchi,Toro,205,Palama,2054,Palama Unguwar Arewa,20542,18,9
+Bauchi,Bauchi,Toro,205,Rahama,2055,Kadade,20551,17,9
+Bauchi,Bauchi,Toro,205,Rahama,2055,Unguwan Liman,20552,18,9
+Bauchi,Bauchi,Zaki,206,Alangwari,2061,Manudurin Ora,20611,17,10
+Bauchi,Bauchi,Zaki,206,Alangwari,2061,Alangwari,20612,53,10
+Bauchi,Bauchi,Zaki,206,Amarmari,2062,Unguwar Malam Mardo,20621,26,10
+Bauchi,Bauchi,Zaki,206,Amarmari,2062,Aboreri,20622,30,10
+Bauchi,Bauchi,Zaki,206,Bursali,2063,Gamdu,20631,57,10
+Bauchi,Bauchi,Zaki,206,Bursali,2063,Matara,20632,26,10
+Bauchi,Bauchi,Zaki,206,Gadai,2064,Sederi,20641,17,10
+Bauchi,Bauchi,Zaki,206,Gadai,2064,Kichiduniye,20642,33,10
+Bauchi,Bauchi,Zaki,206,Gumai,2065,Gayum,20651,20,10
+Bauchi,Bauchi,Zaki,206,Gumai,2065,Lariski,20652,20,10
