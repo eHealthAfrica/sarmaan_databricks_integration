@@ -34,7 +34,7 @@ coverage:
   sokoto_c3:   { asset_uid: "", export_settings_id: "" }
   sokoto_c4:   { asset_uid: "", export_settings_id: "" }
   yobe_c1:     { asset_uid: "", export_settings_id: "" }
-  zamfara_c1:  { asset_uid: "", export_settings_id: "" }
+  zamfara_c1:  { asset_uid: "azrwxC3wDXaiycRvmYj9kQ", export_settings_id: "esyCNoLEXxuRYYXbhzjbTgD" }
 
 # Not read by these pipelines yet; listed so every stream's forms live here.
 amr:
