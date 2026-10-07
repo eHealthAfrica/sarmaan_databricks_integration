@@ -1,0 +1,25 @@
+state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count
+Gombe,Gombe,Akko,Akko,Akko,Akko,Kolele,30111,36
+Gombe,Gombe,Akko,Akko,Akko,Akko,Jalingo Angwan Shurgu,30112,58
+Gombe,Gombe,Akko,Akko,Garko,Garko,Kundulum Ung Sudaniyya,30121,144
+Gombe,Gombe,Akko,Akko,Garko,Garko,Gidim Nuhu,30122,77
+Gombe,Gombe,Balanga,Balanga,Bambam,Bambam,Gadamayo B,30211,24
+Gombe,Gombe,Balanga,Balanga,Bambam,Bambam,Godobe,30212,33
+Gombe,Gombe,Balanga,Balanga,Bangu,Bangu,Soma,30221,46
+Gombe,Gombe,Balanga,Balanga,Bangu,Bangu,Jandawa,30222,35
+Gombe,Gombe,Dukku,Dukku,Gombe Abba,Gombe Abba,Lule Dabe,30311,36
+Gombe,Gombe,Dukku,Dukku,Gombe Abba,Gombe Abba,Wuro S Kogi,30312,106
+Gombe,Gombe,Dukku,Dukku,Hashidu,Hashidu,Unguwa Barade,30321,80
+Gombe,Gombe,Dukku,Dukku,Hashidu,Hashidu,Unguwan Chiroma A,30322,93
+Gombe,Gombe,Kaltungo,Kaltungo,Awak,Awak,Tanga,30411,75
+Gombe,Gombe,Kaltungo,Kaltungo,Awak,Awak,Dundaye B,30412,49
+Gombe,Gombe,Kaltungo,Kaltungo,Baule Central,Baule Central,Jalingo B B,30421,28
+Gombe,Gombe,Kaltungo,Kaltungo,Baule Central,Baule Central,Babali,30422,28
+Gombe,Gombe,Kwami,Kwami,Bojude,Bojude,Jauro Suba,30511,37
+Gombe,Gombe,Kwami,Kwami,Bojude,Bojude,Bura Babadala,30512,51
+Gombe,Gombe,Kwami,Kwami,Daban Fulani,Daban Fulani,Anguwan Yarima B,30521,131
+Gombe,Gombe,Kwami,Kwami,Daban Fulani,Daban Fulani,Anguwan Waziri,30522,141
+Gombe,Gombe,Yamaltu Deba,Yamaltu Deba,Deba,Deba,Kobon Jauro Baba A,30611,24
+Gombe,Gombe,Yamaltu Deba,Yamaltu Deba,Deba,Deba,Fage B,30612,97
+Gombe,Gombe,Yamaltu Deba,Yamaltu Deba,Gwani Shinga Wade,Gwani Shinga Wade,Zanduwa Jauro Rabe A,30621,41
+Gombe,Gombe,Yamaltu Deba,Yamaltu Deba,Gwani Shinga Wade,Gwani Shinga Wade,Shinga Bakinkasuwa Makera A,30622,108

@@ -39,11 +39,13 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),
         logging.FileHandler(log_filename, encoding="utf-8"),
     ],
+    force=True,   # a Databricks notebook may already have logging handlers
 )
 import io
 for handler in logging.root.handlers:
+    # Terminals only: a Databricks notebook's stdout has no .buffer
     if isinstance(handler, logging.StreamHandler) and \
-       not isinstance(handler, logging.FileHandler):
+       not isinstance(handler, logging.FileHandler) and hasattr(sys.stdout, "buffer"):
         handler.stream = io.TextIOWrapper(
             sys.stdout.buffer, encoding="utf-8",
             errors="replace", line_buffering=True

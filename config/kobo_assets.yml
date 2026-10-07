@@ -1,0 +1,45 @@
+# Kobo forms the SARMAAN pipelines download: one entry per stream and
+# state/round. These are config, not secrets: the Kobo API token is in the
+# Databricks secret scope "sarmaan" (key: kobo-token).
+#
+# Adding a form = adding an entry here (and, for coverage, its sampling frame
+# at coverage/mappings/rounds/<round>/dat.csv). Entry names are lowercase
+# <state>_<cycle> and are what you pass as the run's `round`.
+#
+#   asset_uid           the form ID: in the form's Kobo address after /forms/
+#   export_settings_id  the saved export (XML headers, one sheet per repeat);
+#                       may go away once we pull JSON from the API
+#   base_url            only if the form is on another Kobo server
+
+defaults:
+  base_url: https://kf.kobotoolbox.org
+
+coverage:
+  adamawa_c1:  { asset_uid: "", export_settings_id: "" }
+  bauchi_c1:   { asset_uid: "", export_settings_id: "" }
+  bauchi_c2:   { asset_uid: "", export_settings_id: "" }
+  gombe_c1:    { asset_uid: "", export_settings_id: "" }
+  jigawa_c1:   { asset_uid: "", export_settings_id: "" }
+  jigawa_c2:   { asset_uid: "", export_settings_id: "" }
+  kaduna_c1:   { asset_uid: "", export_settings_id: "" }
+  kaduna_c2:   { asset_uid: "", export_settings_id: "" }
+  kano_c1:     { asset_uid: "", export_settings_id: "" }
+  kano_c2:     { asset_uid: "", export_settings_id: "" }
+  katsina_c1:  { asset_uid: "", export_settings_id: "" }
+  katsina_c2:  { asset_uid: "", export_settings_id: "" }
+  kebbi_c1:    { asset_uid: "", export_settings_id: "" }
+  kebbi_c2:    { asset_uid: "", export_settings_id: "" }
+  sokoto_c1:   { asset_uid: "", export_settings_id: "" }   # sampling frame exists; confirm the Kobo form
+  sokoto_c2:   { asset_uid: "", export_settings_id: "" }
+  sokoto_c3:   { asset_uid: "", export_settings_id: "" }
+  sokoto_c4:   { asset_uid: "", export_settings_id: "" }
+  yobe_c1:     { asset_uid: "", export_settings_id: "" }
+  zamfara_c1:  { asset_uid: "", export_settings_id: "" }
+
+# Not read by these pipelines yet; listed so every stream's forms live here.
+amr:
+  zamfara:     { asset_uid: "" }
+pharmacy:
+  zamfara:     { asset_uid: "" }
+mortality:
+  zamfara:     { asset_uid: "" }

@@ -21,11 +21,10 @@ Logic:
 import logging
 import re
 import pandas as pd
-from config import MAPPING_DIR
+from config import DAT_FILE
 
 logger = logging.getLogger(__name__)
 
-DAT_FILE = MAPPING_DIR / "dat.csv"
 
 PREFIX_TO_CYCLE = {
     "B":  "BASELINE",

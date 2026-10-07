@@ -1,0 +1,61 @@
+state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count,RA Target
+Kano,Kano,Garko,501,Dal,5011,Randa Kofar Gabas,50111,39,8
+Kano,Kano,Garko,501,Dal,5011,Jambawa Yamma,50112,31,8
+Kano,Kano,Garko,501,Garin Ali,5012,Masaka,50121,11,8
+Kano,Kano,Garko,501,Garin Ali,5012,Katsinawa Katangawa,50122,23,8
+Kano,Kano,Garko,501,Garko,5013,Lungun Mai Cire Tsakuwa,50131,16,8
+Kano,Kano,Garko,501,Garko,5013,Kusurwa,50132,17,8
+Kano,Kano,Garko,501,Gurjiya,5014,Kumfada Layin Alhaji Zakari,50141,13,8
+Kano,Kano,Garko,501,Gurjiya,5014,Dakare Bakin Kasuwa,50142,18,8
+Kano,Kano,Garko,501,Kafin Malamai,5015,Yandungwi Dan Hausa,50151,19,8
+Kano,Kano,Garko,501,Kafin Malamai,5015,Lamire Kofar Kudu,50152,13,8
+Kano,Kano,Gwale,502,Dandago,5021,Lokon Dan Kwari,50211,35,10
+Kano,Kano,Gwale,502,Dandago,5021,Layin Audu Dan Kura,50212,19,10
+Kano,Kano,Gwale,502,Diso,5022,Layin Ahmadu Dan Fulani,50221,20,10
+Kano,Kano,Gwale,502,Diso,5022,Layin Dan Makwayyo,50222,26,10
+Kano,Kano,Gwale,502,Dorayi,5023,Layin Yan Kifi,50231,38,10
+Kano,Kano,Gwale,502,Dorayi,5023,Layin Chiroma,50232,43,10
+Kano,Kano,Gwale,502,Galadanchi,5024,Layin Wada Jafar,50241,20,10
+Kano,Kano,Gwale,502,Galadanchi,5024,Layin Baba Danbaffa,50242,32,10
+Kano,Kano,Gwale,502,Goron Dutse,5025,Layin Solar,50251,24,10
+Kano,Kano,Gwale,502,Goron Dutse,5025,Layin Mallam Jabana,50252,23,10
+Kano,Kano,Kumbotso,503,Chalawa,5031,Hausawa Yamma,50311,19,10
+Kano,Kano,Kumbotso,503,Chalawa,5031,Kuyan Ta Inna Unguwar Gabas,50312,29,10
+Kano,Kano,Kumbotso,503,Chiranchi,5032,Unguwar Kwari Zangude,50321,21,10
+Kano,Kano,Kumbotso,503,Chiranchi,5032,Gaida Layin Fulani,50322,60,10
+Kano,Kano,Kumbotso,503,Dan Maliki,5033,Medile Layin Ungwar Fulani,50331,12,10
+Kano,Kano,Kumbotso,503,Dan Maliki,5033,Layin Gidan Goburawa,50332,35,10
+Kano,Kano,Kumbotso,503,Danbare,5034,Hawan Dawaki Unguwar Akwa,50341,47,10
+Kano,Kano,Kumbotso,503,Danbare,5034,Gwazaye Boader B,50342,13,10
+Kano,Kano,Kumbotso,503,Garun Gawa,5035,Dausayi,50351,20,10
+Kano,Kano,Kumbotso,503,Garun Gawa,5035,Guringawa Chikin Gari,50352,21,10
+Kano,Kano,Rano,504,Lausu,5041,Lausu Yamma,50411,25,9
+Kano,Kano,Rano,504,Lausu,5041,Gidan Loko,50412,16,9
+Kano,Kano,Rano,504,Madachi,5042,Gidan Sarki,50421,26,9
+Kano,Kano,Rano,504,Madachi,5042,Juma,50422,18,9
+Kano,Kano,Rano,504,Rano Dawaki,5043,Gwan Gwan,50431,54,9
+Kano,Kano,Rano,504,Rano Dawaki,5043,Gidan Gona,50432,11,9
+Kano,Kano,Rano,504,Rano Sabon Gari,5044,Kofar Fada,50441,30,9
+Kano,Kano,Rano,504,Rano Sabon Gari,5044,Gss Rano Quarters,50442,16,9
+Kano,Kano,Rano,504,Rurum Sabon Gari,5045,Kundu Layin Masallaci,50451,28,9
+Kano,Kano,Rano,504,Rurum Sabon Gari,5045,Gidan Tsamiya,50452,25,9
+Kano,Kano,Rimin Gado,505,Butu-Butu,5051,Ba'Awa Bakin Labi,50511,37,9
+Kano,Kano,Rimin Gado,505,Butu-Butu,5051,Ba'Awa Bakin Gauza,50512,35,9
+Kano,Kano,Rimin Gado,505,Dawakin Gulu,5052,Askala Kwari,50521,17,9
+Kano,Kano,Rimin Gado,505,Dawakin Gulu,5052,Sabuwar Unguwa,50522,26,9
+Kano,Kano,Rimin Gado,505,Doka Dawa,5053,Danya Cikin Gari,50531,19,9
+Kano,Kano,Rimin Gado,505,Doka Dawa,5053,Limawa,50532,25,9
+Kano,Kano,Rimin Gado,505,Dugurawa,5054,Dunguwa Mahaka,50541,45,9
+Kano,Kano,Rimin Gado,505,Dugurawa,5054,Gatawa Cikin Gari,50542,22,9
+Kano,Kano,Rimin Gado,505,Gulu,5055,Wangara Layin Rabilu,50551,16,9
+Kano,Kano,Rimin Gado,505,Gulu,5055,Unguwar Daudu Gasal,50552,10,9
+Kano,Kano,Tsanyawa,506,Dunbulum,5061,Jabar Katoge,50611,21,9
+Kano,Kano,Tsanyawa,506,Dunbulum,5061,Umbawa,50612,34,9
+Kano,Kano,Tsanyawa,506,Gozarki,5062,Gozarki Cikin Gari,50621,11,9
+Kano,Kano,Tsanyawa,506,Gozarki,5062,Jigilawa Cikin Gari,50622,17,9
+Kano,Kano,Tsanyawa,506,Gurun,5063,Dandali,50631,37,9
+Kano,Kano,Tsanyawa,506,Gurun,5063,Yar Yara,50632,44,9
+Kano,Kano,Tsanyawa,506,Kabagiwa,5064,Unguwar Zanko,50641,12,9
+Kano,Kano,Tsanyawa,506,Kabagiwa,5064,Kwaski Alhaji Inusa,50642,12,9
+Kano,Kano,Tsanyawa,506,Tatsan,5065,Yargwanda Tsakuwa,50651,37,9
+Kano,Kano,Tsanyawa,506,Tatsan,5065,Soro Daya,50652,29,9

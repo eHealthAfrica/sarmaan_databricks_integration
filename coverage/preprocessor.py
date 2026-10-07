@@ -20,10 +20,9 @@ Transformations:
 
 import logging
 import pandas as pd
-from config import MAPPING_DIR
+from config import DAT_FILE
 
 logger = logging.getLogger(__name__)
-DAT_FILE = MAPPING_DIR / "dat.csv"
 
 
 def apply_all(sheets: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
@@ -173,8 +172,8 @@ def _map_location_codes(df: pd.DataFrame) -> pd.DataFrame:
         for _, row in dat.iterrows():
             sn = str(row["state_Name"]).strip()
             sl = str(row["state_Label"]).strip()
-            if sn.isdigit() and sl:
-                state_code_to_label[sn] = sl
+            if sn and sl and (sn.isdigit() or sn not in state_code_to_label):
+                state_code_to_label[sn] = sl   # numeric code, or a text code like 'bauchi' 
 
     for state_col in ("states", "q1_States"):
         if state_col not in df.columns:

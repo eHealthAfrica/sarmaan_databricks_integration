@@ -15,6 +15,7 @@ secrets/
 # ...except the column mappings in map/ (no survey data)
 !map/**/*.csv
 !coverage/mappings/*.csv
+!coverage/mappings/rounds/*/dat.csv
 !coverage/mappings/*.xlsx
 *.pdf
 pipeline_output/

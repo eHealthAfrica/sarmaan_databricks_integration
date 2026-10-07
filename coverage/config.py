@@ -1,19 +1,31 @@
 """
-config.py — All pipeline settings loaded from environment variables.
-Copy .env.example -> .env and fill in your values before running.
+config.py — All pipeline settings.
+
+Which Kobo form to run is chosen by KOBO_ROUND (e.g. zamfara_c1), looked up in
+config/kobo_assets.yml at the repo root. The Kobo API token comes from the
+Databricks secret scope "sarmaan" when running in Databricks, or from .env
+when testing on a laptop. Other settings come from environment variables or
+.env (copy .env.example -> .env).
 """
 
 import os
 from pathlib import Path
+
+import yaml
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 BASE_DIR    = Path(__file__).parent
+REPO_DIR    = BASE_DIR.parent
 MAPPING_DIR = BASE_DIR / "mappings"
-OUTPUT_DIR  = BASE_DIR / "outputs"
-LOG_DIR     = BASE_DIR / "logs"
+# Where the step outputs (Excel) and logs go. Defaults to the coverage folder;
+# in Databricks the notebook points it at a temporary folder so survey data is
+# never written into the Git folder.
+WORK_DIR    = Path(os.getenv("COVERAGE_WORK_DIR", str(BASE_DIR)))
+OUTPUT_DIR  = WORK_DIR / "outputs"
+LOG_DIR     = WORK_DIR / "logs"
 
 # Mapping files
 STEP1_MAP             = MAPPING_DIR / "step_1_map_file.xlsx"
@@ -23,10 +35,68 @@ STEP5_MAP             = MAPPING_DIR / "step_5_map_file.xlsx"
 COMPLETENESS_TEMPLATE = MAPPING_DIR / "completeness_and_standardization_template.xlsx"
 
 # ── KoboToolbox ───────────────────────────────────────────────────────────────
-KOBO_API_TOKEN          = os.environ["KOBO_API_TOKEN"]
-KOBO_ASSET_UID          = os.environ["KOBO_ASSET_UID"]
-KOBO_BASE_URL           = os.getenv("KOBO_BASE_URL", "https://kf.kobotoolbox.org")
-KOBO_EXPORT_SETTINGS_ID = os.environ["KOBO_EXPORT_SETTINGS_ID"]
+KOBO_ASSETS_FILE = REPO_DIR / "config" / "kobo_assets.yml"
+KOBO_STREAM      = "coverage"
+KOBO_ROUND       = os.getenv("KOBO_ROUND", "").strip().lower()   # e.g. zamfara_c1
+SECRET_SCOPE     = os.getenv("SARMAAN_SECRET_SCOPE", "sarmaan")
+
+
+def get_dbutils():
+    """Databricks' dbutils when running in Databricks, else None (laptop)."""
+    try:
+        from pyspark.sql import SparkSession
+        from pyspark.dbutils import DBUtils
+    except ImportError:
+        return None
+    spark = SparkSession.getActiveSession()
+    return DBUtils(spark) if spark else None
+
+
+def _kobo_token() -> str:
+    dbutils = get_dbutils()
+    if dbutils is not None:
+        return dbutils.secrets.get(SECRET_SCOPE, "kobo-token")
+    token = os.getenv("KOBO_API_TOKEN", "")
+    if not token:
+        raise ValueError("No Kobo token: set KOBO_API_TOKEN in .env (laptop) or run in Databricks")
+    return token
+
+
+def kobo_asset(stream: str, round_name: str) -> dict:
+    """The kobo_assets.yml entry for a stream and round, with defaults applied."""
+    assets = yaml.safe_load(KOBO_ASSETS_FILE.read_text(encoding="utf-8")) or {}
+    entries = assets.get(stream) or {}
+    if round_name not in entries:
+        raise ValueError(
+            f"'{round_name}' is not listed under '{stream}' in {KOBO_ASSETS_FILE.name}. "
+            f"Listed: {', '.join(sorted(entries))}"
+        )
+    entry = {**(assets.get("defaults") or {}), **(entries[round_name] or {})}
+    if not entry.get("asset_uid"):
+        raise ValueError(f"'{stream}.{round_name}' in {KOBO_ASSETS_FILE.name} has no asset_uid yet")
+    return entry
+
+
+if KOBO_ROUND:
+    _asset = kobo_asset(KOBO_STREAM, KOBO_ROUND)
+    KOBO_BASE_URL           = _asset.get("base_url", "https://kf.kobotoolbox.org").rstrip("/")
+    KOBO_ASSET_UID          = _asset["asset_uid"]
+    KOBO_EXPORT_SETTINGS_ID = _asset.get("export_settings_id") or ""
+else:   # laptop testing with .env, no round chosen
+    KOBO_BASE_URL           = os.getenv("KOBO_BASE_URL", "https://kf.kobotoolbox.org").rstrip("/")
+    KOBO_ASSET_UID          = os.getenv("KOBO_ASSET_UID", "")
+    KOBO_EXPORT_SETTINGS_ID = os.getenv("KOBO_EXPORT_SETTINGS_ID", "")
+
+KOBO_API_TOKEN = _kobo_token()
+
+# Sampling frame (location code -> name lookup) for the chosen round:
+# mappings/rounds/<round>/dat.csv. Without a round, mappings/dat.csv.
+if KOBO_ROUND:
+    DAT_FILE = MAPPING_DIR / "rounds" / KOBO_ROUND / "dat.csv"
+    if not DAT_FILE.exists():
+        raise FileNotFoundError(f"No sampling frame for '{KOBO_ROUND}': expected {DAT_FILE}")
+else:
+    DAT_FILE = MAPPING_DIR / "dat.csv"
 
 # ── Load target (step 6) ─────────────────────────────────────────────────────
 # databricks (default) | postgres | both

@@ -135,7 +135,59 @@ def _cols(names: list[str]) -> str:
     return ", ".join(_q(n) for n in names)
 
 
+class _SparkCursor:
+    """The few cursor calls the loader makes, run on the notebook's Spark
+    session. Used inside Databricks, where no login is needed."""
+
+    def __init__(self, spark):
+        self._spark, self._rows = spark, []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def execute(self, sql, params=None):
+        df = self._spark.sql(sql, args=params) if params else self._spark.sql(sql)
+        self._rows = [tuple(r) for r in df.collect()]
+
+    def fetchall(self):
+        return self._rows
+
+    def fetchone(self):
+        return self._rows[0] if self._rows else None
+
+
+class _SparkConnection:
+    def __init__(self, spark):
+        self._spark = spark
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def cursor(self):
+        return _SparkCursor(self._spark)
+
+
+def _active_spark():
+    try:
+        from pyspark.sql import SparkSession
+    except ImportError:
+        return None
+    return SparkSession.getActiveSession()
+
+
 def _connect(staging_dir: Path):
+    """Inside Databricks: the notebook's Spark session. Elsewhere: a SQL
+    warehouse, signed in with the .env settings."""
+    spark = _active_spark()
+    if spark is not None:
+        return _SparkConnection(spark)
+
     from databricks import sql
 
     host = DATABRICKS_SERVER_HOSTNAME.replace("https://", "").strip().rstrip("/")
@@ -178,7 +230,8 @@ def _blank(v) -> bool:
 
 def _as_text_frame(df: pd.DataFrame) -> pd.DataFrame:
     """All values as str, missing as None (bronze and silver are all STRING)."""
-    return df.astype(object).map(lambda v: None if bool(pd.isna(v)) else str(v))
+    # Column by column: DataFrame.map needs pandas 2.1+, Databricks runtimes may ship 1.5
+    return df.astype(object).apply(lambda col: col.map(lambda v: None if bool(pd.isna(v)) else str(v)))
 
 
 def _databricks_type(raw_type: str) -> str:
@@ -549,7 +602,12 @@ def _stage(cur, load: TableLoad, local_dir: Path, run_id: str) -> None:
     pq.write_table(pa.Table.from_arrays(arrays, names=names), local)
 
     remote = f"{DATABRICKS_STAGING_VOLUME.rstrip('/')}/_staging/{local.name}"
-    cur.execute(f"PUT {_lit(local.as_posix())} INTO {_lit(remote)} OVERWRITE")
+    if isinstance(cur, _SparkCursor):
+        # Inside Databricks the volume is a folder: copy the file there
+        Path(remote).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(local, remote)
+    else:
+        cur.execute(f"PUT {_lit(local.as_posix())} INTO {_lit(remote)} OVERWRITE")
     load.staged_path = remote
 
 
@@ -618,7 +676,10 @@ def _remove_staged(cur, loads: list[TableLoad]) -> None:
         if not load.staged_path:
             continue
         try:
-            cur.execute(f"REMOVE {_lit(load.staged_path)}")
+            if isinstance(cur, _SparkCursor):
+                os.remove(load.staged_path)
+            else:
+                cur.execute(f"REMOVE {_lit(load.staged_path)}")
         except Exception as e:
             logger.warning(f"  Could not delete staged file {load.staged_path}: {e}")
 

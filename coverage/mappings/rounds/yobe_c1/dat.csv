@@ -1,0 +1,25 @@
+state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count
+Yobe,Yobe,Bade,Bade,Dagona,Dagona,Mada Muza,110111,64
+Yobe,Yobe,Bade,Bade,Dagona,Dagona,Karin Kwayi,110112,60
+Yobe,Yobe,Bade,Bade,Gwio Kura,Gwio Kura,Sobongari,110121,71
+Yobe,Yobe,Bade,Bade,Gwio Kura,Gwio Kura,Ngeljabe Maigari Baru,110122,70
+Yobe,Yobe,Fika,Fika,Fika Anze,Fika Anze,Police Barracks,110211,47
+Yobe,Yobe,Fika,Fika,Fika Anze,Fika Anze,Biti Street,110212,40
+Yobe,Yobe,Fika,Fika,Garu,Garu,Garu Ward,110221,41
+Yobe,Yobe,Fika,Fika,Garu,Garu,Seminti Anguwan Alhassan,110222,50
+Yobe,Yobe,Fune,Fune,Alagarno,Alagarno,Chidol Jauro Abbati,110311,40
+Yobe,Yobe,Fune,Fune,Alagarno,Alagarno,Katafuna,110312,40
+Yobe,Yobe,Fune,Fune,Borno Kiji,Borno Kiji,Alhaji Kare,110321,39
+Yobe,Yobe,Fune,Fune,Borno Kiji,Borno Kiji,Daurawa,110322,50
+Yobe,Yobe,Gujba,Gujba,Buni Gari,Buni Gari,Bulama Yerima,110411,63
+Yobe,Yobe,Gujba,Gujba,Buni Gari,Buni Gari,Bulabulin,110412,77
+Yobe,Yobe,Gujba,Gujba,Buni Yadi,Buni Yadi,Malari,110421,65
+Yobe,Yobe,Gujba,Gujba,Buni Yadi,Buni Yadi,Isa Mai Lalle,110422,80
+Yobe,Yobe,Gulani,Gulani,Bara,Bara,Anguwan Aduwa,110511,72
+Yobe,Yobe,Gulani,Gulani,Bara,Bara,Jauro Bala,110512,60
+Yobe,Yobe,Gulani,Gulani,Bumsa,Bumsa,Korofi,110521,67
+Yobe,Yobe,Gulani,Gulani,Bumsa,Bumsa,Bulama Audu,110522,80
+Yobe,Yobe,Nguru,Nguru,Afunori,Afunori,Askema,110611,59
+Yobe,Yobe,Nguru,Nguru,Afunori,Afunori,Kurnawa,110612,66
+Yobe,Yobe,Nguru,Nguru,Bulanguwa,Bulanguwa,Kwalle Anguwar Arewa,110621,64
+Yobe,Yobe,Nguru,Nguru,Bulanguwa,Bulanguwa,Bilalaam Hausawa,110622,76
