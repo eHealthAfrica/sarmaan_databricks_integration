@@ -76,6 +76,12 @@ stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 archive = f"/Volumes/{CATALOG}/bronze/landing/coverage/{ROUND}/{stamp}{'_dryrun' if DRY_RUN else ''}"
 try:
     main.run(dry_run=DRY_RUN)
+except SystemExit:
+    # main.py exits when step 4 validation finds issues
+    raise RuntimeError(
+        f"Stopped at step 4: validation found issues, so nothing was loaded. "
+        f"Open {archive}/outputs/04_validation_report.xlsx to see them."
+    ) from None
 finally:
     # Keep the step outputs and the log for this run, then clear the temp folder
     spark.sql(f"CREATE VOLUME IF NOT EXISTS `{CATALOG}`.`bronze`.`landing`")

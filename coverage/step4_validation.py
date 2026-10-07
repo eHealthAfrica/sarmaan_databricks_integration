@@ -41,7 +41,12 @@ def _is_not_blank(val) -> bool:
     return not _is_blank(val)
 
 def _val_eq(actual, expected) -> bool:
-    return str(actual).strip().strip('"').lower() == str(expected).strip().strip('"').lower()
+    """X = val. For a select_multiple answer ("a b c", space-separated choice
+    names) it means val is one of the choices ticked. Kobo choice names never
+    contain spaces, so select_one answers compare exactly as before."""
+    a = str(actual).strip().strip('"').lower()
+    e = str(expected).strip().strip('"').lower()
+    return a == e or e in a.split()
 
 def _val_gt(actual, threshold) -> bool:
     try:
