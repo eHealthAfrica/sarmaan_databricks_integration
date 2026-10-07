@@ -1,0 +1,25 @@
+state_Label,state_Name,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name
+Kaduna,kaduna,Giwa,giwa,Danmahawayi,danmahawayi,Anguwan_Waziri,6_01_1_1
+Kaduna,kaduna,Giwa,giwa,Danmahawayi,danmahawayi,Tsaigana_G_Liman,6_01_1_2
+Kaduna,kaduna,Giwa,giwa,Shika,shika,Unguwar_Alhaji_Bello_A,6_01_2_1
+Kaduna,kaduna,Giwa,giwa,Shika,shika,Kurku,6_01_2_2
+Kaduna,kaduna,Kajuru,kajuru,Kufana,kufana,Unguwan_Waje,6_02_1_1
+Kaduna,kaduna,Kajuru,kajuru,Kufana,kufana,Unguwan_Tanko,6_02_1_2
+Kaduna,kaduna,Kajuru,kajuru,Kasuwan_Magani,kasuwan_Magani,Unguwan_Makurdi,6_02_2_1
+Kaduna,kaduna,Kajuru,kajuru,Kasuwan_Magani,kasuwan_Magani,Dam,6_02_2_2
+Kaduna,kaduna,Kauru,kauru,Damakasuwa,damakasuwa,Kigwargwa,6_03_1_1
+Kaduna,kaduna,Kauru,kauru,Damakasuwa,damakasuwa,Sadau,6_03_1_2
+Kaduna,kaduna,Kauru,kauru,Kauru_East,kauru_east,Sabon_Kaura,6_03_2_1
+Kaduna,kaduna,Kauru,kauru,Kauru_East,kauru_east,Gidan_Tayya,6_03_2_2
+Kaduna,kaduna,Soba,soba,Danwata,danwata,Anguwan_Sarki_Dalhatu,6_04_1_1
+Kaduna,kaduna,Soba,soba,Danwata,danwata,Rugan_Rabiu,6_04_1_2
+Kaduna,kaduna,Soba,soba,Garu,garu,Zamfarawa,6_04_2_1
+Kaduna,kaduna,Soba,soba,Garu,garu,Anguwan_Gambo,6_04_2_2
+Kaduna,kaduna,Zangon Kataf,zangon kataf,Gidan_Jatau,gidan_Jatau,Sakwak_Rikashong,6_05_1_1
+Kaduna,kaduna,Zangon Kataf,zangon kataf,Gidan_Jatau,gidan_Jatau,Arawuwai,6_05_1_2
+Kaduna,kaduna,Zangon Kataf,zangon kataf,Zonkwa,zonkwa,Unguwan_Dakachi,6_05_2_1
+Kaduna,kaduna,Zangon Kataf,zangon kataf,Zonkwa,zonkwa,Unguwan_Masat,6_05_2_2
+Kaduna,kaduna,Zaria,zaria,Dambo,dambo,Rugar_Fulani_Dakace,6_06_1_1
+Kaduna,kaduna,Zaria,zaria,Dambo,dambo,Anguwan_Malam_Yero_Kanfa,6_06_1_2
+Kaduna,kaduna,Zaria,zaria,Gyellesu,gyellesu,Bayan_Asibiti_Kofan_Gayan,6_06_2_1
+Kaduna,kaduna,Zaria,zaria,Gyellesu,gyellesu,Anguwan_Mai_Darasu,6_06_2_2

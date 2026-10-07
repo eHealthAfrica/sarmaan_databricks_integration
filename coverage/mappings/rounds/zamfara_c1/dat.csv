@@ -1,0 +1,61 @@
+state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count,RA Target
+Zamfara,Zamfara,Anka,1001,Magaji,10011,Nrc A,100111,28,10
+Zamfara,Zamfara,Anka,1001,Magaji,10011,Dan Barmo B,100112,26,10
+Zamfara,Zamfara,Anka,1001,Magaji,10011,Shiyar Nagambo,100113,22,10
+Zamfara,Zamfara,Anka,1001,Dangaladima,10012,Shiyar Baban Yara,100121,18,10
+Zamfara,Zamfara,Anka,1001,Dangaladima,10012,Shiyar Malm Sule,100122,30,10
+Zamfara,Zamfara,Anka,1001,Dangaladima,10012,Shiyar Alhaji Bawa,100123,23,10
+Zamfara,Zamfara,Anka,1001,Dangaladima,10012,Tsohuwar Kwata,100124,29,10
+Zamfara,Zamfara,Anka,1001,Galadima,10013,Shiyar Yari 1,100131,22,10
+Zamfara,Zamfara,Anka,1001,Galadima,10013,Bararawa,100132,37,10
+Zamfara,Zamfara,Anka,1001,Galadima,10013,Kanwuri Garkar Sarki,100133,52,10
+Zamfara,Zamfara,Bakura,1002,Bakura,10021,Gandu 2,100211,33,9
+Zamfara,Zamfara,Bakura,1002,Bakura,10021,Boye Kai,100212,47,9
+Zamfara,Zamfara,Bakura,1002,Birnin Tudu,10022,Shiyar Magaji,100221,47,9
+Zamfara,Zamfara,Bakura,1002,Birnin Tudu,10022,Sabon Gari,100222,91,9
+Zamfara,Zamfara,Bakura,1002,Yar Kufoji,10023,Kanwuri,100231,34,9
+Zamfara,Zamfara,Bakura,1002,Yar Kufoji,10023,Yardole,100232,29,9
+Zamfara,Zamfara,Bakura,1002,Yar Geda,10024,Gurbi,100241,23,9
+Zamfara,Zamfara,Bakura,1002,Yar Geda,10024,Tashar Gayu,100242,21,9
+Zamfara,Zamfara,Bakura,1002,Rini,10025,Yarkurna,100251,58,9
+Zamfara,Zamfara,Bakura,1002,Rini,10025,S/Kofa,100252,40,9
+Zamfara,Zamfara,Bungudu,1003,Bela Rawaiya,10031,Shiyar Rafi 1A,100311,51,10
+Zamfara,Zamfara,Bungudu,1003,Bela Rawaiya,10031,"Ka,Ida 2",100312,34,10
+Zamfara,Zamfara,Bungudu,1003,Bungudu,10032,"Mallamawa1,Mallamawa 2",100321,105,10
+Zamfara,Zamfara,Bungudu,1003,Bungudu,10032,Limanchi,100322,77,10
+Zamfara,Zamfara,Bungudu,1003,Furfuri Kwaikwai,10033,Awala Madidi,100331,93,10
+Zamfara,Zamfara,Bungudu,1003,Furfuri Kwaikwai,10033,Gidan Marina,100332,23,10
+Zamfara,Zamfara,Bungudu,1003,Gada Karakai,10034,Birnin Mallan,100341,54,10
+Zamfara,Zamfara,Bungudu,1003,Gada Karakai,10034,Yar Kugga,100342,25,10
+Zamfara,Zamfara,Bungudu,1003,Kotorkoshi,10035,Kofar Bai,100351,45,10
+Zamfara,Zamfara,Bungudu,1003,Kotorkoshi,10035,Marerawa,100352,89,10
+Zamfara,Zamfara,Gusau,1004,Galadima,10041,Kurmi,100411,28,9
+Zamfara,Zamfara,Gusau,1004,Galadima,10041,Sabon Fegi,100412,55,9
+Zamfara,Zamfara,Gusau,1004,Sabon Gari,10042,Dandutsin Gabas,100421,47,9
+Zamfara,Zamfara,Gusau,1004,Sabon Gari,10042,Hizburrahim,100422,25,9
+Zamfara,Zamfara,Gusau,1004,Madawaki,10043,Unguwar Madalah,100431,29,9
+Zamfara,Zamfara,Gusau,1004,Madawaki,10043,Gada Biyu Ta Kudu,100432,64,9
+Zamfara,Zamfara,Gusau,1004,Mayana,10044,Unguwar Mal.Dabbagi,100441,80,9
+Zamfara,Zamfara,Gusau,1004,Mayana,10044,Filin Yari,100442,69,9
+Zamfara,Zamfara,Gusau,1004,Rijiya,10045,Tsunami Mai Bohol,100451,24,9
+Zamfara,Zamfara,Gusau,1004,Rijiya,10045,Tsunami Ta Arewa,100452,39,9
+Zamfara,Zamfara,Kaura Namoda,1005,Banga,10051,Shiyar Garba B,100511,30,9
+Zamfara,Zamfara,Kaura Namoda,1005,Banga,10051,Kanwuri A&B,100512,33,9
+Zamfara,Zamfara,Kaura Namoda,1005,Yankaba,10052,Shiyar Dangaladima,100521,29,9
+Zamfara,Zamfara,Kaura Namoda,1005,Yankaba,10052,Tungur Lado,100522,30,9
+Zamfara,Zamfara,Kaura Namoda,1005,Kungurki,10053,Shiyar Marafa,100531,131,9
+Zamfara,Zamfara,Kaura Namoda,1005,Kungurki,10053,Shiyar Najabaka,100532,122,9
+Zamfara,Zamfara,Kaura Namoda,1005,Galadima Dan Galadima,10054,Turmuzawa,100541,114,9
+Zamfara,Zamfara,Kaura Namoda,1005,Galadima Dan Galadima,10054,Alasawa,100542,64,9
+Zamfara,Zamfara,Kaura Namoda,1005,Sarkin Mafara-Sarkin Baura,10055,Sabuwar Kaura Farin Dutsi,100551,18,9
+Zamfara,Zamfara,Kaura Namoda,1005,Sarkin Mafara-Sarkin Baura,10055,Bakin Gebe,100552,83,9
+Zamfara,Zamfara,Shinkafi,1006,Shinkafi South,10061,Bayan Asibiti,100611,33,9
+Zamfara,Zamfara,Shinkafi,1006,Shinkafi South,10061,Maberaya North Sabon Gari,100612,61,9
+Zamfara,Zamfara,Shinkafi,1006,Birnin Yero,10062,Shiyar Ajiya 2,100621,43,9
+Zamfara,Zamfara,Shinkafi,1006,Birnin Yero,10062,Nasarawa,100622,26,9
+Zamfara,Zamfara,Shinkafi,1006,Shanawa,10063,Yarima B,100631,87,9
+Zamfara,Zamfara,Shinkafi,1006,Shanawa,10063,Ajiyawa B,100632,33,9
+Zamfara,Zamfara,Shinkafi,1006,Jangeru,10064,Shiyar Dangaladima,100641,49,9
+Zamfara,Zamfara,Shinkafi,1006,Jangeru,10064,Shiyar Bakin Marna,100642,32,9
+Zamfara,Zamfara,Shinkafi,1006,Shinkafi North,10065,Shiyar Ajiyawa A,100651,41,9
+Zamfara,Zamfara,Shinkafi,1006,Shinkafi North,10065,Barahazawa,100652,18,9

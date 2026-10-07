@@ -1,0 +1,61 @@
+s_n,state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count
+1,Kaduna,Kaduna,Chikun,601,6011,Nassarawa,Gayan Road B,60111,41
+2,Kaduna,Kaduna,Chikun,601,6011,Nassarawa,Zaria Road B,60112,43
+3,Kaduna,Kaduna,Chikun,601,6012,Narayi,Isa Shado Street,60121,29
+4,Kaduna,Kaduna,Chikun,601,6012,Narayi,Kafanchan Road,60122,47
+5,Kaduna,Kaduna,Chikun,601,6013,Kakau,Bijeh Street,60131,36
+6,Kaduna,Kaduna,Chikun,601,6013,Kakau,Unguwan Bala,60132,27
+7,Kaduna,Kaduna,Chikun,601,6014,Kujama,Unguwan Danbaki,60141,53
+8,Kaduna,Kaduna,Chikun,601,6014,Kujama,Unguwan Yarai,60142,21
+9,Kaduna,Kaduna,Chikun,601,6015,Sabon Gari,Galadima Road,60151,85
+10,Kaduna,Kaduna,Chikun,601,6015,Sabon Gari,Hakimi,60152,76
+11,Kaduna,Kaduna,Jaba,602,6021,Sabzuro,Unguwan Nyam Bako,60211,68
+12,Kaduna,Kaduna,Jaba,602,6021,Sabzuro,Unguwan Timothy Haruna,60212,38
+13,Kaduna,Kaduna,Jaba,602,6022,Chori,Unguwan Sundayali,60221,33
+14,Kaduna,Kaduna,Jaba,602,6022,Chori,Musa Mairumbu,60222,21
+15,Kaduna,Kaduna,Jaba,602,6023,Daddu,Unguwan Thomas Zock,60231,21
+16,Kaduna,Kaduna,Jaba,602,6023,Daddu,Unguwan Stephen Jonah,60232,40
+17,Kaduna,Kaduna,Jaba,602,6024,Durabitaro,Rugar Aicha,60241,34
+18,Kaduna,Kaduna,Jaba,602,6024,Durabitaro,Unguwan Haruna Jock,60242,92
+19,Kaduna,Kaduna,Jaba,602,6025,Fada,Unguwan Kurah Daro,60251,21
+20,Kaduna,Kaduna,Jaba,602,6025,Fada,Unguwan Jatau Fumen,60252,30
+21,Kaduna,Kaduna,Jemaa,603,6031,Atuku,Tajak 1,60311,30
+22,Kaduna,Kaduna,Jemaa,603,6031,Atuku,Manyikanjung,60312,22
+23,Kaduna,Kaduna,Jemaa,603,6032,Kafanchan A,Kano Street Magajiya Street,60321,25
+24,Kaduna,Kaduna,Jemaa,603,6032,Kafanchan A,Hayin Gada Ii,60322,29
+25,Kaduna,Kaduna,Jemaa,603,6033,Gidan Waya,Denji 1,60331,28
+26,Kaduna,Kaduna,Jemaa,603,6033,Gidan Waya,Unguwan Ninzo A,60332,34
+27,Kaduna,Kaduna,Jemaa,603,6034,Godogodo,Unguwan Makera,60341,27
+28,Kaduna,Kaduna,Jemaa,603,6034,Godogodo,Zankan Kwano,60342,27
+29,Kaduna,Kaduna,Jemaa,603,6035,Jagindi,Unguwan Sarki I,60351,20
+30,Kaduna,Kaduna,Jemaa,603,6035,Jagindi,Tudun Wada,60352,21
+31,Kaduna,Kaduna,Kajuru,604,6041,Kasuwan Magani,Unguwan Gwari,60411,35
+32,Kaduna,Kaduna,Kajuru,604,6041,Kasuwan Magani,Rimau City,60412,43
+33,Kaduna,Kaduna,Kajuru,604,6042,Kufana,Unguwan Sarki,60421,31
+34,Kaduna,Kaduna,Kajuru,604,6042,Kufana,Unguwan Bahago,60422,21
+35,Kaduna,Kaduna,Kajuru,604,6043,Afogo,Unguwansaleh,60431,22
+36,Kaduna,Kaduna,Kajuru,604,6043,Afogo,Kurminwali,60432,24
+37,Kaduna,Kaduna,Kajuru,604,6044,Kajuru,Rugan Durwa,60441,24
+38,Kaduna,Kaduna,Kajuru,604,6044,Kajuru,Rugan Jae,60442,28
+39,Kaduna,Kaduna,Kajuru,604,6045,Rimau,Ungwan Makaranta,60451,27
+40,Kaduna,Kaduna,Kajuru,604,6045,Rimau,Isa Kali,60452,20
+41,Kaduna,Kaduna,Soba,605,6051,Danwata,Dansala Ibrahim,60511,22
+42,Kaduna,Kaduna,Soba,605,6051,Danwata,Anguwan Maianguwa,60512,49
+43,Kaduna,Kaduna,Soba,605,6052,Gamagira,Mahauta B,60521,57
+44,Kaduna,Kaduna,Soba,605,6052,Gamagira,Anguwan Magina Gabas,60522,56
+45,Kaduna,Kaduna,Soba,605,6053,Garu,Rugar Majidadi,60531,26
+46,Kaduna,Kaduna,Soba,605,6053,Garu,Anguwan Liman,60532,25
+47,Kaduna,Kaduna,Soba,605,6054,Gimba,Wankamakarahuta,60541,47
+48,Kaduna,Kaduna,Soba,605,6054,Gimba,Anguwar Maikulu,60542,22
+49,Kaduna,Kaduna,Soba,605,6055,Kinkiba,Damari B,60551,101
+50,Kaduna,Kaduna,Soba,605,6055,Kinkiba,Anguwan Marmara,60552,75
+51,Kaduna,Kaduna,Zaria,606,6061,Dambo,Anguwan Malamai,60611,23
+52,Kaduna,Kaduna,Zaria,606,6061,Dambo,Anguwan Mai Rogo,60612,29
+53,Kaduna,Kaduna,Zaria,606,6062,Unguwarfatika,Sabuwananguwanbymaianguisyakugombe,60621,43
+54,Kaduna,Kaduna,Zaria,606,6062,Unguwarfatika,Aallibygidanalliarea,60622,139
+55,Kaduna,Kaduna,Zaria,606,6063,Gyellesu,Kufena Road,60631,70
+56,Kaduna,Kaduna,Zaria,606,6063,Gyellesu,Buzai,60632,50
+57,Kaduna,Kaduna,Zaria,606,6064,Kaura,Kadarkon Madaki,60641,65
+58,Kaduna,Kaduna,Zaria,606,6064,Kaura,Aminu Janari,60642,47
+59,Kaduna,Kaduna,Zaria,606,6065,Kufena,Anguwan Sarki Kufena,60651,48
+60,Kaduna,Kaduna,Zaria,606,6065,Kufena,Anguwan Mal Shuaibu Zakiyos,60652,30

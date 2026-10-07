@@ -1,0 +1,61 @@
+state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count
+Jigawa,Jigawa,Kaugama,Kaugama,Arbus,Arbus,Kankanba,40111,21
+Jigawa,Jigawa,Kaugama,Kaugama,Arbus,Arbus,Kantamaria,40112,24
+Jigawa,Jigawa,Kaugama,Kaugama,Askandu,Askandu,Mana,40121,19
+Jigawa,Jigawa,Kaugama,Kaugama,Askandu,Askandu,Albashi Ung Yamma,40122,29
+Jigawa,Jigawa,Kaugama,Kaugama,Dabuwaran,Dabuwaran,Rugar Doki,40131,14
+Jigawa,Jigawa,Kaugama,Kaugama,Dabuwaran,Dabuwaran,Idanzakara Kofar Fada,40132,17
+Jigawa,Jigawa,Kaugama,Kaugama,Dakaiyyawa,Dakaiyyawa,Unguwar Turaki,40141,84
+Jigawa,Jigawa,Kaugama,Kaugama,Dakaiyyawa,Dakaiyyawa,Chiroma,40142,53
+Jigawa,Jigawa,Kaugama,Kaugama,Girbobo,Girbobo,Bultuwa Kofar Fada,40151,15
+Jigawa,Jigawa,Kaugama,Kaugama,Girbobo,Girbobo,Kambariwa B,40152,22
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Baturiya,Baturiya,Iyomahauta,40211,31
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Baturiya,Baturiya,Yabal,40212,24
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Bulunchai,Bulunchai,Birnin Gudo,40221,17
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Bulunchai,Bulunchai,Sunkuye Fadaa B,40222,15
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Fandum,Fandum,Kaiwari,40231,26
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Fandum,Fandum,Suga B,40232,49
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Gayin,Gayin,Bulabirin A,40241,27
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Gayin,Gayin,Bulabirin B,40242,35
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Kiri Kasama,Kiri Kasama,Gadari Fada,40251,38
+Jigawa,Jigawa,Kiri Kasamma,Kiri Kasamma,Kiri Kasama,Kiri Kasama,Kofar Fada Kirika Samma,40252,19
+Jigawa,Jigawa,Kiyawa,Kiyawa,Andaza,Andaza,Andazara Gari A,40311,32
+Jigawa,Jigawa,Kiyawa,Kiyawa,Andaza,Andaza,Mabara Butusu,40312,17
+Jigawa,Jigawa,Kiyawa,Kiyawa,Balago,Balago,Unguwarmaidodo,40321,16
+Jigawa,Jigawa,Kiyawa,Kiyawa,Balago,Balago,Kwara,40322,17
+Jigawa,Jigawa,Kiyawa,Kiyawa,Fake,Fake,Akar B,40331,33
+Jigawa,Jigawa,Kiyawa,Kiyawa,Fake,Fake,Dangoli Gabas,40332,31
+Jigawa,Jigawa,Kiyawa,Kiyawa,Garko,Garko,Garko Arewa,40341,23
+Jigawa,Jigawa,Kiyawa,Kiyawa,Garko,Garko,Zurara,40342,17
+Jigawa,Jigawa,Kiyawa,Kiyawa,Katuka,Katuka,Katuka Cikin Gari,40351,14
+Jigawa,Jigawa,Kiyawa,Kiyawa,Katuka,Katuka,Katuka Madaki,40352,22
+Jigawa,Jigawa,Miga,Miga,Dangyatin,Dangyatin,Karabe,40411,30
+Jigawa,Jigawa,Miga,Miga,Dangyatin,Dangyatin,Garingami,40412,23
+Jigawa,Jigawa,Miga,Miga,Garbo,Garbo,Sabara,40421,28
+Jigawa,Jigawa,Miga,Miga,Garbo,Garbo,Jigawartsaba,40422,29
+Jigawa,Jigawa,Miga,Miga,Gwari,Gwari,Gwarib,40431,89
+Jigawa,Jigawa,Miga,Miga,Gwari,Gwari,Kigawac,40432,32
+Jigawa,Jigawa,Miga,Miga,Hantsu,Hantsu,Markewa,40441,20
+Jigawa,Jigawa,Miga,Miga,Hantsu,Hantsu,Gidan Nagari,40442,45
+Jigawa,Jigawa,Miga,Miga,Koya,Koya,Tsalliya,40451,31
+Jigawa,Jigawa,Miga,Miga,Koya,Koya,Gidankanyababba,40452,14
+Jigawa,Jigawa,Taura,Taura,Ajaura,Ajaura,Bardoarewabardotanda,40511,30
+Jigawa,Jigawa,Taura,Taura,Ajaura,Ajaura,Nahucegabasanahucegabasb,40512,66
+Jigawa,Jigawa,Taura,Taura,Chukuto,Chukuto,Akasanarewa,40521,26
+Jigawa,Jigawa,Taura,Taura,Chukuto,Chukuto,Chukutoyamma,40522,39
+Jigawa,Jigawa,Taura,Taura,Chukwaikwaiwa,Chukwaikwaiwa,Koranmato,40531,31
+Jigawa,Jigawa,Taura,Taura,Chukwaikwaiwa,Chukwaikwaiwa,Chakwaikwaiwab,40532,79
+Jigawa,Jigawa,Taura,Taura,Gujungu,Gujungu,Malawamaarewa,40541,62
+Jigawa,Jigawa,Taura,Taura,Gujungu,Gujungu,Gujungukawarigaric,40542,92
+Jigawa,Jigawa,Taura,Taura,Kiri,Kiri,Hawandua,40551,26
+Jigawa,Jigawa,Taura,Taura,Kiri,Kiri,Hawandub,40552,16
+Jigawa,Jigawa,Yankwashi,Yankwashi,Achilafiya,Achilafiya,Unguwartudukudu,40611,19
+Jigawa,Jigawa,Yankwashi,Yankwashi,Achilafiya,Achilafiya,Achilafiya,40612,33
+Jigawa,Jigawa,Yankwashi,Yankwashi,Belas,Belas,Dankariharuna,40621,20
+Jigawa,Jigawa,Yankwashi,Yankwashi,Belas,Belas,Dankarimaaru,40622,20
+Jigawa,Jigawa,Yankwashi,Yankwashi,Dawan Gawo,Dawan Gawo,Dankamaarewa,40631,54
+Jigawa,Jigawa,Yankwashi,Yankwashi,Dawan Gawo,Dawan Gawo,Dankamakudu,40632,22
+Jigawa,Jigawa,Yankwashi,Yankwashi,Gurjiya,Gurjiya,Zugumb,40641,21
+Jigawa,Jigawa,Yankwashi,Yankwashi,Gurjiya,Gurjiya,Yasore,40642,29
+Jigawa,Jigawa,Yankwashi,Yankwashi,Gwarta,Gwarta,Fantekahassan,40651,24
+Jigawa,Jigawa,Yankwashi,Yankwashi,Gwarta,Gwarta,Shadamai,40652,41

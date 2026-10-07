@@ -1,0 +1,25 @@
+s_n,state_Name,state_Label,lga_Label,lga_Name,ward_Label,ward_Name,settlement_Label,settlement_Name,sample_count
+1,4,Jigawa,Hadejia,hadejia,Yankoli,yankoli,Fanisau,40111,50
+2,4,Jigawa,Hadejia,hadejia,Yankoli,yankoli,Fantai B,40112,50
+3,4,Jigawa,Hadejia,hadejia,Yayari,yayari,Chediyar Kyalesu,40121,50
+4,4,Jigawa,Hadejia,hadejia,Yayari,yayari,Mai Alkama A,40122,50
+5,4,Jigawa,Malam Madori,malam_madori,Mairakumi,mairakumi,Agayau Gabas,40211,50
+6,4,Jigawa,Malam Madori,malam_madori,Mairakumi,mairakumi,Tagurere,40212,50
+7,4,Jigawa,Malam Madori,malam_madori,Shaiya,shaiya,Zaro,40221,50
+8,4,Jigawa,Malam Madori,malam_madori,Shaiya,shaiya,Kadirawa Abc,40222,50
+9,4,Jigawa,Roni,roni,Tunas,tunas,Shimfida B,40311,50
+10,4,Jigawa,Roni,roni,Tunas,tunas,Takwardawa,40312,50
+11,4,Jigawa,Roni,roni,Yanzaki,yanzaki,Ruwan Garau ,40321,50
+12,4,Jigawa,Roni,roni,Yanzaki,yanzaki,Yanzaki,40322,50
+13,4,Jigawa,Gumel,gumel,Dantanoma,dantanoma,Layin Nasiru Ladan,40411,50
+14,4,Jigawa,Gumel,gumel,Dantanoma,dantanoma,Gidan Gawo,40412,50
+15,4,Jigawa,Gumel,gumel,Galagamma,galagamma,Naibawa Solar,40421,50
+16,4,Jigawa,Gumel,gumel,Galagamma,galagamma,Zaburan Layin Habu Dan Yaya,40422,50
+17,4,Jigawa,Miga,miga,Hantsu,hantsu,Markewa,40511,50
+18,4,Jigawa,Miga,miga,Hantsu,hantsu,Dogori,40512,50
+19,4,Jigawa,Miga,miga,Tsakuwawa,tsakuwawa,Duje Yamma,40521,50
+20,4,Jigawa,Miga,miga,Tsakuwawa,tsakuwawa,Zagau Arewa A,40522,50
+21,4,Jigawa,Kiyawa,kiyawa,Garko,garko,Kagadama,40611,50
+22,4,Jigawa,Kiyawa,kiyawa,Garko,garko,Yan Auta Yamma B,40612,50
+23,4,Jigawa,Kiyawa,kiyawa,Shuwarin,shuwarin,Gidan Zogale,40621,50
+24,4,Jigawa,Kiyawa,kiyawa,Shuwarin,shuwarin,Kagadama,40622,50

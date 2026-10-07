@@ -25,7 +25,9 @@ coverage/
 ├── load_common.py            ← table definitions and checks shared by both loaders
 ├── databricks/setup_catalog.sql ← staging volume (the catalog and schemas already exist)
 ├── docs/generate_erd.py      ← builds the ERD (docs/erd/index.html) from the mappings + architecture.py
-├── mappings/                 ← step_1/2/3/5 map files, completeness template, dat.csv (sampling frame)
+├── mappings/                 ← step_1/2/3/5 map files, completeness template
+│   └── rounds/<round>/dat.csv ← sampling frame (location codes → names) per state/round
+├── notebooks/run_coverage_pipeline.py ← Databricks notebook: run one state/round
 ├── outputs/                  ← local outputs (git-ignored: contain survey data)
 ├── logs/                     ← one log per run (git-ignored)
 ├── requirements.txt
@@ -89,12 +91,20 @@ Files are staged in the volume `/Volumes/<catalog>/bronze/landing/_staging/` dur
 - **Keys (Databricks):** Databricks records primary and foreign keys but doesn't enforce them, so the loader also stops on blank or repeated primary keys in the batch.
 - **All or nothing:** Postgres runs everything in one transaction. Databricks has no transaction across tables, so the loader runs every check before writing, notes each table's version, and if a `MERGE` fails it restores the tables it already changed (`RESTORE TABLE … TO VERSION AS OF …`).
 
-### Setting up Databricks
+### Running in Databricks
 
-1. You need membership of `sarmaan-engineers` (read/write on the four schemas) and **Can use** on a SQL warehouse.
-2. In `.env`, set `DATABRICKS_SERVER_HOSTNAME` and `DATABRICKS_HTTP_PATH` (SQL Warehouses → your warehouse → Connection details), `DATABRICKS_CATALOG`, and either `DATABRICKS_TOKEN` (personal access token) or `DATABRICKS_CLIENT_ID` + `DATABRICKS_CLIENT_SECRET` (service principal).
-3. Set the Kobo values for the state and round you are loading (`KOBO_API_TOKEN`, `KOBO_ASSET_UID`, `KOBO_EXPORT_SETTINGS_ID`).
-4. `pip install -r requirements.txt`, then `python main.py --dry-run` to check the data, then `python main.py`. The first run creates the tables.
+1. **Forms:** each state/round is an entry in [../config/kobo_assets.yml](../config/kobo_assets.yml) (`asset_uid`, `export_settings_id`). The Kobo token is read from the `sarmaan` secret scope (key `kobo-token`), so nothing secret is in the repo.
+2. **Sampling frame:** each round has its location lookup at `mappings/rounds/<round>/dat.csv`.
+3. **Run:** in the `eha-ghi-dev` workspace, open the repo as a Git folder, open `notebooks/run_coverage_pipeline`, set the widgets (`round`, `dry_run`, `catalog`) and **Run all**. Start with `dry_run = true`: it runs every step and checks the tables but writes nothing.
+4. **Outputs:** the step outputs (Excel) and the log are saved to `/Volumes/<catalog>/bronze/landing/coverage/<round>/<time>/`. The notebook loads through its own Spark session, so it needs no Databricks login settings.
+
+You need membership of `sarmaan-engineers` (read/write on `bronze`, `silver`, `gold`, `restricted`, and the `sarmaan` secret scope).
+
+**Adding a state/round:** add its entry to `kobo_assets.yml` and its `dat.csv` under `mappings/rounds/<round>/`.
+
+### Running on a laptop (testing)
+
+In `.env`, set `KOBO_ROUND` (or `KOBO_ASSET_UID` + `KOBO_EXPORT_SETTINGS_ID`) and `KOBO_API_TOKEN`; for the Databricks load also `DATABRICKS_SERVER_HOSTNAME`, `DATABRICKS_HTTP_PATH` (SQL Warehouses → your warehouse → Connection details), `DATABRICKS_CATALOG`, and `DATABRICKS_TOKEN`. Then `python main.py --dry-run` and `python main.py`.
 
 ## Updating mappings
 
