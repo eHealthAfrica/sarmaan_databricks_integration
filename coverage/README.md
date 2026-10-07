@@ -1,8 +1,8 @@
 # SARMAAN Coverage pipeline
 
-KoboToolbox → transform → validate → PostgreSQL (`raw_data` and `sarmaan2data` schemas).
+KoboToolbox → transform → validate → Databricks catalog `eha_ghi_sarmaan_dev` / `eha_ghi_sarmaan_prod` (`bronze`, `silver`, `gold`, `restricted` schemas). Postgres (`raw_data` and `sarmaan2data` schemas) is still supported for the parallel run before switch-over.
 
-What it reads from Kobo and writes to the database is described in [SCHEMA.md](SCHEMA.md).
+What it reads from Kobo and writes to the database is described in [SCHEMA.md](SCHEMA.md). Table and column names are the same in Postgres and Databricks.
 
 ## Files
 
@@ -19,7 +19,12 @@ coverage/
 ├── step3_partner_output.py   ← approved only; merge into household_info / net_info for partners
 ├── step4_validation.py       ← completeness + standardization rules (stops the run on any issue)
 ├── step5_db_schema.py        ← approved only; DB column names, keys, cycle, 0/1 → no/yes
-├── step6_db_loader.py        ← upserts into raw_data.* and sarmaan2data.* in one transaction
+├── step6_databricks_loader.py ← MERGE into <catalog>.bronze/silver/gold/restricted (default)
+├── architecture.py           ← architecture review rules: keys, metadata, identifiers, masking
+├── step6_db_loader.py        ← Postgres: upserts into raw_data.* and sarmaan2data.* in one transaction
+├── load_common.py            ← table definitions and checks shared by both loaders
+├── databricks/setup_catalog.sql ← staging volume (the catalog and schemas already exist)
+├── docs/generate_erd.py      ← builds the ERD (docs/erd/index.html) from the mappings + architecture.py
 ├── mappings/                 ← step_1/2/3/5 map files, completeness template, dat.csv (sampling frame)
 ├── outputs/                  ← local outputs (git-ignored: contain survey data)
 ├── logs/                     ← one log per run (git-ignored)
@@ -31,7 +36,7 @@ coverage/
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env   # fill in the Kobo token, asset UID, export settings ID and Postgres details
+cp .env.example .env   # fill in the Kobo token, asset UID, export settings ID and Databricks details
 ```
 
 ## Running
@@ -40,7 +45,8 @@ cp .env.example .env   # fill in the Kobo token, asset UID, export settings ID a
 python main.py              # all steps
 python main.py --step 1     # one step
 python main.py --step 4 5   # re-run validation and DB mapping from the latest local outputs
-python main.py --step 6     # load the latest 01_raw_xml_export.xlsx and 05_db_ready.xlsx into Postgres
+python main.py --step 6     # load the latest step 1, 2 and 5 outputs into the LOAD_TARGET
+python main.py --dry-run    # all steps; step 6 builds and checks the Databricks tables but writes nothing
 ```
 
 When a step runs without the earlier steps, it loads the **most recently written** local output for those steps.
@@ -52,15 +58,43 @@ When a step runs without the earlier steps, it loads the **most recently written
 | 3 | `SARMAAN_II_COVERAGE_{STATE}_{CYCLE}_CLEANED.xlsx` | Approved submissions merged into `household_info` + `net_info` |
 | 4 | `04_validation_report.xlsx` | Completeness and standardization issues; the run stops if there are any |
 | 5 | `05_db_ready.xlsx` | Approved submissions with DB column names |
-| 6 | (database) | Upsert into `raw_data.coverage_*` and `sarmaan2data.coverage_*` |
+| 6 | (database) | Load into Databricks and/or Postgres, set by `LOAD_TARGET` |
 
 ## Database load (step 6)
 
-- **Upsert:** rows are inserted or updated on the table's primary key, so re-running the same state and cycle doesn't create duplicates.
+`LOAD_TARGET` in `.env` picks where step 6 writes: `databricks` (default), `postgres`, or `both` (the same run to both, for the parallel run before switch-over).
+
+### Databricks layers
+
+Catalog: `eha_ghi_sarmaan_dev` (development) or `eha_ghi_sarmaan_prod` (production), set by `DATABRICKS_CATALOG`. The rules below come from the architecture review and live in [architecture.py](architecture.py).
+
+| Schema | Filled from | Tables | Contents |
+|---|---|---|---|
+| `bronze` | Step 1 | `coverage_household`, `coverage_all_children`, `coverage_net_info`, `coverage_children_1_59` | Every submission, all columns as text, plus `_ingested_at`, `_run_id`, `_source_system`, `_source_asset`, `_pipeline_version` |
+| `silver` | Step 2 | same four tables | Every submission (approved or not), readable column names, plus `root_uuid` and `_run_id` |
+| `silver` | Step 4 | `coverage_validation_issues` | One row per failed check, appended when validation stops a run; failing values of identifier columns are masked (`value_masked`) |
+| `gold` | Step 5 | same four tables | Approved submissions only, typed columns, plus `root_uuid` and `_run_id`; **no identifier columns** |
+| `restricted` | Step 5 | `coverage_household_identifiers`, `coverage_all_children_identifiers`, `coverage_children_1_59_identifiers` | Names, phone numbers (`STRING`), GPS and card images, one row per gold row, same key |
+
+**Keys (pending the key spike):** Kobo rootUuid in every layer (`meta_rootuuid` / `_submission_meta_rootuuid` in bronze, `root_uuid` in silver and gold). `coverage_household` is keyed on it; child tables on rootUuid + their row id, with rootUuid as the foreign key to the household. A household with no rootUuid gets `uuid:` + its `_uuid`, which is what Kobo sets on first submission.
+
+Files are staged in the volume `/Volumes/<catalog>/bronze/landing/_staging/` during a load and deleted afterwards. The loader creates the volume if it is missing and your group may create it; otherwise an admin runs [databricks/setup_catalog.sql](databricks/setup_catalog.sql).
+
+### Safeguards (both targets)
+
+- **Upsert:** rows are inserted or updated on the table's primary key (`MERGE` in Databricks), so re-running the same state and cycle doesn't create duplicates.
 - **Schema safety:** existing tables are never altered. If a mapped column is missing from the table, the run stops.
-- **Duplicate guard:** a household UUID that already exists under a different primary key stops the run.
+- **Duplicate guard (Postgres):** a household UUID that already exists under a different primary key stops the run. In Databricks the rootUuid key makes this unnecessary: an edited or re-exported submission keeps its rootUuid.
 - **Orphan check:** child rows whose household isn't in the batch stop the run.
-- **Transaction:** everything is in one transaction. Any error rolls back the whole load.
+- **Keys (Databricks):** Databricks records primary and foreign keys but doesn't enforce them, so the loader also stops on blank or repeated primary keys in the batch.
+- **All or nothing:** Postgres runs everything in one transaction. Databricks has no transaction across tables, so the loader runs every check before writing, notes each table's version, and if a `MERGE` fails it restores the tables it already changed (`RESTORE TABLE … TO VERSION AS OF …`).
+
+### Setting up Databricks
+
+1. You need membership of `sarmaan-engineers` (read/write on the four schemas) and **Can use** on a SQL warehouse.
+2. In `.env`, set `DATABRICKS_SERVER_HOSTNAME` and `DATABRICKS_HTTP_PATH` (SQL Warehouses → your warehouse → Connection details), `DATABRICKS_CATALOG`, and either `DATABRICKS_TOKEN` (personal access token) or `DATABRICKS_CLIENT_ID` + `DATABRICKS_CLIENT_SECRET` (service principal).
+3. Set the Kobo values for the state and round you are loading (`KOBO_API_TOKEN`, `KOBO_ASSET_UID`, `KOBO_EXPORT_SETTINGS_ID`).
+4. `pip install -r requirements.txt`, then `python main.py --dry-run` to check the data, then `python main.py`. The first run creates the tables.
 
 ## Updating mappings
 

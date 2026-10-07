@@ -578,3 +578,43 @@ def run_step5(
     logger.info("Step 5 complete")
 
     return mapped_sheets
+
+
+# ── Silver layer (Databricks) ─────────────────────────────────────────────────
+
+def _dedupe_column_names(df: pd.DataFrame, label: str) -> pd.DataFrame:
+    """
+    Databricks column names must be unique ignoring case. Step 2 maps two
+    Net_repeat columns (_index and _parent_index) to 'index', and an Excel
+    round-trip turns the second one into 'index.1'. Both become 'index_1'.
+    """
+    seen: dict[str, int] = {}
+    names = []
+    for col in df.columns:
+        base = str(col).replace(".", "_")
+        n = seen.get(base.lower(), 0)
+        seen[base.lower()] = n + 1
+        names.append(base if n == 0 else f"{base}_{n}")
+    renamed = [(a, b) for a, b in zip(df.columns, names) if str(a) != b]
+    if renamed:
+        logger.info(f"  [{label}] Renamed repeated columns for silver: {renamed}")
+    df = df.copy()
+    df.columns = names
+    return df
+
+
+def build_silver(step2_sheets: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+    """
+    Silver layer: every submission (approved or not) with the Step 2 readable
+    column names, plus the same keys as gold (concatenated_id and the child
+    PKs) and cycle. No approval filter, no 0/1 -> no/yes, no DB mapping.
+    """
+    logger.info("  Building silver tables from Step 2 output...")
+    sheets = {name: _dedupe_column_names(df, name) for name, df in step2_sheets.items()}
+    sheets = _join_admin_cols(sheets)
+    sheets = _restore_submission_uuid(sheets)
+    sheets = _add_concatenated_id(sheets)
+    sheets = _add_pk_columns(sheets)
+    sheets = _add_household_fk(sheets)
+    sheets = _add_cycle(sheets)
+    return sheets
