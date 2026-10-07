@@ -10,6 +10,10 @@
 # MAGIC 2. **Run all.** Start with `dry_run = true`: it runs every step and checks the tables, but writes nothing to the catalog.
 # MAGIC 3. Read the log at the bottom. When it is clean, set `dry_run = false` and run again to load.
 # MAGIC
+# MAGIC If Kobo is slow to build the export, the run stops after **export_wait_minutes** and leaves the export
+# MAGIC on Kobo; run again later and it is picked up. You can also start the export on the Kobo website
+# MAGIC (same saved export) and run this once it shows complete: the finished file is reused.
+# MAGIC
 # MAGIC The Kobo token is read from the `sarmaan` secret scope. The step outputs (Excel) and the log are
 # MAGIC saved to `/Volumes/<catalog>/bronze/landing/coverage/<round>/<time>/`, never into this Git folder.
 
@@ -26,11 +30,13 @@ dbutils.library.restartPython()
 dbutils.widgets.text("round", "zamfara_c1", "Round (state_cycle)")
 dbutils.widgets.dropdown("dry_run", "true", ["true", "false"], "Dry run (write nothing)")
 dbutils.widgets.text("catalog", "eha_ghi_sarmaan_dev", "Catalog")
+dbutils.widgets.text("export_wait_minutes", "60", "Wait for Kobo export (minutes)")
 
 ROUND = dbutils.widgets.get("round").strip().lower()
 DRY_RUN = dbutils.widgets.get("dry_run") == "true"
 CATALOG = dbutils.widgets.get("catalog").strip()
-print(f"round={ROUND}  dry_run={DRY_RUN}  catalog={CATALOG}")
+EXPORT_WAIT = dbutils.widgets.get("export_wait_minutes").strip() or "60"
+print(f"round={ROUND}  dry_run={DRY_RUN}  catalog={CATALOG}  export_wait_minutes={EXPORT_WAIT}")
 
 # COMMAND ----------
 
@@ -48,6 +54,7 @@ os.environ.update({
     "DATABRICKS_CATALOG": CATALOG,
     "LOAD_TARGET": "databricks",
     "COVERAGE_WORK_DIR": WORK_DIR,
+    "KOBO_EXPORT_TIMEOUT_MINUTES": EXPORT_WAIT,
 })
 
 # Forget pipeline modules from an earlier run, so a new round's settings are read
