@@ -7,7 +7,7 @@ Stage, audit and load pipelines for SARMAAN survey data (KoboToolbox -> Postgres
 | `amr/` | Household, Mother, Child stagers (Zamfara) | Household, Mother, Child loaders | `sarmaan_2.sarmaan2data.amr_*` |
 | `pharmacy/` | Pharmacy stager (Zamfara) | Pharmacy loader | `sarmaan_2.sarmaan2data.pharmacy_information` |
 | `mortality/` | Household / Female / Pregnancy stager | Mortality loader | `mortality.mortalitydata.*` |
-| `coverage/` | 6-step pipeline: `python main.py` (see [coverage/README.md](coverage/README.md)) | Step 6 upsert | `raw_data.coverage_*` and `sarmaan2data.coverage_*` |
+| `coverage/` | 6-step pipeline: `python main.py` (see [coverage/README.md](coverage/README.md)) | Step 6 merge/upsert | Databricks `eha_ghi_sarmaan_dev` / `_prod`: `bronze`, `silver`, `gold`, `restricted` (Postgres `raw_data` / `sarmaan2data` while running in parallel) |
 
 Each run has two phases:
 

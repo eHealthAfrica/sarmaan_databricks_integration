@@ -28,12 +28,44 @@ KOBO_ASSET_UID          = os.environ["KOBO_ASSET_UID"]
 KOBO_BASE_URL           = os.getenv("KOBO_BASE_URL", "https://kf.kobotoolbox.org")
 KOBO_EXPORT_SETTINGS_ID = os.environ["KOBO_EXPORT_SETTINGS_ID"]
 
-# ── PostgreSQL ────────────────────────────────────────────────────────────────
+# ── Load target (step 6) ─────────────────────────────────────────────────────
+# databricks (default) | postgres | both
+# "both" loads the same run into Postgres and Databricks, for the parallel run
+# before switching over.
+LOAD_TARGET = os.getenv("LOAD_TARGET", "databricks").strip().lower()
+
+# ── Databricks ────────────────────────────────────────────────────────────────
+# Server hostname and HTTP path: SQL Warehouses > (your warehouse) > Connection details.
+DATABRICKS_SERVER_HOSTNAME = os.getenv("DATABRICKS_SERVER_HOSTNAME", "")
+DATABRICKS_HTTP_PATH       = os.getenv("DATABRICKS_HTTP_PATH", "")
+# Sign in with EITHER a personal access token (DATABRICKS_TOKEN) OR a service
+# principal (DATABRICKS_CLIENT_ID + DATABRICKS_CLIENT_SECRET, OAuth).
+DATABRICKS_TOKEN         = os.getenv("DATABRICKS_TOKEN", "")
+DATABRICKS_CLIENT_ID     = os.getenv("DATABRICKS_CLIENT_ID", "")
+DATABRICKS_CLIENT_SECRET = os.getenv("DATABRICKS_CLIENT_SECRET", "")
+
+# Unity Catalog names (architecture review; see architecture.py):
+#   catalog    -> eha_ghi_sarmaan_dev (development) or eha_ghi_sarmaan_prod (production)
+#   bronze     -> coverage_*              (step 1: every submission, all text, lineage columns)
+#   silver     -> coverage_*              (step 2: every submission, readable names)
+#   gold       -> coverage_*              (step 5: approved only, typed, no identifiers)
+#   restricted -> coverage_*_identifiers  (names, phones, GPS, card images for gold rows)
+DATABRICKS_CATALOG           = os.getenv("DATABRICKS_CATALOG", "eha_ghi_sarmaan_dev")
+DATABRICKS_BRONZE_SCHEMA     = os.getenv("DATABRICKS_BRONZE_SCHEMA", "bronze")
+DATABRICKS_SILVER_SCHEMA     = os.getenv("DATABRICKS_SILVER_SCHEMA", "silver")
+DATABRICKS_GOLD_SCHEMA       = os.getenv("DATABRICKS_GOLD_SCHEMA", "gold")
+DATABRICKS_RESTRICTED_SCHEMA = os.getenv("DATABRICKS_RESTRICTED_SCHEMA", "restricted")
+# Volume where step 6 stages Parquet files before merging them into tables.
+DATABRICKS_STAGING_VOLUME = os.getenv(
+    "DATABRICKS_STAGING_VOLUME", f"/Volumes/{DATABRICKS_CATALOG}/bronze/landing"
+)
+
+# ── PostgreSQL (only when LOAD_TARGET is postgres or both) ───────────────────
 PG_HOST     = os.getenv("PG_HOST", "localhost")
 PG_PORT     = os.getenv("PG_PORT", "5432")
-PG_DB       = os.environ["PG_DB"]
-PG_USER     = os.environ["PG_USER"]
-PG_PASSWORD = os.environ["PG_PASSWORD"]
+PG_DB       = os.getenv("PG_DB", "")
+PG_USER     = os.getenv("PG_USER", "")
+PG_PASSWORD = os.getenv("PG_PASSWORD", "")
 
 # Target schemas in the database. The DB already stores coverage data as:
 #   raw   -> raw_data.coverage_household / coverage_all_children / coverage_net_info / coverage_children_1_59

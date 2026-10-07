@@ -5,6 +5,8 @@ Run:
     python main.py             # full pipeline (all steps)
     python main.py --step 1    # run only step 1
     python main.py --step 4 5  # run steps 4 and 5
+    python main.py --dry-run   # all steps, but step 6 only builds and checks the
+                               # Databricks tables (no connection, nothing written)
 
 Steps:
     1 — Raw XML export          -> outputs/01_raw_xml_export.xlsx
@@ -12,7 +14,8 @@ Steps:
     3 — Merge + partner output  -> outputs/SARMAAN_II_COVERAGE_{STATE}_{CYCLE}_CLEANED.xlsx
     4 — Validation              -> outputs/04_validation_report.xlsx (stops on failure)
     5 — DB schema mapping       -> outputs/05_db_ready.xlsx
-    6 — Sync to PostgreSQL      -> raw_data.coverage_* and sarmaan2data.coverage_*
+    6 — Load                    -> Databricks <catalog>.bronze/silver/gold/restricted
+                                   and/or Postgres raw_data / sarmaan2data (LOAD_TARGET)
 """
 
 import argparse
@@ -23,7 +26,7 @@ from datetime import datetime
 
 import pandas as pd
 
-from config import LOG_DIR, OUTPUT_DIR, STEP1_FILENAME, STEP5_FILENAME
+from config import LOAD_TARGET, LOG_DIR, OUTPUT_DIR, STEP1_FILENAME, STEP4_FILENAME, STEP5_FILENAME
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -49,7 +52,9 @@ for handler in logging.root.handlers:
 logger = logging.getLogger("main")
 
 
-def run(steps: list[int] | None = None):
+def run(steps: list[int] | None = None, dry_run: bool = False):
+    if LOAD_TARGET not in ("databricks", "postgres", "both"):
+        raise ValueError(f"LOAD_TARGET must be databricks, postgres or both (got '{LOAD_TARGET}')")
     run_all = not steps
     def should_run(n): return run_all or n in steps
 
@@ -124,6 +129,8 @@ def run(steps: list[int] | None = None):
             step4_sheets = run_step4(step3_sheets, completeness_rules, std_cols)
         except ValidationError as e:
             logger.error(f"Pipeline stopped at Step 4: {e}")
+            if not dry_run:
+                _record_validation_issues()
             sys.exit(1)
 
     # ── Step 5: DB schema mapping ─────────────────────────────────────────────
@@ -135,10 +142,8 @@ def run(steps: list[int] | None = None):
             )
         step5_sheets = run_step5(step2_sheets, step5_maps, std_cols)
 
-    # ── Step 6: Sync to PostgreSQL ────────────────────────────────────────────
+    # ── Step 6: Load (Databricks and/or PostgreSQL) ──────────────────────────
     if should_run(6):
-        from step6_db_loader import run_step6
-
         # Load from memory if available, otherwise from local files
         if step1_sheets is None:
             step1_sheets = _load_local(
@@ -163,17 +168,63 @@ def run(steps: list[int] | None = None):
             "Child_Infoo":    step5_maps.get("child_infoo", {}),
         }
 
-        run_step6(
-            raw_sheets=step1_sheets,
-            clean_sheets=step5_sheets,
-            raw_maps=raw_maps,
-            clean_maps=clean_maps,
-        )
+        if dry_run:
+            _dry_run(step1_sheets, raw_maps, step2_sheets, step5_sheets)
+        elif LOAD_TARGET in ("postgres", "both"):
+            from step6_db_loader import run_step6
+            run_step6(
+                raw_sheets=step1_sheets,
+                clean_sheets=step5_sheets,
+                raw_maps=raw_maps,
+                clean_maps=clean_maps,
+            )
+
+        if not dry_run and LOAD_TARGET in ("databricks", "both"):
+            from step6_databricks_loader import run_step6_databricks
+            if step2_sheets is None:
+                step2_sheets = _load_local(
+                    2, sheets=["Household Code", "Child_Info", "Net_repeat", "Child_Infoo"]
+                )
+            run_step6_databricks(
+                raw_sheets=step1_sheets,
+                raw_maps=raw_maps,
+                step2_sheets=step2_sheets,
+                clean_sheets=step5_sheets,
+            )
 
     elapsed = time.time() - start
     logger.info("=" * 60)
     logger.info(f"Pipeline finished in {elapsed:.1f}s")
     logger.info("=" * 60)
+
+
+def _dry_run(step1_sheets, raw_maps, step2_sheets, step5_sheets) -> None:
+    """Build and check every Databricks table without connecting."""
+    from step6_databricks_loader import prepare_all
+    if step2_sheets is None:
+        step2_sheets = _load_local(
+            2, sheets=["Household Code", "Child_Info", "Net_repeat", "Child_Infoo"]
+        )
+    loads = prepare_all(step1_sheets, raw_maps, step2_sheets, step5_sheets)
+    logger.info("=" * 60)
+    logger.info("DRY RUN — tables that step 6 would load (nothing written):")
+    for load in loads:
+        logger.info(
+            f"  {load.name:<55} {len(load.df):>6} rows  {len(load.df.columns):>4} cols  "
+            f"key: {', '.join(load.pk) or '-'}"
+        )
+
+
+def _record_validation_issues() -> None:
+    """Append the Step 4 report to Databricks silver.coverage_validation_issues."""
+    if LOAD_TARGET not in ("databricks", "both"):
+        return
+    try:
+        from step6_databricks_loader import log_validation_issues
+        log_validation_issues(OUTPUT_DIR / STEP4_FILENAME)
+    except Exception as e:
+        # The validation failure is what matters; don't hide it behind this one
+        logger.error(f"Could not record validation issues in Databricks: {e}")
 
 
 def _load_local(
@@ -215,5 +266,9 @@ if __name__ == "__main__":
         "--step", nargs="+", type=int,
         help="Run specific steps only, e.g. --step 1 or --step 5 6",
     )
+    parser.add_argument(
+        "--dry-run", action="store_true",
+        help="Build and check the Databricks tables in step 6 without connecting or writing",
+    )
     args = parser.parse_args()
-    run(steps=args.step)
+    run(steps=args.step, dry_run=args.dry_run)

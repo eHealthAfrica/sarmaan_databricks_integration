@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SARMAAN Coverage ERD</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+/* Layout: physical ERD canvas — parent entity left, child entities right, crow's-foot connectors drawn between key rows; restricted identifier tables in a band below */
+:root {
+  --bg: #f3f5f8; --panel: #ffffff; --fg: #15202c; --muted: #5a6575; --line: #d6dce4; --grid: #e6eaf0;
+  --accent: #0b6fb8; --accent-soft: #e2eef8; --mark: #fff1a8; --pk: #8a6a00; --pk-soft: #f7efd2;
+  --bronze: #9a5a1f; --bronze-soft: #f6ebe0; --silver: #56626f; --silver-soft: #e9edf1; --gold: #8a6a00; --gold-soft: #f7efd2;
+  --restricted: #b42318; --restricted-soft: #fdecea; --meta: #5b4bb7; --meta-soft: #eeebfa;
+  --sans: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif; --mono: 'IBM Plex Mono', Consolas, monospace;
+  --layer: var(--gold); --layer-soft: var(--gold-soft);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; }
+body[data-layer="bronze"] { --layer: var(--bronze); --layer-soft: var(--bronze-soft); }
+body[data-layer="silver"] { --layer: var(--silver); --layer-soft: var(--silver-soft); }
+body[data-layer="gold"] { --layer: var(--gold); --layer-soft: var(--gold-soft); }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; justify-content: space-between; }
+.eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
+.eyebrow .mono { text-transform: none; letter-spacing: 0; }
+h1 { font-size: 28px; font-weight: 600; margin: 4px 0 0; line-height: 1.2; text-wrap: balance; }
+.mono { font-family: var(--mono); }
+.layers { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.layers button { font: inherit; font-weight: 600; background: none; border: 0; color: var(--muted); padding: 8px 16px; cursor: pointer; display: grid; text-align: left; gap: 1px; }
+.layers button span { font-size: 11.5px; font-weight: 400; }
+.layers button + button { border-left: 1px solid var(--line); }
+.layers button[aria-pressed="true"] { background: var(--layer-soft); color: var(--layer); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pending { background: var(--pk-soft); color: var(--fg); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+.pending b { color: var(--pk); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.bar input[type=search] { font: inherit; padding: 7px 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--fg); width: min(100%, 300px); }
+.bar label { display: inline-flex; gap: 6px; align-items: center; color: var(--fg); cursor: pointer; }
+.bar .about { color: var(--muted); flex: 1 1 320px; min-width: 0; }
+.bar .about b { color: var(--layer); }
+#hits { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-size: 12.5px; align-items: center; }
+.legend svg { vertical-align: middle; margin-right: 6px; }
+
+/* Canvas */
+.canvas-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px;
+  background-color: var(--panel); background-image: radial-gradient(var(--grid) 1px, transparent 1px); background-size: 18px 18px; }
+.canvas { position: relative; min-width: 1000px; padding: 28px; display: grid; grid-template-columns: minmax(360px, 1fr) 200px minmax(380px, 1.05fr); column-gap: 0; row-gap: 28px; align-items: start; }
+.canvas > svg.rels { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.parent { grid-column: 1; grid-row: 1; }
+.children { grid-column: 3; grid-row: 1; display: grid; gap: 22px; }
+.solo { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(360px, 460px); gap: 8px; }
+.band-note { color: var(--muted); font-size: 12.5px; max-width: 95ch; }
+.band-note b { color: var(--restricted); font-family: var(--mono); }
+.restricted { grid-column: 1 / -1; display: grid; gap: 10px; border-top: 2px dashed var(--restricted); padding-top: 16px; }
+.rgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; align-items: start; }
+
+.ent { background: var(--panel); border: 1.5px solid var(--layer); border-radius: 6px; box-shadow: 0 1px 3px rgba(20,30,45,.08); position: relative; z-index: 1; min-width: 0; }
+.ent .hd { background: var(--layer); color: var(--panel); padding: 7px 10px; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; border-radius: 4px 4px 0 0; }
+.ent .hd .nm { font-family: var(--mono); font-weight: 600; font-size: 13px; overflow-wrap: anywhere; }
+.ent .hd .ct { font-size: 11.5px; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ent .src { font-size: 11.5px; color: var(--muted); padding: 4px 10px; border-bottom: 1px solid var(--line); background: var(--layer-soft); }
+.ent.r { border-color: var(--restricted); }
+.ent.r .hd { background: var(--restricted); }
+.ent.r .src, .ent.r .keys li { background: var(--restricted-soft); }
+.ent.r .keys { border-bottom-color: var(--restricted); }
+.rows { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 12px; }
+.rows li { display: grid; grid-template-columns: 40px 1fr auto; gap: 6px; align-items: baseline; padding: 2.5px 10px; border-bottom: 1px solid var(--grid); }
+.rows li:last-child { border-bottom: 0; }
+.rows .k { font-family: var(--sans); font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-align: center; border-radius: 3px; padding: 0 2px; white-space: nowrap; }
+.rows .k.pk { background: var(--pk-soft); color: var(--pk); }
+.rows .k.fk { background: var(--accent-soft); color: var(--accent); }
+.rows .k.pkfk { background: linear-gradient(90deg, var(--pk-soft) 50%, var(--accent-soft) 50%); color: var(--fg); }
+.rows .k.n { color: var(--muted); font-weight: 400; font-family: var(--mono); font-size: 10px; text-align: right; }
+.rows .c { overflow-wrap: anywhere; min-width: 0; }
+.rows .t { color: var(--muted); font-size: 10.5px; text-transform: uppercase; white-space: nowrap; }
+.tag { font-family: var(--sans); font-size: 9.5px; font-weight: 600; border-radius: 3px; padding: 0 4px; margin-left: 6px; white-space: nowrap; }
+.tag.meta { background: var(--meta-soft); color: var(--meta); }
+.tag.pii { background: var(--restricted-soft); color: var(--restricted); }
+.keys { border-bottom: 2px solid var(--layer); }
+.keys li { background: var(--layer-soft); }
+.keys .c { font-weight: 600; }
+.ref { display: block; font-size: 10.5px; color: var(--accent); font-weight: 400; }
+.body { overflow-y: auto; }
+.parent .body { max-height: 640px; }
+.children .body { max-height: 190px; }
+.solo .body { max-height: 240px; }
+.restricted .body { max-height: none; }
+.canvas.full .body { max-height: none; }
+.rows li.dim { opacity: .22; }
+.rows mark { background: var(--mark); color: inherit; border-radius: 2px; }
+.ent .ft { font-size: 11px; color: var(--muted); padding: 4px 10px; border-top: 1px solid var(--line); }
+
+.rels .ln { stroke: var(--fg); stroke-width: 1.4; fill: none; }
+.rels .lbl { fill: var(--muted); font: 500 11px var(--mono); }
+.status { color: var(--muted); padding: 40px; }
+footer { color: var(--muted); font-size: 12.5px; max-width: 90ch; }
+@media (max-width: 560px) { h1 { font-size: 23px; } }
+@media (prefers-reduced-motion: no-preference) { .rows li { transition: opacity .15s; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Databricks · catalogs <span class="mono">eha_ghi_sarmaan_dev</span> / <span class="mono">eha_ghi_sarmaan_prod</span> · Coverage survey</p>
+      <h1>Coverage physical data model</h1>
+    </div>
+    <div class="layers" role="group" aria-label="Schema">
+      <button type="button" data-layer="bronze" aria-pressed="false">bronze<span>raw + lineage</span></button>
+      <button type="button" data-layer="silver" aria-pressed="false">silver<span>renamed, keyed</span></button>
+      <button type="button" data-layer="gold" aria-pressed="true">gold<span>approved, typed</span></button>
+    </div>
+  </header>
+
+  <p class="pending"><b>Keys pending the key spike.</b> Every table is keyed on the Kobo <span class="mono">rootUuid</span>, which stays the same when a submission is edited. Child tables add their row id inside the repeat group. Dev and prod catalogs have the same schemas and tables.</p>
+
+  <div class="bar">
+    <input id="q" type="search" aria-label="Search columns" placeholder="Find a column, e.g. root_uuid or _run_id" autocomplete="off">
+    <label><input id="full" type="checkbox"> Expand every table</label>
+    <span id="hits"></span>
+    <span class="about" id="about"></span>
+  </div>
+
+  <div class="legend" aria-label="Legend">
+    <span><b class="mono" style="color:var(--pk)">PK</b> primary key (two PK rows = composite key)</span>
+    <span><b class="mono" style="color:var(--accent)">FK</b> foreign key → parent key</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M6 2V12M10 2V12" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>exactly one (parent)</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M46 1L36 7L46 13M30 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>zero or many (child)</span>
+    <span><span class="tag meta" style="margin:0 6px 0 0">metadata</span>lineage column</span>
+    <span><span class="tag pii" style="margin:0 6px 0 0">identifier</span>name, phone, GPS or card image; restricted</span>
+  </div>
+
+  <div class="canvas-scroll">
+    <div class="canvas" id="canvas"><p class="status">Loading the data model…</p></div>
+  </div>
+
+  <footer>Generated by coverage/docs/generate_erd.py from the step 1, 2 and 5 mapping files, with the architecture review decisions applied. Primary and foreign keys are declared in Databricks as informational constraints and are not enforced by the engine; the loader's checks enforce them. DBML versions open in dbdiagram.io.</footer>
+</div>
+
+<script>
+const ABOUT = {
+  bronze: '<b>bronze</b> · step 1 · every Kobo submission as downloaded, all columns STRING, keyed on Kobo rootUuid, with lineage columns <span class="mono">_ingested_at</span>, <span class="mono">_run_id</span>, <span class="mono">_source_system</span>, <span class="mono">_source_asset</span>, <span class="mono">_pipeline_version</span>.',
+  silver: '<b>silver</b> · steps 2 and 4 · all submissions with readable names, keyed on <span class="mono">root_uuid</span>, carrying <span class="mono">_run_id</span>. The validation issues log masks failing values in identifier columns.',
+  gold: '<b>gold</b> · step 5 · approved submissions only, typed columns, keyed on <span class="mono">root_uuid</span>, carrying <span class="mono">_run_id</span>. Names, phones, GPS and card images are in <span class="mono">restricted</span>, one row per gold row.'
+};
+let DATA = null, layer = 'gold';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const TAGS = { metadata: '<span class="tag meta">metadata</span>', identifier: '<span class="tag pii">identifier</span>' };
+const BADGE = { pk: '<span class="k pk">PK</span>', fk: '<span class="k fk">FK</span>', pkfk: '<span class="k pkfk">PK FK</span>' };
+
+function row(c, kind, extra, rel) {
+  const k = kind ? BADGE[kind] : `<span class="k n">${c.pos}</span>`;
+  return `<li data-name="${esc(c.name.toLowerCase())}"${kind ? ` data-key="${kind}"` : ''}${rel ? ` data-rel="${rel}"` : ''}>${k}<span class="c"><span class="txt">${esc(c.name)}</span>${TAGS[c.tag] || ''}${extra || ''}</span><span class="t">${esc(c.type)}</span></li>`;
+}
+
+function entity(t) {
+  const cols = t.columns.map((c, i) => ({ ...c, pos: i + 1 }));
+  const keyNames = [...t.pk, ...t.fk.filter((f) => !t.pk.includes(f))];
+  const isRoot = t.pk.length && !t.fk.length;
+  const keys = keyNames.map((n, i) => {
+    const c = cols.find((x) => x.name === n);
+    const isPk = t.pk.includes(n), isFk = t.fk.includes(n);
+    const ref = isFk ? `<span class="ref">→ ${esc(t.parent_schema)}.${esc(t.parent)}.${esc(t.parent_pk[t.fk.indexOf(n)])}${t.card === 'one' ? ' (1:1)' : ''}</span>` : '';
+    const rel = isFk && t.card === 'many' ? 'link' : (isRoot && i === 0 ? 'anchor' : '');
+    return row(c, isPk && isFk ? 'pkfk' : isPk ? 'pk' : 'fk', ref, rel);
+  });
+  const rest = cols.filter((c) => !keyNames.includes(c.name)).map((c) => row(c)).join('');
+  const foot = t.card === 'many' ? 'zero or many rows per household'
+    : t.card === 'one' ? `one row per ${esc(t.parent_schema)}.${esc(t.parent)} row`
+    : t.pk.length ? 'one row per household submission' : 'no keys · not related to other tables';
+  const restricted = !['bronze', 'silver', 'gold'].includes(t.schema);
+  return `<div class="ent${restricted ? ' r' : ''}" data-table="${esc(t.name)}">
+    <div class="hd"><span class="nm">${esc(t.schema)}.${esc(t.name)}</span><span class="ct">${cols.length} cols</span></div>
+    <div class="src">${esc(t.source || '')}${t.note ? ' · ' + esc(t.note) : ''}</div>
+    ${keys.length ? `<ul class="rows keys">${keys.join('')}</ul>` : ''}
+    <div class="body"><ul class="rows">${rest}</ul></div>
+    <div class="ft">${foot}</div>
+  </div>`;
+}
+
+function render() {
+  document.body.dataset.layer = layer;
+  document.querySelectorAll('.layers button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layer === layer)));
+  $('about').innerHTML = ABOUT[layer];
+  if (!DATA) return;
+  const all = DATA.layers[layer];
+  const main = all.filter((t) => t.schema === layer);
+  const restricted = all.filter((t) => t.schema !== layer);
+  const parent = main.find((t) => t.pk.length && !t.fk.length);
+  const kids = main.filter((t) => t.fk.length);
+  const solo = main.filter((t) => !t.pk.length);
+  $('canvas').innerHTML = `<svg class="rels" aria-hidden="true"></svg>
+    <div class="parent">${entity(parent)}</div>
+    <div class="children">${kids.map(entity).join('')}</div>
+    ${solo.length ? `<div class="solo"><span class="band-note">Standalone table, no relationships</span>${solo.map(entity).join('')}</div>` : ''}
+    ${restricted.length ? `<div class="restricted"><span class="band-note"><b>restricted</b> · identifier columns moved out of gold: names, phone numbers (STRING), GPS and card images. Each table has the same key as the gold table it belongs to, one row per gold row (1:1). Access is limited to approved users.</span><div class="rgrid">${restricted.map(entity).join('')}</div></div>` : ''}`;
+  filter();
+  requestAnimationFrame(drawRels);
+}
+
+function drawRels() {
+  const cv = $('canvas'), svg = cv.querySelector('svg.rels');
+  if (!svg) return;
+  svg.replaceChildren();
+  const box = cv.getBoundingClientRect();
+  const pkRow = cv.querySelector('.parent li[data-rel="anchor"]');
+  if (!pkRow) return;
+  const p = pkRow.getBoundingClientRect();
+  const x1 = p.right - box.left, y1 = p.top + p.height / 2 - box.top;
+  const fks = [...cv.querySelectorAll('.children li[data-rel="link"]')];
+  const midX = x1 + ((fks[0]?.getBoundingClientRect().left ?? x1) - box.left - x1) / 2;
+  const add = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  // parent side: exactly one
+  add('path', { class: 'ln', d: `M${x1} ${y1}H${midX}M${x1 + 10} ${y1 - 6}V${y1 + 6}M${x1 + 15} ${y1 - 6}V${y1 + 6}` });
+  fks.forEach((li) => {
+    const r = li.getBoundingClientRect();
+    const x2 = r.left - box.left, y2 = r.top + r.height / 2 - box.top;
+    add('path', { class: 'ln', d: `M${midX} ${y1}V${y2}H${x2}` });
+    // child side: zero or many (circle + crow's foot)
+    add('path', { class: 'ln', d: `M${x2} ${y2 - 7}L${x2 - 12} ${y2}L${x2} ${y2 + 7}` });
+    add('circle', { class: 'ln', cx: x2 - 20, cy: y2, r: 4, fill: 'var(--panel)' });
+  });
+  const fkName = DATA.layers[layer].find((t) => t.card === 'many')?.fk[0] || '';
+  const t = add('text', { class: 'lbl', x: x1 + 22, y: y1 - 10 });
+  t.textContent = fkName.length > 26 ? fkName.slice(0, 25) + '…' : fkName;
+}
+
+function filter() {
+  const q = $('q').value.trim().toLowerCase();
+  let hits = 0;
+  document.querySelectorAll('.rows li').forEach((li) => {
+    const txt = li.querySelector('.txt'), raw = txt.textContent, at = li.dataset.name.indexOf(q);
+    if (!q || at < 0) { li.classList.toggle('dim', !!q); txt.innerHTML = esc(raw); return; }
+    hits++; li.classList.remove('dim');
+    txt.innerHTML = esc(raw.slice(0, at)) + '<mark>' + esc(raw.slice(at, at + q.length)) + '</mark>' + esc(raw.slice(at + q.length));
+  });
+  if (q) {
+    document.querySelectorAll('.body').forEach((b) => { const m = b.querySelector('li:not(.dim)'); if (m) b.scrollTop = m.offsetTop - b.firstElementChild.offsetTop - 4; });
+  }
+  $('hits').textContent = q ? `${hits} match${hits === 1 ? '' : 'es'}` : '';
+}
+
+document.querySelectorAll('.layers button').forEach((b) => b.addEventListener('click', () => {
+  layer = b.dataset.layer;
+  try { history.replaceState(null, '', '#' + layer); } catch (e) {}
+  render();
+}));
+$('q').addEventListener('input', filter);
+$('full').addEventListener('change', (e) => { $('canvas').classList.toggle('full', e.target.checked); requestAnimationFrame(drawRels); });
+window.addEventListener('resize', () => requestAnimationFrame(drawRels));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(drawRels));
+const h = location.hash.replace('#', '');
+if (['bronze', 'silver', 'gold'].includes(h)) layer = h;
+render();
+DATA = __DATA__;
+render();
+</script>
+
+</body>
+</html>
