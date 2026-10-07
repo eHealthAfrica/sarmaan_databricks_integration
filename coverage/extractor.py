@@ -5,9 +5,15 @@ XML headers, which keeps the group/repeat structure as separate sheets.
 The export is built by Kobo in the background, the way the Export button on
 the Kobo website does it:
   1. Read the saved export settings (KOBO_EXPORT_SETTINGS_ID).
-  2. Ask Kobo to start an export with those settings.
-  3. Check every few seconds until Kobo reports it complete.
-  4. Download the finished file, then delete the export from Kobo.
+  2. Reuse an export of this form with the same settings if there is one:
+     a finished one from the last KOBO_EXPORT_MAX_AGE_HOURS (default 24) is
+     downloaded straight away; one Kobo is still building is waited for.
+     Otherwise ask Kobo to start a new export.
+  3. Check every few seconds until Kobo reports it complete, for up to
+     KOBO_EXPORT_TIMEOUT_MINUTES (default 60). An export that is not ready
+     yet is left on Kobo, so the next run picks it up instead of starting over.
+  4. Download the finished file. Only exports this run started are deleted
+     from Kobo afterwards; exports made on the Kobo website are left alone.
 Asking for the file in one request (export-settings/<id>/data.xlsx) makes
 Kobo build it while the request waits, which times out (504) on large forms.
 
@@ -28,8 +34,10 @@ from config import KOBO_API_TOKEN, KOBO_BASE_URL, KOBO_ASSET_UID, KOBO_EXPORT_SE
 logger = logging.getLogger(__name__)
 
 POLL_SECONDS = 10
-EXPORT_TIMEOUT_MINUTES = float(os.getenv("KOBO_EXPORT_TIMEOUT_MINUTES", "30"))
+EXPORT_TIMEOUT_MINUTES = float(os.getenv("KOBO_EXPORT_TIMEOUT_MINUTES", "60"))
+EXPORT_MAX_AGE_HOURS = float(os.getenv("KOBO_EXPORT_MAX_AGE_HOURS", "24"))
 RETRY_STATUSES = {429, 500, 502, 503, 504}
+BUILDING = ("created", "processing")
 
 
 def _request(method: str, url: str, **kwargs) -> requests.Response:
@@ -46,6 +54,41 @@ def _request(method: str, url: str, **kwargs) -> requests.Response:
     raise AssertionError("unreachable")
 
 
+def _created(export: dict) -> pd.Timestamp:
+    return pd.to_datetime(export.get("date_created"), utc=True, errors="coerce")
+
+
+def _age(export: dict) -> str:
+    created = _created(export)
+    if pd.isna(created):
+        return "unknown age"
+    minutes = int((pd.Timestamp.now(tz="UTC") - created).total_seconds() // 60)
+    return f"created {created:%Y-%m-%d %H:%M} UTC, {minutes} min ago"
+
+
+def _matching_exports(asset_url: str, settings: dict) -> list[dict]:
+    """This form's recent exports made with the same settings, newest first."""
+    rows = _request("GET", f"{asset_url}/exports/", params={"limit": 100}).json().get("results", [])
+    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(hours=EXPORT_MAX_AGE_HOURS)
+    matching = []
+    for export in rows:
+        data = export.get("data") or {}
+        same = data.get("type") == settings.get("type") and all(
+            data[k] == v for k, v in settings.items() if k in data
+        )
+        created = _created(export)
+        if same and not pd.isna(created) and created >= cutoff:
+            matching.append(export)
+    return sorted(matching, key=_created, reverse=True)
+
+
+def _delete(export_url: str, uid: str) -> None:
+    try:
+        _request("DELETE", export_url)
+    except Exception as e:
+        logger.warning(f"Could not delete Kobo export {uid}: {e}")
+
+
 def _download_export() -> bytes:
     if not (KOBO_ASSET_UID and KOBO_EXPORT_SETTINGS_ID):
         raise ValueError("Kobo download needs an asset_uid and an export_settings_id for the round")
@@ -57,36 +100,47 @@ def _download_export() -> bytes:
     logger.info(f"Using saved export '{saved.get('name', KOBO_EXPORT_SETTINGS_ID)}' "
                 f"(type {settings.get('type', '?')})")
 
-    # 2. Start the export
-    export = _request("POST", f"{asset_url}/exports/", json=settings).json()
+    # 2. Reuse a recent export with the same settings, or start a new one
+    existing = _matching_exports(asset_url, settings)
+    finished = next((e for e in existing if e.get("status") == "complete"), None)
+    building = next((e for e in existing if e.get("status") in BUILDING), None)
+    started_here = False
+    if finished:
+        logger.info(f"Reusing finished Kobo export {finished['uid']} ({_age(finished)})")
+        export = finished
+    elif building:
+        logger.info(f"Kobo is already building export {building['uid']} ({_age(building)}) — waiting for it")
+        export = building
+    else:
+        export = _request("POST", f"{asset_url}/exports/", json=settings).json()
+        started_here = True
+        logger.info(f"Kobo export {export['uid']} started — waiting for Kobo to build it")
     export_url = f"{asset_url}/exports/{export['uid']}/"
-    logger.info(f"Kobo export {export['uid']} started — waiting for Kobo to build it")
 
     # 3. Wait until it is built
     deadline = time.monotonic() + EXPORT_TIMEOUT_MINUTES * 60
-    try:
-        while True:
-            status = export.get("status")
-            if status == "complete":
-                break
-            if status == "error":
-                raise RuntimeError(f"Kobo could not build the export: {export.get('messages') or export}")
-            if time.monotonic() > deadline:
-                raise TimeoutError(
-                    f"Kobo export {export['uid']} not ready after {EXPORT_TIMEOUT_MINUTES:g} minutes "
-                    f"(last status '{status}'). Set KOBO_EXPORT_TIMEOUT_MINUTES to wait longer."
-                )
-            time.sleep(POLL_SECONDS)
-            export = _request("GET", export_url).json()
+    while export.get("status") != "complete":
+        status = export.get("status")
+        if status == "error":
+            if started_here:
+                _delete(export_url, export["uid"])
+            raise RuntimeError(f"Kobo could not build the export: {export.get('messages') or export}")
+        if time.monotonic() > deadline:
+            # Left on Kobo on purpose: the next run waits for it instead of starting over
+            raise TimeoutError(
+                f"Kobo export {export['uid']} not ready after {EXPORT_TIMEOUT_MINUTES:g} minutes "
+                f"(last status '{status}'). It stays on Kobo: run again later and the pipeline "
+                f"picks it up, or wait longer with KOBO_EXPORT_TIMEOUT_MINUTES."
+            )
+        time.sleep(POLL_SECONDS)
+        export = _request("GET", export_url).json()
 
-        # 4. Download the finished file
-        logger.info(f"Kobo export {export['uid']} complete — downloading")
-        return _request("GET", export["result"]).content
-    finally:
-        try:
-            _request("DELETE", export_url)
-        except Exception as e:
-            logger.warning(f"Could not delete Kobo export {export['uid']}: {e}")
+    # 4. Download the finished file
+    logger.info(f"Kobo export {export['uid']} complete — downloading")
+    content = _request("GET", export["result"]).content
+    if started_here:
+        _delete(export_url, export["uid"])
+    return content
 
 
 def fetch_kobo_data() -> tuple[dict[str, pd.DataFrame], str]:
