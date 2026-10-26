@@ -36,9 +36,13 @@ coverage:
   yobe_c1:     { asset_uid: "", export_settings_id: "" }
   zamfara_c1:  { asset_uid: "azrwxC3wDXaiycRvmYj9kQ", export_settings_id: "esyCNoLEXxuRYYXbhzjbTgD" }
 
-# Not read by these pipelines yet; listed so every stream's forms live here.
+# AMR: read by amr/pipeline. With no export_settings_id the pipeline asks Kobo
+# for XML headers itself. The stagers' saved export (esBAy9ZfJutvuffFDgu3Bqt)
+# uses question labels as headers, so it is not used here.
 amr:
-  zamfara:     { asset_uid: "" }
+  zamfara_c1:  { asset_uid: "aks5TQaYbfgGvhCigjGAvp", export_settings_id: "" }
+
+# Not read by these pipelines yet; listed so every stream's forms live here.
 pharmacy:
   zamfara:     { asset_uid: "" }
 mortality:

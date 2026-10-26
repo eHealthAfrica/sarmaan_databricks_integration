@@ -1,212 +1,212 @@
-table,db_name,type,kobo_field,kobo_type
-household,start_time,TIMESTAMP_NTZ,start,start
-household,end_time,TIMESTAMP_NTZ,end,end
-household,enumerator_name,STRING,username,username
-household,enumerator_phone_number,STRING,phonenumber,phonenumber
-household,household_head_consent,STRING,household_head_consent,select_one
-household,date_of_consent,DATE,date_of_consent,date
-household,witness,STRING,witness,select_one
-household,witness_name,STRING,witness_name_proper,calculate
-household,start_timme,STRING,start_time,time
-household,state,STRING,state_name,calculate
-household,lga,STRING,lga_name,calculate
-household,ward,STRING,ward_name,calculate
-household,community,STRING,community_label,calculate
-household,household_no_category,STRING,,derived by the pipeline (no Kobo column)
-household,household_consent_name,STRING,name_parent_proper,calculate
-household,settlement_type,STRING,settlement_type,select_one
-household,language_communication,STRING,communication_language,select_one
-household,other_language_communication,STRING,other_communication_language,text
-household,latitude,DOUBLE,gps_capture,geopoint part
-household,longitude,DOUBLE,gps_capture,geopoint part
-household,cycle,STRING,cycle,select_one
-household,household_number,STRING,household_no1,select_one
-household,household_code,STRING,unique_code,calculate
-household,household_status,STRING,,derived by the pipeline (no Kobo column)
-household,head_household,STRING,household_head,select_one
-household,household_name,STRING,household_headname_proper,calculate
-household,gender_head_household,STRING,gender_hh,select_one
-household,household_age,INT,age_hhead,integer
-household,related_to_head_household_name,STRING,name_questionnaire_proper,calculate
-household,related_to_head_household_live,STRING,live_here,select_one
-household,related_to_head_household_stay,STRING,stay_last_night,select_one
-household,related_to_head_household_age,INT,age_hhhead,integer
-household,related_to_head_household_gender,STRING,gender_phh,select_one
-household,related_to_head_household,STRING,household_relationship,select_one
-household,related_to_head_household_others,STRING,other_household_relationship,text
-household,education,STRING,school,select_one
-household,education_type_quranic,STRING,q_western,select_multiple
-household,education_type_western,STRING,q_western,select_multiple
-household,school_level,STRING,hh_education_level,select_one
-household,school_level_primary,INT,duration_level_pri,integer
-household,school_level_secondary,INT,duration_level_sec,integer
-household,school_level_tertiary,STRING,,derived by the pipeline (no Kobo column)
-household,own_mobile_phone,STRING,own_phone,select_one
-household,smart_mobile_phone,STRING,smart_phone,select_one
-household,television,STRING,television,select_one
-household,electric_iron,STRING,electric_iron,select_one
-household,fan,STRING,fan,select_one
-household,refrigerator,STRING,refrigerator,select_one
-household,electricity,STRING,electricity,select_one
-household,generator,STRING,generator,select_one
-household,bank_account,STRING,bank_account,select_one
-household,watch,STRING,watch,select_one
-household,floor_material,STRING,floor_material,select_one
-household,floor_material_others,STRING,other_floor_material,text
-household,cooking_stove,STRING,cooking_stove,select_one
-household,cooking_stove_others,STRING,cooking_stove_others,select_one
-household,drinking_water_source,STRING,water_source,select_one
-household,drinking_water_source_others,STRING,other_water_source,text
-household,cooking_water_source,STRING,water_source2,select_one
-household,cooking_water_source_others,STRING,other_water_source2,text
-household,no_sleeping_rooms,INT,bedroom,integer
-household,toilet_facility_type,STRING,toilet_facility,select_one
-household,toilet_facility_type_others,STRING,other_toilet_facility,text
-household,shared_toilet_facility,STRING,shared_toilet,select_one
-household,toilet_facility_location,STRING,toilet_location,select_one
-household,waste_disposal,STRING,rubbish,select_one
-household,waste_disposal_others,STRING,rubbish_other,text
-household,household_handwash_use,STRING,washing_hand,select_one
-household,household_handwash_use_others,STRING,washing_hand_other,text
-household,household_handwash_observed,STRING,washing_place,select_one
-household,total_no_persons_household,INT,no_household,integer
-household,no_wives_0_59_months,INT,no_wives_1_59,integer
-household,no_children_0_59_months,INT,no_0_59,integer
-household,no_children_1_59_months,INT,no_u5,integer
-household,no_children_0_28_days,INT,no_28days,integer
-household,no_wives_caregivers,INT,mothers_count,integer
-household,manifest_url,STRING,photo,image
-household,household_uuid,STRING,_uuid,Kobo system column
-household,end_timme,TIMESTAMP_NTZ,_submission_time,Kobo system column
-household,submission_id,BIGINT,_id,Kobo system column
-household,concatenated_id,STRING,,derived by the pipeline (no Kobo column)
-household,index,INT,_index,Kobo system column
-household,health_facility_name,STRING,,derived by the pipeline (no Kobo column)
-household,marital_status_head_household,STRING,marital_status_hh,select_one
-household,person_completed_household_questionnaire_signature_url,STRING,hh_signature,image
-household,have_phone_number,STRING,hh_no,select_one
-household,phone_number,STRING,hh_phone_no,text
-household,household_head_occupation,STRING,occupation_h,select_one
-household,donkey,STRING,animal_mobility,select_one
-household,truck,STRING,truck,select_one
-household,bicycle,STRING,bicycle,select_one
-household,tricycle,STRING,tricycle,select_one
-household,computer,STRING,computer,select_one
-household,table_,STRING,table,select_one
-household,aircondition,STRING,aircondition,select_one
-household,wall_material,STRING,wall_material,select_one
-household,wall_material_others,STRING,other_wall_material,text
-household,household_number2,STRING,,derived by the pipeline (no Kobo column)
-mother,state,STRING,,derived by the pipeline (no Kobo column)
-mother,lga,STRING,,derived by the pipeline (no Kobo column)
-mother,ward,STRING,,derived by the pipeline (no Kobo column)
-mother,community,STRING,,derived by the pipeline (no Kobo column)
-mother,mother_id,STRING,mother_id_001,calculate
-mother,household_code,STRING,householdid,text
-mother,mother_code,STRING,unique_code1,text
-mother,mother_name,STRING,mother_name_proper,calculate
-mother,mother_age,INT,mother_age,integer
-mother,highest_level_education,STRING,education_level,select_one
-mother,occupation,STRING,occupation,select_one
-mother,no_children_less_1_month,INT,no_children_less_than_1_month,integer
-mother,no_children_1_59_month,INT,mother_no_u5,integer
-mother,azithromycin_administered,STRING,,derived by the pipeline (no Kobo column)
-mother,no_azithromycin_administered,STRING,,derived by the pipeline (no Kobo column)
-mother,adverse_events,STRING,,derived by the pipeline (no Kobo column)
-mother,excessive_vomiting,STRING,,derived by the pipeline (no Kobo column)
-mother,abdominal_pain,STRING,,derived by the pipeline (no Kobo column)
-mother,excessive_cry,STRING,,derived by the pipeline (no Kobo column)
-mother,watery_stool,STRING,,derived by the pipeline (no Kobo column)
-mother,constipation,STRING,,derived by the pipeline (no Kobo column)
-mother,skin_rash,STRING,,derived by the pipeline (no Kobo column)
-mother,skin_itching,STRING,,derived by the pipeline (no Kobo column)
-mother,adverse_events_other,STRING,,derived by the pipeline (no Kobo column)
-mother,adverse_events_other_specify,STRING,,derived by the pipeline (no Kobo column)
-mother,mother_uuid,STRING,_submission__uuid,Kobo system column
-mother,submission_id,BIGINT,_submission__id,Kobo system column
-mother,concatenated_id,STRING,,derived by the pipeline (no Kobo column)
-mother,index,INT,_index,Kobo system column
-mother,parent_index,INT,_parent_index,Kobo system column
-mother,cycle,STRING,,derived by the pipeline (no Kobo column)
-mother,mother_signature_url,STRING,mother_signature,image
-mother,father_name,STRING,fathername,text
-mother,mother_marital_status,STRING,marital_status_mother,select_one
-child,state,STRING,,derived by the pipeline (no Kobo column)
-child,lga,STRING,,derived by the pipeline (no Kobo column)
-child,ward,STRING,,derived by the pipeline (no Kobo column)
-child,community,STRING,,derived by the pipeline (no Kobo column)
-child,cycle,STRING,,derived by the pipeline (no Kobo column)
-child,child_id,STRING,ch_id,calculate
-child,child_code,STRING,child_id,calculate
-child,household_code,STRING,householdid_001,text
-child,mother_code,STRING,motherid,text
-child,child_name,STRING,child_name_proper,calculate
-child,child_dob,DATE,child_dob,date
-child,child_age,STRING,c_age,calculate
-child,child_gender,STRING,child_gender,select_one
-child,delivery_place,STRING,place_of_delivery,select_one
-child,feeding_mode_6_months,STRING,feeding_mode,select_one
-child,current_feeding_breastfeeding,STRING,current_feeding_mode,select_multiple
-child,current_feeding_formula,STRING,current_feeding_mode,select_multiple
-child,current_feeding_family_diet,STRING,current_feeding_mode,select_multiple
-child,current_feeding_cereals_milk,STRING,current_feeding_mode,select_multiple
-child,immunization,STRING,immunization_status,select_one
-child,no_immunization,STRING,reason_4_no_immunization,select_one
-child,child_sick,STRING,child_been_sick_in_last_3_months,select_one
-child,no_ari,INT,ari_count,integer
-child,no_afi,INT,fever,integer
-child,no_ad,INT,diarrhea_child,integer
-child,ari_info,STRING,information_rti,select_one
-child,afi_info,STRING,information_fever,select_one
-child,ad_info,STRING,information_diarrhea,select_one
-child,ors_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,zinc_tablet_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,metronidazole_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,probiotics_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,seven_keys_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,septrin_clotrimazole_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple
-child,child_antibiotic_ad,STRING,given_child_antibiotics,select_one
-child,drug_prescription_ad,STRING,who_prescribe_drugs,select_one
-child,septrin_clotrimazole_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,penicillin_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,metronidazole_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,erythromycin_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,azithromycin_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,dont_know_antibiotic,STRING,antibiotic_type_given_child,select_multiple
-child,antibiotic_others,STRING,antibiotic_type_given_child,select_multiple
-child,antibiotic_others_specify,STRING,other_given_antibiotic_type,text
-child,drug_reaction,STRING,drug_reaction_antibiotics,select_one
-child,reaction_experienced,STRING,symptoms_antibiotics,select_one
-child,reaction_experienced_others,STRING,other_symptoms_antibiotics,text
-child,child_admitted,STRING,admitted_antibiotics,select_one
-child,reaction_stop,STRING,symptom_disappear_antibiotics,select_one
-child,child_used_drug_again,STRING,another_usage_antibiotics,select_one
-child,child_used_antimalarial_3months,STRING,antimalarial,select_one
-child,drug_prescription_antimalarial,STRING,who_prescribe_drugs_001,select_one
-child,name_antimalarial,STRING,,derived by the pipeline (no Kobo column)
-child,fansidar_antimalarial,STRING,antimalarial_type,select_multiple
-child,act_antimalarial,STRING,antimalarial_type,select_multiple
-child,chloroquine_antimalarial,STRING,antimalarial_type,select_multiple
-child,camosunate_antimalarial,STRING,,derived by the pipeline (no Kobo column)
-child,quinine_antimalarial,STRING,,derived by the pipeline (no Kobo column)
-child,antimalarial_dont_know,STRING,antimalarial_type,select_multiple
-child,reaction_antimalarial,STRING,drug_reaction_antimalarial,select_one
-child,severe_symptom_antimalarial,STRING,symptoms_antimalarial,select_one
-child,severe_symptom_antimalarial_others,STRING,other_symptoms_antibiotics,text
-child,hospital_admitted_antimalaria,STRING,admitted_antimalarial,select_one
-child,reaction_stopped_antimalarial,STRING,symptom_disappear_antimalarial,select_one
-child,antimalarial_used_again,STRING,another_usage_antimalarial,select_one
-child,child_weight,STRING,,derived by the pipeline (no Kobo column)
-child,child_height_cm,STRING,,derived by the pipeline (no Kobo column)
-child,sample_date_collected,DATE,sample_date,date
-child,sample_time_collected,STRING,time,time
-child,sample_rectal_swab,STRING,sample_type,select_multiple
-child,sample_nasal_swab,STRING,sample_type,select_multiple
-child,child_uuid,STRING,_submission__uuid,Kobo system column
-child,submission_id,BIGINT,_submission__id,Kobo system column
-child,concatenated_id,STRING,,derived by the pipeline (no Kobo column)
-child,index,INT,_index,Kobo system column
-child,parent_index,INT,_parent_index,Kobo system column
-child,father_name,STRING,father_info,text
-child,mother_name,STRING,mothername,text
-child,sample_barcode,STRING,sample_barcode_no,barcode
+table,db_name,type,kobo_field,kobo_type,export_column
+household,start_time,TIMESTAMP_NTZ,start,start,start
+household,end_time,TIMESTAMP_NTZ,end,end,end
+household,enumerator_name,STRING,username,username,username
+household,enumerator_phone_number,STRING,phonenumber,phonenumber,phonenumber
+household,household_head_consent,STRING,household_head_consent,select_one,household_head_consent
+household,date_of_consent,DATE,date_of_consent,date,date_of_consent
+household,witness,STRING,witness,select_one,witness
+household,witness_name,STRING,witness_name_proper,calculate,witness_name_proper
+household,start_timme,STRING,start_time,time,start_time
+household,state,STRING,state_name,calculate,state_name
+household,lga,STRING,lga_name,calculate,lga_name
+household,ward,STRING,ward_name,calculate,ward_name
+household,community,STRING,community_label,calculate,community_label
+household,household_no_category,STRING,,derived by the pipeline (no Kobo column),
+household,household_consent_name,STRING,name_parent_proper,calculate,name_parent_proper
+household,settlement_type,STRING,settlement_type,select_one,settlement_type
+household,language_communication,STRING,communication_language,select_one,communication_language
+household,other_language_communication,STRING,other_communication_language,text,other_communication_language
+household,latitude,DOUBLE,gps_capture,geopoint part,_gps_capture_latitude
+household,longitude,DOUBLE,gps_capture,geopoint part,_gps_capture_longitude
+household,cycle,STRING,cycle,select_one,cycle
+household,household_number,STRING,household_no1,select_one,household_no1
+household,household_code,STRING,unique_code,calculate,unique_code
+household,household_status,STRING,,derived by the pipeline (no Kobo column),
+household,head_household,STRING,household_head,select_one,household_head
+household,household_name,STRING,household_headname_proper,calculate,household_headname_proper
+household,gender_head_household,STRING,gender_hh,select_one,gender_hh
+household,household_age,INT,age_hhead,integer,age_hhead
+household,related_to_head_household_name,STRING,name_questionnaire_proper,calculate,name_questionnaire_proper
+household,related_to_head_household_live,STRING,live_here,select_one,live_here
+household,related_to_head_household_stay,STRING,stay_last_night,select_one,stay_last_night
+household,related_to_head_household_age,INT,age_hhhead,integer,age_hhhead
+household,related_to_head_household_gender,STRING,gender_phh,select_one,gender_phh
+household,related_to_head_household,STRING,household_relationship,select_one,household_relationship
+household,related_to_head_household_others,STRING,other_household_relationship,text,other_household_relationship
+household,education,STRING,school,select_one,school
+household,education_type_quranic,STRING,q_western,select_multiple,q_western/quranic
+household,education_type_western,STRING,q_western,select_multiple,q_western/western
+household,school_level,STRING,hh_education_level,select_one,hh_education_level
+household,school_level_primary,INT,duration_level_pri,integer,duration_level_pri
+household,school_level_secondary,INT,duration_level_sec,integer,duration_level_sec
+household,school_level_tertiary,STRING,,derived by the pipeline (no Kobo column),
+household,own_mobile_phone,STRING,own_phone,select_one,own_phone
+household,smart_mobile_phone,STRING,smart_phone,select_one,smart_phone
+household,television,STRING,television,select_one,television
+household,electric_iron,STRING,electric_iron,select_one,electric_iron
+household,fan,STRING,fan,select_one,fan
+household,refrigerator,STRING,refrigerator,select_one,refrigerator
+household,electricity,STRING,electricity,select_one,electricity
+household,generator,STRING,generator,select_one,generator
+household,bank_account,STRING,bank_account,select_one,bank_account
+household,watch,STRING,watch,select_one,watch
+household,floor_material,STRING,floor_material,select_one,floor_material
+household,floor_material_others,STRING,other_floor_material,text,other_floor_material
+household,cooking_stove,STRING,cooking_stove,select_one,cooking_stove
+household,cooking_stove_others,STRING,cooking_stove_others,select_one,cooking_stove_others
+household,drinking_water_source,STRING,water_source,select_one,water_source
+household,drinking_water_source_others,STRING,other_water_source,text,other_water_source
+household,cooking_water_source,STRING,water_source2,select_one,water_source2
+household,cooking_water_source_others,STRING,other_water_source2,text,other_water_source2
+household,no_sleeping_rooms,INT,bedroom,integer,bedroom
+household,toilet_facility_type,STRING,toilet_facility,select_one,toilet_facility
+household,toilet_facility_type_others,STRING,other_toilet_facility,text,other_toilet_facility
+household,shared_toilet_facility,STRING,shared_toilet,select_one,shared_toilet
+household,toilet_facility_location,STRING,toilet_location,select_one,toilet_location
+household,waste_disposal,STRING,rubbish,select_one,rubbish
+household,waste_disposal_others,STRING,rubbish_other,text,rubbish_other
+household,household_handwash_use,STRING,washing_hand,select_one,washing_hand
+household,household_handwash_use_others,STRING,washing_hand_other,text,washing_hand_other
+household,household_handwash_observed,STRING,washing_place,select_one,washing_place
+household,total_no_persons_household,INT,no_household,integer,no_household
+household,no_wives_0_59_months,INT,no_wives_1_59,integer,no_wives_1_59
+household,no_children_0_59_months,INT,no_0_59,integer,no_0_59
+household,no_children_1_59_months,INT,no_u5,integer,no_u5
+household,no_children_0_28_days,INT,no_28days,integer,no_28days
+household,no_wives_caregivers,INT,mothers_count,integer,mothers_count
+household,manifest_url,STRING,photo,image,photo_URL
+household,household_uuid,STRING,_uuid,Kobo system column,_uuid
+household,end_timme,TIMESTAMP_NTZ,_submission_time,Kobo system column,_submission_time
+household,submission_id,BIGINT,_id,Kobo system column,_id
+household,concatenated_id,STRING,,derived by the pipeline (no Kobo column),
+household,index,INT,_index,Kobo system column,_index
+household,health_facility_name,STRING,,derived by the pipeline (no Kobo column),
+household,marital_status_head_household,STRING,marital_status_hh,select_one,marital_status_hh
+household,person_completed_household_questionnaire_signature_url,STRING,hh_signature,image,hh_signature_URL
+household,have_phone_number,STRING,hh_no,select_one,hh_no
+household,phone_number,STRING,hh_phone_no,text,hh_phone_no
+household,household_head_occupation,STRING,occupation_h,select_one,occupation_h
+household,donkey,STRING,animal_mobility,select_one,animal_mobility
+household,truck,STRING,truck,select_one,truck
+household,bicycle,STRING,bicycle,select_one,bicycle
+household,tricycle,STRING,tricycle,select_one,tricycle
+household,computer,STRING,computer,select_one,computer
+household,table_,STRING,table,select_one,table
+household,aircondition,STRING,aircondition,select_one,aircondition
+household,wall_material,STRING,wall_material,select_one,wall_material
+household,wall_material_others,STRING,other_wall_material,text,other_wall_material
+household,household_number2,STRING,,derived by the pipeline (no Kobo column),
+mother,state,STRING,,derived by the pipeline (no Kobo column),
+mother,lga,STRING,,derived by the pipeline (no Kobo column),
+mother,ward,STRING,,derived by the pipeline (no Kobo column),
+mother,community,STRING,,derived by the pipeline (no Kobo column),
+mother,mother_id,STRING,mother_id_001,calculate,mother_id_001
+mother,household_code,STRING,householdid,text,householdid
+mother,mother_code,STRING,unique_code1,text,unique_code1
+mother,mother_name,STRING,mother_name_proper,calculate,mother_name_proper
+mother,mother_age,INT,mother_age,integer,mother_age
+mother,highest_level_education,STRING,education_level,select_one,education_level
+mother,occupation,STRING,occupation,select_one,occupation
+mother,no_children_less_1_month,INT,no_children_less_than_1_month,integer,no_children_less_than_1_month
+mother,no_children_1_59_month,INT,mother_no_u5,integer,mother_no_u5
+mother,azithromycin_administered,STRING,,derived by the pipeline (no Kobo column),
+mother,no_azithromycin_administered,STRING,,derived by the pipeline (no Kobo column),
+mother,adverse_events,STRING,,derived by the pipeline (no Kobo column),
+mother,excessive_vomiting,STRING,,derived by the pipeline (no Kobo column),
+mother,abdominal_pain,STRING,,derived by the pipeline (no Kobo column),
+mother,excessive_cry,STRING,,derived by the pipeline (no Kobo column),
+mother,watery_stool,STRING,,derived by the pipeline (no Kobo column),
+mother,constipation,STRING,,derived by the pipeline (no Kobo column),
+mother,skin_rash,STRING,,derived by the pipeline (no Kobo column),
+mother,skin_itching,STRING,,derived by the pipeline (no Kobo column),
+mother,adverse_events_other,STRING,,derived by the pipeline (no Kobo column),
+mother,adverse_events_other_specify,STRING,,derived by the pipeline (no Kobo column),
+mother,mother_uuid,STRING,_submission__uuid,Kobo system column,_submission__uuid
+mother,submission_id,BIGINT,_submission__id,Kobo system column,_submission__id
+mother,concatenated_id,STRING,,derived by the pipeline (no Kobo column),
+mother,index,INT,_index,Kobo system column,_index
+mother,parent_index,INT,_parent_index,Kobo system column,_parent_index
+mother,cycle,STRING,,derived by the pipeline (no Kobo column),
+mother,mother_signature_url,STRING,mother_signature,image,mother_signature_URL
+mother,father_name,STRING,fathername,text,fathername
+mother,mother_marital_status,STRING,marital_status_mother,select_one,marital_status_mother
+child,state,STRING,,derived by the pipeline (no Kobo column),
+child,lga,STRING,,derived by the pipeline (no Kobo column),
+child,ward,STRING,,derived by the pipeline (no Kobo column),
+child,community,STRING,,derived by the pipeline (no Kobo column),
+child,cycle,STRING,,derived by the pipeline (no Kobo column),
+child,child_id,STRING,ch_id,calculate,ch_id
+child,child_code,STRING,child_id,calculate,child_id
+child,household_code,STRING,householdid_001,text,householdid_001
+child,mother_code,STRING,motherid,text,motherid
+child,child_name,STRING,child_name_proper,calculate,child_name_proper
+child,child_dob,DATE,child_dob,date,child_dob
+child,child_age,STRING,c_age,calculate,c_age
+child,child_gender,STRING,child_gender,select_one,child_gender
+child,delivery_place,STRING,place_of_delivery,select_one,place_of_delivery
+child,feeding_mode_6_months,STRING,feeding_mode,select_one,feeding_mode
+child,current_feeding_breastfeeding,STRING,current_feeding_mode,select_multiple,current_feeding_mode/breastfeeding
+child,current_feeding_formula,STRING,current_feeding_mode,select_multiple,current_feeding_mode/formula
+child,current_feeding_family_diet,STRING,current_feeding_mode,select_multiple,current_feeding_mode/family_diet
+child,current_feeding_cereals_milk,STRING,current_feeding_mode,select_multiple,current_feeding_mode/pap_cereals_and_milk
+child,immunization,STRING,immunization_status,select_one,immunization_status
+child,no_immunization,STRING,reason_4_no_immunization,select_one,reason_4_no_immunization
+child,child_sick,STRING,child_been_sick_in_last_3_months,select_one,child_been_sick_in_last_3_months
+child,no_ari,INT,ari_count,integer,ari_count
+child,no_afi,INT,fever,integer,fever
+child,no_ad,INT,diarrhea_child,integer,diarrhea_child
+child,ari_info,STRING,information_rti,select_one,information_rti
+child,afi_info,STRING,information_fever,select_one,information_fever
+child,ad_info,STRING,information_diarrhea,select_one,information_diarrhea
+child,ors_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/oral_rehydration_salt_ors
+child,zinc_tablet_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/zinc_tablet
+child,metronidazole_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/metronidazole
+child,probiotics_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/probiotics
+child,seven_keys_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/seven_keys
+child,septrin_clotrimazole_ad,STRING,drugs_aware_mgmt_Acute_Diarrhoea,select_multiple,drugs_aware_mgmt_Acute_Diarrhoea/septrin_clotrimazole
+child,child_antibiotic_ad,STRING,given_child_antibiotics,select_one,given_child_antibiotics
+child,drug_prescription_ad,STRING,who_prescribe_drugs,select_one,who_prescribe_drugs
+child,septrin_clotrimazole_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/septrin_cotrimoxazole
+child,penicillin_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/penicillinampicillin_ampiclox_augmentin
+child,metronidazole_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/metronidazole_flagyl
+child,erythromycin_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/erythromycin
+child,azithromycin_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/azithromycin
+child,dont_know_antibiotic,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/i_do_not_known
+child,antibiotic_others,STRING,antibiotic_type_given_child,select_multiple,antibiotic_type_given_child/others
+child,antibiotic_others_specify,STRING,other_given_antibiotic_type,text,other_given_antibiotic_type
+child,drug_reaction,STRING,drug_reaction_antibiotics,select_one,drug_reaction_antibiotics
+child,reaction_experienced,STRING,symptoms_antibiotics,select_one,symptoms_antibiotics
+child,reaction_experienced_others,STRING,other_symptoms_antibiotics,text,other_symptoms_antibiotics
+child,child_admitted,STRING,admitted_antibiotics,select_one,admitted_antibiotics
+child,reaction_stop,STRING,symptom_disappear_antibiotics,select_one,symptom_disappear_antibiotics
+child,child_used_drug_again,STRING,another_usage_antibiotics,select_one,another_usage_antibiotics
+child,child_used_antimalarial_3months,STRING,antimalarial,select_one,antimalarial
+child,drug_prescription_antimalarial,STRING,who_prescribe_drugs_001,select_one,who_prescribe_drugs_001
+child,name_antimalarial,STRING,,derived by the pipeline (no Kobo column),
+child,fansidar_antimalarial,STRING,antimalarial_type,select_multiple,antimalarial_type/fansidar
+child,act_antimalarial,STRING,antimalarial_type,select_multiple,antimalarial_type/act
+child,chloroquine_antimalarial,STRING,antimalarial_type,select_multiple,antimalarial_type/chloroquine
+child,camosunate_antimalarial,STRING,,derived by the pipeline (no Kobo column),
+child,quinine_antimalarial,STRING,,derived by the pipeline (no Kobo column),
+child,antimalarial_dont_know,STRING,antimalarial_type,select_multiple,antimalarial_type/dont_know
+child,reaction_antimalarial,STRING,drug_reaction_antimalarial,select_one,drug_reaction_antimalarial
+child,severe_symptom_antimalarial,STRING,symptoms_antimalarial,select_one,symptoms_antimalarial
+child,severe_symptom_antimalarial_others,STRING,other_symptoms_antibiotics,text,other_symptoms_antibiotics
+child,hospital_admitted_antimalaria,STRING,admitted_antimalarial,select_one,admitted_antimalarial
+child,reaction_stopped_antimalarial,STRING,symptom_disappear_antimalarial,select_one,symptom_disappear_antimalarial
+child,antimalarial_used_again,STRING,another_usage_antimalarial,select_one,another_usage_antimalarial
+child,child_weight,STRING,,derived by the pipeline (no Kobo column),
+child,child_height_cm,STRING,,derived by the pipeline (no Kobo column),
+child,sample_date_collected,DATE,sample_date,date,sample_date
+child,sample_time_collected,STRING,time,time,time
+child,sample_rectal_swab,STRING,sample_type,select_multiple,sample_type/rectal_swab
+child,sample_nasal_swab,STRING,sample_type,select_multiple,sample_type/nasal_swab
+child,child_uuid,STRING,_submission__uuid,Kobo system column,_submission__uuid
+child,submission_id,BIGINT,_submission__id,Kobo system column,_submission__id
+child,concatenated_id,STRING,,derived by the pipeline (no Kobo column),
+child,index,INT,_index,Kobo system column,_index
+child,parent_index,INT,_parent_index,Kobo system column,_parent_index
+child,father_name,STRING,father_info,text,father_info
+child,mother_name,STRING,mothername,text,mothername
+child,sample_barcode,STRING,sample_barcode_no,barcode,sample_barcode_no
