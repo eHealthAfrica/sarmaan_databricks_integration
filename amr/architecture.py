@@ -87,3 +87,7 @@ PHONE_COLUMNS = {"enumerator_phone_number", "phone_number"}
 
 def restricted_table(sheet: str) -> str:
     return f"{TABLES[sheet]}_identifiers"
+
+
+# Shown instead of the value of an identifier column in amr_validation_issues
+MASK = "***"
