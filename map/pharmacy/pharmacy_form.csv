@@ -1,0 +1,93 @@
+type,name
+start,starttime
+end,endtime
+start-geopoint,start-geopoint
+deviceid,deviceid
+username,username
+phonenumber,phonenumber
+begin_group,config
+calculate,concat_user
+note,note_missing_username
+note,note_missing_phone_number
+note,note_incorrect_date_and_time
+text,user_confrim
+text,concat_enu
+text,enum_id
+note,note_incorrect_date_and_time_001
+end_group,
+note,wrong_login
+begin_group,start_point
+note,note1
+note,note2
+image,photo_001
+begin_group,consent
+select_one yn,signed_consent
+text,name_pharmacist
+image,consent_sign
+date,date_of_consent
+select_one yn,witness
+text,witness_name
+note,note3
+end_group,
+begin_group,form_1
+time,start_time
+begin_group,g_params
+select_one state,states
+select_one lga,lgas
+select_one ward,ward
+geopoint,gps
+end_group,pharmacy_name
+begin_group,start_survey
+select_one ph,pharmacy_no
+calculate,unique
+text,pharm_id
+select_one type_settlement,settlement_type
+integer,age
+select_one sex,gender
+select_one religion,religion
+text,other_religion
+select_one edu,education
+select_one eth,ethnicity
+text,other_ethnicity
+select_one shop,drug_shop
+text,other_shop
+note,note3_001
+select_one yn,training
+begin_group,begin_group_ij4Za6U0d
+select_one type,training_type
+text,other_type
+integer,experience
+end_group,
+note,note5
+select_one yn,antibiotics
+select_multiple meaning,antibiotic_meaning
+text,other_meaning
+select_one yn,rational_use
+select_one institution,training_institute
+text,other_training_institute
+date,training_year
+select_one yn,selling
+select_multiple reason,selling_reason
+select_multiple reason2,selling_reason2
+text,other_s_reason
+integer,no_people
+integer,no_people2
+integer,no_people3
+select_one yn,no_sold
+select_multiple disease,disease
+text,other_disease
+select_one yn,effectiveness
+select_one no,no_mixed
+integer,no_mixed2
+select_one yn,prevention
+select_one type2,antibiotic_type
+text,other_antibiotic_type
+select_one yn,injections
+select_multiple injection,injection_type
+text,other_injection_type
+integer,consumption_days
+select_multiple r,stock
+text,other_stock
+end_group,
+end_group,
+end_group,
