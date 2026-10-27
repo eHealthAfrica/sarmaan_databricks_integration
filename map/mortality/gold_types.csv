@@ -1,0 +1,205 @@
+table,db_name,type,kobo_field,kobo_type,export_column,transform,other_sources,status
+household,start_time,TIMESTAMP_NTZ,starttime,start,starttime,datetime_full_utc,,keep
+household,end_time,TIMESTAMP_NTZ,endtime,end,endtime,datetime_full_utc,,keep
+household,enumerator_name,STRING,username,username,username,none,,keep
+household,enumerator_phone_number,STRING,phonenumber,phonenumber,phonenumber,none,,keep
+household,enum_id,STRING,enum_id,text,enum_id,none,,keep
+household,consent,STRING,signed_consent,select_one,signed_consent,yesno_titlecase,,keep
+household,household_head_consent,STRING,household_head_consent,select_one,household_head_consent,yesno_titlecase,,keep
+household,household_consent_name,STRING,name_parent,text,name_parent,none,,keep
+household,date_of_consent,DATE,date_of_consent,date,date_of_consent,date_truncate,,keep
+household,witness,STRING,witness,select_one,witness,yesno_titlecase,,keep
+household,witness_name,STRING,witness_name,text,witness_name,none,,keep
+household,start_timme,STRING,start_time,time,start_time,datetime_short_tz,,keep
+household,state,STRING,states,older form version,states,none,,keep
+household,lga,STRING,lgas,text,lgas,simple_capitalize,,keep
+household,ward,STRING,ward,text,ward,underscore_to_space,wards;ward_confirm,review
+household,community,STRING,community_confirm,text,community_confirm,underscore_to_space,check_hh,keep
+household,settlement_cluster,STRING,settlement_cluster,older form version,settlement_cluster,underscore_to_space,,keep
+household,women_15_49,INT,female_count,integer,female_count,none,,keep
+household,latitude,DOUBLE,latitude,calculate,latitude,none,,keep
+household,longitude,DOUBLE,longitude,calculate,longitude,none,,keep
+household,household_no_category,STRING,hh_category,select_one,hh_category,hh_category_range,,keep
+household,household_number,INT,unique,calculate,unique,int_cast,,keep
+household,household_code,STRING,unique_code,calculate,unique_code,none,,keep
+household,cycle,STRING,cycle,select_one,cycle,simple_capitalize,,keep
+household,settlement_type,STRING,settlement_type,select_one,settlement_type,simple_capitalize,,keep
+household,language_communication,STRING,communication_language,select_one,communication_language,simple_capitalize,,keep
+household,other_language_communication,STRING,other_communication_language,text,other_communication_language,none,,keep
+household,household_status,STRING,household_status,select_one,household_status,label_recode:household_status,,keep
+household,head_household,STRING,household_head,select_one,household_head,yesno_titlecase,,keep
+household,household_name,STRING,household_headname,text,household_headname,none,,keep
+household,gender_head_household,STRING,gender_hh,select_one,gender_hh,simple_capitalize,,keep
+household,household_age,INT,age_hhead,integer,age_hhead,int_cast,,keep
+household,related_to_head_household_name,STRING,name_questionnaire,text,name_questionnaire,none,,keep
+household,related_to_head_household_live,STRING,live_here,select_one,live_here,yesno_titlecase,,keep
+household,related_to_head_household_stay,STRING,stay_last_night,select_one,stay_last_night,yesno_titlecase,,keep
+household,related_to_head_household_age,INT,age_hhhead,integer,age_hhhead,int_cast,,keep
+household,related_to_head_household_gender,STRING,gender_phh,select_one,gender_phh,simple_capitalize,,keep
+household,related_to_head_household,STRING,household_relationship,select_one,household_relationship,label_recode:relationship,,keep
+household,related_to_head_household_others,STRING,other_household_relationship,text,other_household_relationship,none,,keep
+household,education,STRING,school,select_one,school,yesno_titlecase,,keep
+household,education_type_quranic,STRING,q_western,select_multiple,q_western/quranic,binary_yesno,,keep
+household,education_type_western,STRING,q_western,select_multiple,q_western/western,binary_yesno,,keep
+household,school_level,STRING,hh_education_level,select_one,hh_education_level,label_recode:school_level,,keep
+household,school_level_primary,INT,duration_level_pri,integer,duration_level_pri,int_cast,,review
+household,school_level_secondary,INT,duration_level_sec,integer,duration_level_sec,int_cast,,review
+household,own_mobile_phone,STRING,own_phone,select_one,own_phone,yesno_titlecase,,keep
+household,smart_mobile_phone,STRING,smart_phone,select_one,smart_phone,yesno_titlecase,,keep
+household,respondent_phone_number,STRING,phone_no,text,phone_no,strip_leading_zero,,keep
+household,television,STRING,television,select_one,television,yesno_titlecase,,keep
+household,electric_iron,STRING,electric_iron,select_one,electric_iron,yesno_titlecase,,keep
+household,fan,STRING,fan,select_one,fan,yesno_titlecase,,keep
+household,refrigerator,STRING,refrigerator,select_one,refrigerator,yesno_titlecase,,keep
+household,electricity,STRING,electricity,select_one,electricity,yesno_titlecase,,keep
+household,generator,STRING,generator,select_one,generator,yesno_titlecase,,keep
+household,bank_account,STRING,bank_account,select_one,bank_account,yesno_titlecase,,keep
+household,watch,STRING,watch,select_one,watch,yesno_titlecase,,keep
+household,floor_material,STRING,floor_material,select_one,floor_material,label_recode:floor_material,,keep
+household,floor_material_others,STRING,other_floor_material,select_one,other_floor_material,simple_capitalize,,keep
+household,cooking_stove,STRING,cooking_stove,select_one,cooking_stove,label_recode:cooking_stove,,keep
+household,cooking_stove_others,STRING,cooking_stove_others,select_one,cooking_stove_others,simple_capitalize,,keep
+household,drinking_water_source,STRING,water_source,select_one,water_source,label_recode:water_source,,keep
+household,drinking_water_source_others,STRING,other_water_source,text,other_water_source,none,,keep
+household,cooking_water_source,STRING,water_source2,select_one,water_source2,label_recode:water_source,,keep
+household,cooking_water_source_others,STRING,other_water_source2,text,other_water_source2,none,,keep
+household,no_sleeping_rooms,INT,bedroom,integer,bedroom,none,,keep
+household,toilet_facility_type,STRING,toilet_facility,select_one,toilet_facility,label_recode:toilet_facility,,keep
+household,toilet_facility_type_others,STRING,other_toilet_facility,text,other_toilet_facility,none,,keep
+household,shared_toilet_facility,STRING,shared_toilet,select_one,shared_toilet,yesno_titlecase,,keep
+household,toilet_facility_location,STRING,toilet_location,select_one,toilet_location,label_recode:toilet_facility_location,,keep
+household,waste_disposal,STRING,rubbish,select_one,rubbish,label_recode:rubbish,,keep
+household,waste_disposal_others,STRING,rubbish_other,text,rubbish_other,none,,keep
+household,household_handwash_use,STRING,washing_hand,select_one,washing_hand,label_recode:washing_hand,,keep
+household,household_handwash_use_others,STRING,washing_hand_other,text,washing_hand_other,none,,keep
+household,household_handwash_observed,STRING,washing_place,select_one,washing_place,label_recode:washing_place,,keep
+household,total_no_persons_household,INT,no_household,integer,no_household,none,,keep
+household,current_women_10_55,INT,hh_females,integer,hh_females,none,,keep
+household,end_timme,TIMESTAMP_NTZ,_submission_time,Kobo system column,_submission_time,submission_time_utc,,keep
+household,audio,STRING,audio,background-audio,audio,none,,keep
+household,audio_url,STRING,audio_URL,media link,audio_URL,none,,keep
+household,household_uuid,STRING,_uuid,Kobo system column,_uuid,none,,keep
+household,index,INT,_index,Kobo system column,_index,none,,keep
+household,submission_id,BIGINT,_id,Kobo system column,_id,none,,keep
+household,concatenated_id,STRING,,derived by the pipeline (no Kobo column),,derived:household_pk,,keep
+female,state,STRING,,copied from the household,,derived:from_household,,keep
+female,lga,STRING,,copied from the household,,derived:from_household,,keep
+female,ward,STRING,,copied from the household,,derived:from_household,,keep
+female,community,STRING,,copied from the household,,derived:from_household,,keep
+female,household_code,STRING,household_id,text,household_id,none,,keep
+female,female_id,INT,female_position,calculate,female_position,int_cast,,keep
+female,mother_code,STRING,mother_id,calculate,mother_id,none,,keep
+female,female_name,STRING,female_name,select_one,female_name,none,,keep
+female,birth_year,STRING,birth_year,select_one,birth_year,none,,keep
+female,birth_month,STRING,birth_month,select_one,birth_month,label_recode:month_name,,keep
+female,female_age,STRING,age,calculate,age,none,,keep
+female,female_dob,STRING,birth_day,select_one,birth_day,none,,keep
+female,education,STRING,school_001,select_one,school_001,yesno_titlecase,,keep
+female,school_level_quranic,STRING,q_women_western,select_multiple,q_women_western/quranic,binary_yesno,,keep
+female,school_level_western,STRING,q_women_western,select_multiple,q_women_western/western,binary_yesno,,keep
+female,school_level_cat,STRING,hh_women_education_level,select_one,hh_women_education_level,label_recode:school_level_cat,,keep
+female,school_level_attained_primary_secondary,INT,duration_level_pri_001,integer,duration_level_pri_001,int_cast,,keep
+female,school_level_attained_higher,INT,duration_level_sec_001,integer,duration_level_sec_001,int_cast,,keep
+female,birthing_status,STRING,birthing_status,select_one,birthing_status,yesno_titlecase,,keep
+female,children_living_together,STRING,living_status,select_one,living_status,yesno_titlecase,,keep
+female,sons_living_together,INT,living_sons,integer,living_sons,int_cast,,keep
+female,daughters_living_together,INT,living_daughter,integer,living_daughter,int_cast,,keep
+female,children_living_elsewhere,STRING,living_status1,select_one,living_status1,yesno_titlecase,,keep
+female,sons_living_elsewhere,INT,living_sons1,integer,living_sons1,int_cast,,keep
+female,daughters_living_elsewhere,INT,living_daughter1,integer,living_daughter1,int_cast,,keep
+female,children_alive_later_died,STRING,birthing_status,select_one,birthing_status,yesno_titlecase,,keep
+female,boys_alive_later_died,INT,dead_sons,integer,dead_sons,int_cast,,keep
+female,girls_alive_later_died,INT,dead_daughter,integer,dead_daughter,int_cast,,keep
+female,sum_children_alive,INT,c_alive,calculate,c_alive,int_cast,,keep
+female,sum_children_dead,INT,c_dead,calculate,c_dead,int_cast,,keep
+female,sum_alive_dead_children,INT,c_count,calculate,c_count,int_cast,,keep
+female,confirm_birthing_no,STRING,birthing_status1,select_one,birthing_status1,yesno_titlecase,,keep
+female,miscarriage_abortion_pregnancy,STRING,missed_preg,select_one,missed_preg,yesno_titlecase,,keep
+female,miscarriage_abortion_count,INT,misscarraige_count,calculate,misscarraige_count,int_cast,,keep
+female,miscarriage_count,INT,misscarraige_count,calculate,misscarraige_count,int_cast,,keep
+female,total_pregnancies,INT,p_count,calculate,p_count,int_cast,,keep
+female,pregnancy_id,INT,p_id,calculate,p_id,int_cast,,keep
+female,agg_child_still_alive,INT,agg_child_still_alive,calculate,agg_child_still_alive,int_cast,,keep
+female,agg_child_alive_death,INT,agg_child_alive_death,calculate,agg_child_alive_death,int_cast,,keep
+female,agg_dead_miscarrage,INT,agg_dead_miscarrage,calculate,agg_dead_miscarrage,int_cast,,keep
+female,pregnancy_status,STRING,preg_status,select_one,preg_status,yesno_titlecase,,keep
+female,pregnancy_report,STRING,preg_report_1,select_one,preg_report_1,simple_capitalize,,keep
+female,pregnancy_length_weeks,INT,preg_length_1,integer,preg_length_1,int_cast,,keep
+female,pregnancy_length_months,INT,preg_length_2,integer,preg_length_2,int_cast,,keep
+female,pregnancy_decision,STRING,preg_decision,select_one,preg_decision,yesno_titlecase,,keep
+female,future_pregnancies,STRING,children,select_one,children,label_recode:future_pregnancies,,keep
+female,female_uuid,STRING,_submission__uuid,Kobo system column,_submission__uuid,none,,keep
+female,parent_index,INT,_parent_index,Kobo system column,_parent_index,none,,keep
+female,index,INT,_index,Kobo system column,_index,none,,keep
+female,submission_id,BIGINT,_submission__id,Kobo system column,_submission__id,none,,keep
+female,concatenated_id,STRING,,derived by the pipeline (no Kobo column),,derived:fk_to_household,,keep
+pregnancy,state,STRING,,copied from the household,,derived:from_household,,keep
+pregnancy,lga,STRING,,copied from the household,,derived:from_household,,keep
+pregnancy,ward,STRING,,copied from the household,,derived:from_household,,keep
+pregnancy,community,STRING,,copied from the household,,derived:from_household,,keep
+pregnancy,household_code,STRING,householdid,text,householdid,none,,keep
+pregnancy,mother_code,STRING,motherid,text,motherid,none,,keep
+pregnancy,pregnancy_id,INT,c_id,calculate,c_id,int_cast,,keep
+pregnancy,pregnancy_code,STRING,preg_id,calculate,preg_id,none,,keep
+pregnancy,pregnancy_form,STRING,q113_pregnancy_type,select_one,q113_pregnancy_type,label_recode:pregnancy_type,,keep
+pregnancy,birth_form,STRING,q114_pregnancy_outcome,select_one,q114_pregnancy_outcome,label_recode:pregnancy_outcome,,keep
+pregnancy,birth_status,STRING,q115_live_signs_at_birth,select_one,q115_live_signs_at_birth,yesno_titlecase,,keep
+pregnancy,child_alive_name,STRING,q116_child_name,text,q116_child_name,none,,keep
+pregnancy,child_alive_gender,STRING,q117_child_sex,select_one,q117_child_sex,simple_capitalize,,keep
+pregnancy,child_alive_later_died_gender,STRING,q117_child_sex_dup,select_one,q117_child_sex_dup,none,,review
+pregnancy,child_age_category,STRING,q118_child_age_category,select_one,q118_child_age_category,label_recode:child_age_category,,keep
+pregnancy,child_month_less_1_month,STRING,q119ai_dob_child_month_less_1,select_one,q119ai_dob_child_month_less_1,label_recode:month_name,,keep
+pregnancy,child_day_less_1_month,STRING,q119aii_dob_child_day_less_1,select_one,q119aii_dob_child_day_less_1,none,,review
+pregnancy,child_dob_less_1_month,STRING,q119aiv_dob_child_less_1,calculate,q119aiv_dob_child_less_1,none,,review
+pregnancy,child_year_alive_later_died,STRING,date_birth12_year,select_one,date_birth12_year,none,,review
+pregnancy,child_month_alive_later_died,STRING,date_birth12_month,select_one,date_birth12_month,none,,review
+pregnancy,child_day_alive_later_died,STRING,date_birth12_day,select_one,date_birth12_day,none,,review
+pregnancy,child_dob_alive_later_died,DATE,date_birth12,date,date_birth12,none,,review
+pregnancy,child_year_1_11_month,INT,q119aiii_dob_child_year_1_11m,select_one,q119aiii_dob_child_year_1_11m,int_cast,,review
+pregnancy,child_month_1_11_month,INT,q119aii_dob_child_month_1_11m,select_one,q119aii_dob_child_month_1_11m,int_cast,,keep
+pregnancy,child_day_1_11_month,INT,q119ai_dob_child_day_1_11m,select_one,q119ai_dob_child_day_1_11m,int_cast,,keep
+pregnancy,child_dob_1_11_month,STRING,q119aiv_dob_child_1_11m,calculate,q119aiv_dob_child_1_11m,none,,review
+pregnancy,child_year_12_59_month,INT,q119aiii_dob_child_12_59m,select_one,q119aiii_dob_child_12_59m,int_cast,,review
+pregnancy,child_month_12_59_month,INT,q119aii_dob_child_12_59m,select_one,q119aii_dob_child_12_59m,int_cast,,review
+pregnancy,child_day_12_59_month,INT,q119ai_dob_child_12_59m,select_one,q119ai_dob_child_12_59m,int_cast,,review
+pregnancy,child_dob_12_59_month,STRING,q119aiv_dob_child_12_59m,calculate,q119aiv_dob_child_12_59m,none,,review
+pregnancy,child_year_greater_5_years,STRING,q119aiii_dob_child_greaterThan5,select_one,q119aiii_dob_child_greaterThan5,none,,review
+pregnancy,child_month_greater_5_years,STRING,q119aii_dob_child_greaterThan5,select_one,q119aii_dob_child_greaterThan5,none,,review
+pregnancy,child_day_greater_5_years,STRING,q119ai_dob_child_greaterThan5,select_one,q119ai_dob_child_greaterThan5,none,,review
+pregnancy,year_pregnancy_ended,INT,q120i_pregnancy_end_year,select_one,q120i_pregnancy_end_year,int_cast,,keep
+pregnancy,month_pregnancy_ended,STRING,q120ii_pregnancy_end_month,select_one,q120ii_pregnancy_end_month,label_recode:month_name,,keep
+pregnancy,day_pregnancy_ended,INT,q120iii_pregnancy_end_day,select_one,q120iii_pregnancy_end_day,int_cast_dk99,,keep
+pregnancy,pregnancy_report,STRING,,derived by the pipeline (no Kobo column),,none,,review
+pregnancy,miscarriage_pregnancy_report,STRING,q121_pregnancy_duration_type,select_one,q121_pregnancy_duration_type,simple_capitalize,,keep
+pregnancy,pregnancy_report_length_weeks,STRING,,derived by the pipeline (no Kobo column),,none,,review
+pregnancy,pregnancy_report_length_months,STRING,,derived by the pipeline (no Kobo column),,none,,review
+pregnancy,miscarriage_pregnancy_length_weeks,INT,q122_pregnancy_duration_weeks,integer,q122_pregnancy_duration_weeks,int_cast,,keep
+pregnancy,miscarriage_pregnancy_length_months,INT,q122_pregnancy_duration_months,integer,q122_pregnancy_duration_months,int_cast,,keep
+pregnancy,child_age_less_1_month,INT,q119aii_dob_child_day_less_1,select_one,q119aii_dob_child_day_less_1,int_cast,,keep
+pregnancy,child_age_less_1_11_month,STRING,less_1_11ms,calculate,less_1_11ms,none,,keep
+pregnancy,child_age_less_12_59_month,STRING,less_less_5,calculate,less_less_5,none,,keep
+pregnancy,child_age_greater_5_years,STRING,greater_greater_5,calculate,greater_greater_5,none,,keep
+pregnancy,child_still_alive,STRING,q124_child_alive,select_one,q124_child_alive,yesno_titlecase,,keep
+pregnancy,child_age_1_11_last_birthday,STRING,q123_age_months_last_birthday,older form version,q123_age_months_last_birthday,none,,review
+pregnancy,child_age_1_to_more_than_5_years_last_birthday,INT,q125_age_at_last_birthday_month,integer,q125_age_at_last_birthday_month,int_cast,,keep
+pregnancy,child_age_alive_later_died_category,STRING,q126_age_at_death_exact,select_one,q126_age_at_death_exact,label_recode:child_age_alive_later_died_category,,keep
+pregnancy,child_age_months_alive_later_died,INT,q127a_age_at_death_months,integer,q127a_age_at_death_months,int_cast,,keep
+pregnancy,child_age_alive_later_died_less_1_month,INT,q127a_age_at_death_days_1,integer,q127a_age_at_death_days_1,int_cast,,keep
+pregnancy,child_age_days_alive_later_died,INT,q127a_age_at_death_days_2,integer,q127a_age_at_death_days_2,none,,review
+pregnancy,first_birthday,STRING,q128_had_first_birthday,select_one,q128_had_first_birthday,yesno_titlecase,,keep
+pregnancy,child_age_alive_later_died_less_1_year,INT,q129a_age_at_death_months_dup,integer,q129a_age_at_death_months_dup,int_cast,,keep
+pregnancy,child_age_alive_later_died_1_less_month,INT,q129a_age_at_death_days_dup,integer,q129a_age_at_death_days_dup,none,,review
+pregnancy,child_age_alive_later_died_greater_1_year,INT,q129a_age_at_death_years,integer,q129a_age_at_death_years,int_cast,,keep
+pregnancy,child_age_alive_later_died_less_2_year,INT,q129a_age_at_death_months_dup_dup,integer,q129a_age_at_death_months_dup_dup,int_cast,,keep
+pregnancy,child_living_together,STRING,q130_child_living_with_respondent,select_one,q130_child_living_with_respondent,yesno_titlecase,,keep
+pregnancy,child_vaccinated,STRING,q131_child_ever_vaccinated,select_one,q131_child_ever_vaccinated,label_recode:child_vaccinated,,keep
+pregnancy,child_ever_vaccinated,STRING,q131_child_ever_vaccinated_dup,select_one,q131_child_ever_vaccinated_dup,none,,review
+pregnancy,child_alive_still,STRING,child_still_alive,calculate,child_still_alive,binary_yesno,,keep
+pregnancy,child_alive_death,STRING,child_alive_death,calculate,child_alive_death,binary_yesno,,keep
+pregnancy,birth_form_dead,STRING,birth_form_dead,calculate,birth_form_dead,binary_yesno,,keep
+pregnancy,birth_form_miscarriage,STRING,birth_form_miscarriage,calculate,birth_form_miscarriage,binary_yesno,,keep
+pregnancy,index,INT,_index,Kobo system column,_index,none,,keep
+pregnancy,parent_index,INT,_parent_index,Kobo system column,_parent_index,none,,keep
+pregnancy,pregnancy_uuid,STRING,_submission__uuid,Kobo system column,_submission__uuid,none,,keep
+pregnancy,submission_id,BIGINT,_submission__id,Kobo system column,_submission__id,none,,keep
+pregnancy,concatenated_id,STRING,,derived by the pipeline (no Kobo column),,derived:fk_to_female,,keep

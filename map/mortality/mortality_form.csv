@@ -1,0 +1,289 @@
+type,name
+start,starttime
+end,endtime
+deviceid,deviceid
+start-geopoint,start-geopoint
+username,username
+phonenumber,phonenumber
+audit,audit
+begin_group,group_check_constraints
+note,note_missing_username
+note,note_missing_phone_number
+note,note_incorrect_date_and_time
+calculate,concat_user
+text,user_confrim
+text,concat_enu
+text,enum_id
+text,cluster_no
+text,lgas_k
+text,ward
+text,role
+text,name_supp
+text,phone_supp
+text,name_sup_2
+text,phone_sup_2
+calculate,clus_no
+end_group,
+note,wrong_login
+begin_group,form_1
+time,start_time
+text,lgas
+text,wards
+select_one community,community_name
+select_one_from_file hh_list.csv,check_hh
+geopoint,gps
+calculate,area
+calculate,latitude
+calculate,longitude
+calculate,first_id_key
+calculate,n_corner
+begin_repeat,g_polygon
+calculate,id_key_i
+calculate,p_latitude_i
+calculate,p_longitude_i
+calculate,id_key_j
+calculate,p_latitude_j
+calculate,p_longitude_j
+calculate,p_cross
+end_repeat,g_polygon_end
+calculate,result
+text,perimeter
+calculate,lat_ss
+calculate,long_ss
+note,note_gps_link
+select_one cat,hh_category
+select_one hh,household_no1
+select_one hh,household_no2
+select_one hh,household_no3
+select_one hh,household_no4
+select_one hh,household_no5
+select_one hh,household_no6
+select_one hh,household_no7
+select_one hh,household_no8
+select_one hh,household_no9
+select_one hh,household_no10
+text,lga_confirm
+text,ward_confirm
+text,community_confirm
+select_one cycle,cycle
+calculate,unique
+calculate,unique_code
+text,hh_id
+acknowledge,check_location
+end_group,
+begin_group,consent
+note,note_consent
+select_one yn,signed_consent
+select_one yn,household_head_consent
+text,name_parent
+select_one type_settlement,settlement_type
+select_one language,communication_language
+text,other_communication_language
+note,note4
+integer,female_count
+date,date_of_consent
+select_one yn,witness
+text,witness_name
+begin_group,group_1
+select_one hstatus,household_status
+select_one yn,household_head
+text,household_headname
+select_one sex,gender_hh
+integer,age_hhead
+text,name_questionnaire
+select_one yn,live_here
+select_one yn,stay_last_night
+integer,age_hhhead
+select_one sex,gender_phh
+select_one relationship,household_relationship
+text,other_household_relationship
+select_one yn,school
+select_multiple schools,q_western
+select_one education,hh_education_level
+integer,duration_level_pri
+integer,duration_level_sec
+select_one yn,own_phone
+select_one yn,smart_phone
+text,phone_no
+begin_group,question_household
+select_one yn,note6
+select_one yn,television
+select_one yn,electric_iron
+select_one yn,fan
+select_one yn,refrigerator
+select_one yn,electricity
+select_one yn,generator
+select_one yn,bank_account
+select_one yn,watch
+end_group,question_household
+select_one floor,floor_material
+select_one other_floor,other_floor_material
+select_one cook,cooking_stove
+select_one energy,cooking_stove_others
+select_one water,water_source
+text,other_water_source
+select_one water,water_source2
+text,other_water_source2
+integer,bedroom
+select_one toilet,toilet_facility
+text,other_toilet_facility
+select_one yn,shared_toilet
+select_one tlocation,toilet_location
+select_one rub,rubbish
+text,rubbish_other
+select_one wash,washing_hand
+text,washing_hand_other
+select_one soap,washing_place
+note,note4400
+integer,no_household
+integer,hh_females
+begin_repeat,caregiver_cosent
+calculate,f_id
+select_one yn,informed_consent
+text,mother_name_consent
+image,consent_sign
+select_one reason,wives_no_consent_reason
+text,other_wives_no_consent_reason
+end_repeat,
+calculate,consented_females
+note,consented_counr
+begin_repeat,female
+calculate,female_position
+note,female_info
+text,household_id
+calculate,mother_id
+note,note76
+calculate,current_year
+calculate,current_month
+select_one ${mother_name_consent},female_name
+select_one year,birth_year
+select_one month,birth_month
+calculate,age
+select_one day,birth_day
+note,mothers_age
+select_one yn,school_001
+select_multiple schools,q_women_western
+select_one education,hh_women_education_level
+integer,duration_level_pri_001
+integer,duration_level_sec_001
+note,note1000000
+select_one yn,status_preg
+select_one yn,living_status
+integer,living_sons
+integer,living_daughter
+note,confirm_1
+select_one yn,living_status1
+integer,living_sons1
+integer,living_daughter1
+note,confirm_2
+select_one yn,birthing_status
+integer,dead_sons
+integer,dead_daughter
+note,confirm_2_001
+calculate,c_alive
+calculate,c_dead
+calculate,c_count
+note,total_live_births1
+select_one yn,birthing_status1
+note,confirm
+select_one yn,missed_preg
+integer,missed_preg_no
+calculate,misscarraige_count
+calculate,p_count
+note,total_preg_outcome
+calculate,p_id
+note,confimation
+note,note99
+note,checkin
+note,note7
+begin_repeat,pregnancy_history
+text,householdid
+text,motherid
+calculate,c_id
+calculate,preg_id
+calculate,child_id
+note,twin_note
+note,twin_note3
+text,pregnancy_id
+select_one form,q113_pregnancy_type
+select_one status,q114_pregnancy_outcome
+select_one yn,q115_live_signs_at_birth
+text,q116_child_name
+select_one sex,q117_child_sex
+select_one sex,q117_child_sex_dup
+select_one ad,q118_child_age_category
+select_one month,q119ai_dob_child_month_less_1
+select_one day,q119aii_dob_child_day_less_1
+calculate,q119aiv_dob_child_less_1
+select_one year,date_birth12_year
+select_one month,date_birth12_month
+select_one day,date_birth12_day
+date,date_birth12
+select_one year,q119aiii_dob_child_year_1_11m
+select_one month,q119aii_dob_child_month_1_11m
+select_one day,q119ai_dob_child_day_1_11m
+calculate,q119aiv_dob_child_1_11m
+select_one year,q119aiii_dob_child_12_59m
+select_one month,q119aii_dob_child_12_59m
+select_one day,q119ai_dob_child_12_59m
+calculate,q119aiv_dob_child_12_59m
+select_one year,q119aiii_dob_child_greaterThan5
+select_one month,q119aii_dob_child_greaterThan5
+select_one day,q119ai_dob_child_greaterThan5
+select_one year,q120i_pregnancy_end_year
+select_one month,q120ii_pregnancy_end_month
+select_one day,q120iii_pregnancy_end_day
+select_one preport,q121_pregnancy_duration_type
+select_one preport,q121_pregnancy_miscarriage_duration_type
+integer,q122_pregnancy_duration_weeks
+integer,q122_pregnancy_duration_months
+integer,q122_pregnancy_miscarriage_duration_weeks
+integer,q122_pregnancy_miscarriage_duration_months
+calculate,less_less_1
+calculate,less_1_11ms
+calculate,less_less_5
+calculate,greater_greater_5
+note,q123_age_days_last_birthday
+note,q123_age_months_last_birthday
+note,q123_age_less_5_last_birthday
+note,q123_age_years_last_birthday
+select_one yn,q124_child_alive
+integer,q125_age_at_last_birthday_month
+integer,q125_age_at_last_birthday
+select_one cate,q126_age_at_death_exact
+integer,q127a_age_at_death_months
+integer,q127a_age_at_death_days_1
+integer,q127a_age_at_death_days_2
+select_one yn,q128_had_first_birthday
+integer,q129a_age_at_death_months_dup
+integer,q129a_age_at_death_days_dup
+integer,q129a_age_at_death_years
+integer,q129a_age_at_death_months_dup_dup
+select_one yn,q130_child_living_with_respondent
+select_one yns,q131_child_ever_vaccinated
+select_one yns,q131_child_ever_vaccinated_dup
+calculate,child_still_alive
+calculate,child_alive_death
+calculate,birth_form_dead
+calculate,birth_form_miscarriage
+end_repeat,
+calculate,agg_child_still_alive
+calculate,agg_child_alive_death
+calculate,agg_dead_miscarrage
+acknowledge,aggregate_summary_history
+note,alive_check
+note,death_check
+note,misscarriage_check
+note,note88
+select_one yn,preg_status
+select_one preport,preg_report_1
+integer,preg_length_1
+integer,preg_length_2
+select_one yn,preg_decision
+select_one child,children
+end_repeat,
+end_group,
+end_group,
+text,val_comment
+note,note9001
+background-audio,audio
