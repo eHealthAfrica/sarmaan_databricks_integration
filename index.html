@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SARMAAN Mortality ERD</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+/* Layout: physical ERD canvas — one column per level of the hierarchy (parent, child, grandchild),
+   crow's-foot connectors drawn between key rows; restricted identifier tables in a band below */
+:root {
+  --bg: #f3f5f8; --panel: #ffffff; --fg: #15202c; --muted: #5a6575; --line: #d6dce4; --grid: #e6eaf0;
+  --accent: #0b6fb8; --accent-soft: #e2eef8; --mark: #fff1a8; --pk: #8a6a00; --pk-soft: #f7efd2;
+  --bronze: #9a5a1f; --bronze-soft: #f6ebe0; --silver: #56626f; --silver-soft: #e9edf1; --gold: #8a6a00; --gold-soft: #f7efd2;
+  --restricted: #b42318; --restricted-soft: #fdecea; --meta: #5b4bb7; --meta-soft: #eeebfa;
+  --sans: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif; --mono: 'IBM Plex Mono', Consolas, monospace;
+  --layer: var(--gold); --layer-soft: var(--gold-soft);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; }
+body[data-layer="bronze"] { --layer: var(--bronze); --layer-soft: var(--bronze-soft); }
+body[data-layer="silver"] { --layer: var(--silver); --layer-soft: var(--silver-soft); }
+body[data-layer="gold"] { --layer: var(--gold); --layer-soft: var(--gold-soft); }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1680px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; justify-content: space-between; }
+.eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
+.eyebrow .mono { text-transform: none; letter-spacing: 0; }
+h1 { font-size: 28px; font-weight: 600; margin: 4px 0 0; line-height: 1.2; text-wrap: balance; }
+.mono { font-family: var(--mono); }
+.layers { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.layers button { font: inherit; font-weight: 600; background: none; border: 0; color: var(--muted); padding: 8px 16px; cursor: pointer; display: grid; text-align: left; gap: 1px; }
+.layers button span { font-size: 11.5px; font-weight: 400; }
+.layers button + button { border-left: 1px solid var(--line); }
+.layers button[aria-pressed="true"] { background: var(--layer-soft); color: var(--layer); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pending { background: var(--pk-soft); color: var(--fg); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 0; }
+.pending b { color: var(--pk); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.bar input[type=search] { font: inherit; padding: 7px 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--fg); width: min(100%, 300px); }
+.bar label { display: inline-flex; gap: 6px; align-items: center; color: var(--fg); cursor: pointer; }
+.bar .about { color: var(--muted); flex: 1 1 320px; min-width: 0; }
+.bar .about b { color: var(--layer); }
+#hits { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-size: 12.5px; align-items: center; }
+.legend svg { vertical-align: middle; margin-right: 6px; }
+
+/* Canvas: one grid column per level, a connector gutter between levels */
+.canvas-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px;
+  background-color: var(--panel); background-image: radial-gradient(var(--grid) 1px, transparent 1px); background-size: 18px 18px; }
+.canvas { position: relative; padding: 28px; display: grid; column-gap: 0; row-gap: 28px; align-items: start; }
+.canvas > svg.rels { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.level { grid-row: 1; display: grid; gap: 22px; align-content: start; }
+.solo { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(340px, 460px); gap: 8px; }
+.band-note { color: var(--muted); font-size: 12.5px; max-width: 95ch; }
+.band-note b { color: var(--restricted); font-family: var(--mono); }
+.restricted { grid-column: 1 / -1; display: grid; gap: 10px; border-top: 2px dashed var(--restricted); padding-top: 16px; }
+.rgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; align-items: start; }
+
+.ent { background: var(--panel); border: 1.5px solid var(--layer); border-radius: 6px; box-shadow: 0 1px 3px rgba(20,30,45,.08); position: relative; z-index: 1; min-width: 0; }
+.ent .hd { background: var(--layer); color: var(--panel); padding: 7px 10px; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; border-radius: 4px 4px 0 0; }
+.ent .hd .nm { font-family: var(--mono); font-weight: 600; font-size: 13px; overflow-wrap: anywhere; }
+.ent .hd .ct { font-size: 11.5px; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ent .src { font-size: 11.5px; color: var(--muted); padding: 4px 10px; border-bottom: 1px solid var(--line); background: var(--layer-soft); }
+.ent.r { border-color: var(--restricted); }
+.ent.r .hd { background: var(--restricted); }
+.ent.r .src, .ent.r .keys li { background: var(--restricted-soft); }
+.ent.r .keys { border-bottom-color: var(--restricted); }
+.rows { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 12px; }
+.rows li { display: grid; grid-template-columns: 40px 1fr auto; gap: 6px; align-items: baseline; padding: 2.5px 10px; border-bottom: 1px solid var(--grid); }
+.rows li:last-child { border-bottom: 0; }
+.rows .k { font-family: var(--sans); font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-align: center; border-radius: 3px; padding: 0 2px; white-space: nowrap; }
+.rows .k.pk { background: var(--pk-soft); color: var(--pk); }
+.rows .k.fk { background: var(--accent-soft); color: var(--accent); }
+.rows .k.pkfk { background: linear-gradient(90deg, var(--pk-soft) 50%, var(--accent-soft) 50%); color: var(--fg); }
+.rows .k.n { color: var(--muted); font-weight: 400; font-family: var(--mono); font-size: 10px; text-align: right; }
+.rows .c { overflow-wrap: anywhere; min-width: 0; }
+.rows .t { color: var(--muted); font-size: 10.5px; text-transform: uppercase; white-space: nowrap; }
+.tag { font-family: var(--sans); font-size: 9.5px; font-weight: 600; border-radius: 3px; padding: 0 4px; margin-left: 6px; white-space: nowrap; }
+.tag.meta { background: var(--meta-soft); color: var(--meta); }
+.tag.pii { background: var(--restricted-soft); color: var(--restricted); }
+.tag.empty { background: var(--grid); color: var(--muted); }
+.keys { border-bottom: 2px solid var(--layer); }
+.keys li { background: var(--layer-soft); }
+.keys .c { font-weight: 600; }
+.ref { display: block; font-size: 10.5px; color: var(--accent); font-weight: 400; }
+.body { overflow-y: auto; }
+.level .body { max-height: 420px; }
+.level:first-of-type .body { max-height: 640px; }
+.solo .body { max-height: 240px; }
+.restricted .body { max-height: none; }
+.canvas.full .body { max-height: none; }
+.rows li.dim { opacity: .22; }
+.rows mark { background: var(--mark); color: inherit; border-radius: 2px; }
+.ent .ft { font-size: 11px; color: var(--muted); padding: 4px 10px; border-top: 1px solid var(--line); }
+
+.rels .ln { stroke: var(--fg); stroke-width: 1.4; fill: none; }
+.rels .lbl { fill: var(--muted); font: 500 11px var(--mono); pointer-events: auto; cursor: help; }
+.status { color: var(--muted); padding: 40px; }
+footer { color: var(--muted); font-size: 12.5px; max-width: 90ch; }
+@media (max-width: 560px) { h1 { font-size: 23px; } }
+@media (prefers-reduced-motion: no-preference) { .rows li { transition: opacity .15s; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="title"></h1>
+    </div>
+    <div class="layers" role="group" aria-label="Schema">
+      <button type="button" data-layer="bronze" aria-pressed="false">bronze<span>raw + lineage</span></button>
+      <button type="button" data-layer="silver" aria-pressed="false">silver<span>renamed, keyed</span></button>
+      <button type="button" data-layer="gold" aria-pressed="true">gold<span>approved, typed</span></button>
+    </div>
+  </header>
+
+  <p class="pending" id="pending"></p>
+
+  <div class="bar">
+    <input id="q" type="search" aria-label="Search columns" placeholder="Find a column, e.g. root_uuid or pregnancy_code" autocomplete="off">
+    <label><input id="full" type="checkbox"> Expand every table</label>
+    <span id="hits"></span>
+    <span class="about" id="about"></span>
+  </div>
+
+  <div class="legend" aria-label="Legend">
+    <span><b class="mono" style="color:var(--pk)">PK</b> primary key (two PK rows = composite key)</span>
+    <span><b class="mono" style="color:var(--accent)">FK</b> foreign key → parent key</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M6 2V12M10 2V12" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>exactly one (parent)</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M46 1L36 7L46 13M30 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>zero or many (child)</span>
+    <span><span class="tag meta" style="margin:0 6px 0 0">metadata</span>lineage column</span>
+    <span><span class="tag pii" style="margin:0 6px 0 0">identifier</span>name, phone, GPS or audio; restricted</span>
+    <span><span class="tag empty" style="margin:0 6px 0 0">no source</span>no question in this form; always empty</span>
+  </div>
+
+  <div class="canvas-scroll">
+    <div class="canvas" id="canvas"><p class="status">Loading the data model…</p></div>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+let DATA = null, layer = 'gold';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const TAGS = { metadata: '<span class="tag meta">metadata</span>', identifier: '<span class="tag pii">identifier</span>', empty: '<span class="tag empty">no source</span>' };
+const BADGE = { pk: '<span class="k pk">PK</span>', fk: '<span class="k fk">FK</span>', pkfk: '<span class="k pkfk">PK FK</span>' };
+const isMain = (t) => t.schema === layer;
+
+function row(c, kind, extra) {
+  const k = kind ? BADGE[kind] : `<span class="k n">${c.pos}</span>`;
+  return `<li data-name="${esc(c.name.toLowerCase())}"${kind ? ` data-key="${kind}"` : ''}>${k}<span class="c"><span class="txt">${esc(c.name)}</span>${TAGS[c.tag] || ''}${extra || ''}</span><span class="t">${esc(c.type)}</span></li>`;
+}
+
+function entity(t) {
+  const cols = t.columns.map((c, i) => ({ ...c, pos: i + 1 }));
+  const keyNames = [...t.pk, ...t.fk.filter((f) => !t.pk.includes(f))];
+  const keys = keyNames.map((n) => {
+    const c = cols.find((x) => x.name === n);
+    const isPk = t.pk.includes(n), isFk = t.fk.includes(n);
+    const ref = isFk ? `<span class="ref">→ ${esc(t.parent_schema)}.${esc(t.parent)}.${esc(t.parent_pk[t.fk.indexOf(n)])}${t.card === 'one' ? ' (1:1)' : ''}</span>` : '';
+    return row(c, isPk && isFk ? 'pkfk' : isPk ? 'pk' : 'fk', ref);
+  });
+  const rest = cols.filter((c) => !keyNames.includes(c.name)).map((c) => row(c)).join('');
+  const parentName = t.parent ? `${esc(t.parent_schema)}.${esc(t.parent)}` : '';
+  const foot = t.card === 'many' ? `zero or many rows per ${parentName} row`
+    : t.card === 'one' ? `one row per ${parentName} row`
+    : t.pk.length ? 'one row per household submission' : 'no keys · not related to other tables';
+  return `<div class="ent${isMain(t) ? '' : ' r'}" data-id="${esc(t.schema)}.${esc(t.name)}">
+    <div class="hd"><span class="nm">${esc(t.schema)}.${esc(t.name)}</span><span class="ct">${cols.length} cols</span></div>
+    <div class="src">${esc(t.source || '')}${t.note ? ' · ' + esc(t.note) : ''}</div>
+    ${keys.length ? `<ul class="rows keys">${keys.join('')}</ul>` : ''}
+    <div class="body"><ul class="rows">${rest}</ul></div>
+    <div class="ft">${foot}</div>
+  </div>`;
+}
+
+function levels(main) {
+  // level 0: tables with keys and no parent; level n: parent at level n-1
+  const out = [main.filter((t) => t.pk.length && !t.fk.length)];
+  let placed = new Set(out[0].map((t) => t.name));
+  for (;;) {
+    const next = main.filter((t) => t.fk.length && !placed.has(t.name) && placed.has(t.parent));
+    if (!next.length) break;
+    out.push(next);
+    next.forEach((t) => placed.add(t.name));
+  }
+  return out;
+}
+
+function render() {
+  document.body.dataset.layer = layer;
+  document.querySelectorAll('.layers button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layer === layer)));
+  if (!DATA) return;
+  $('about').innerHTML = DATA.about[layer];
+  const all = DATA.layers[layer];
+  const main = all.filter(isMain);
+  const restricted = all.filter((t) => !isMain(t));
+  const solo = main.filter((t) => !t.pk.length);
+  const lv = levels(main);
+  const canvas = $('canvas');
+  // The levels share the page width, so the diagram fits without scrolling
+  // sideways; only screens narrower than minWidth (about 900px) scroll.
+  canvas.style.gridTemplateColumns = lv.map(() => 'minmax(0, 1fr)').join(' clamp(56px, 6vw, 110px) ');
+  canvas.style.minWidth = `${lv.length * 260 + (lv.length - 1) * 56}px`;
+  canvas.innerHTML = `<svg class="rels" aria-hidden="true"></svg>
+    ${lv.map((ts, i) => `<div class="level" style="grid-column:${i * 2 + 1}">${ts.map(entity).join('')}</div>`).join('')}
+    ${solo.length ? `<div class="solo"><span class="band-note">Standalone table, no relationships</span>${solo.map(entity).join('')}</div>` : ''}
+    ${restricted.length ? `<div class="restricted"><span class="band-note">${DATA.restricted_note}</span><div class="rgrid">${restricted.map(entity).join('')}</div></div>` : ''}`;
+  filter();
+  requestAnimationFrame(drawRels);
+}
+
+function drawRels() {
+  const cv = $('canvas'), svg = cv.querySelector('svg.rels');
+  if (!svg || !DATA) return;
+  svg.replaceChildren();
+  const box = cv.getBoundingClientRect();
+  const add = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  const keyRow = (id, name) => cv.querySelector(`.ent[data-id="${id}"] .keys li[data-name="${name.toLowerCase()}"]`);
+  const byParent = {};
+  DATA.layers[layer].filter((t) => isMain(t) && t.card === 'many').forEach((t) => {
+    const p = keyRow(`${t.parent_schema}.${t.parent}`, t.parent_pk[t.parent_pk.length - 1]);
+    const c = keyRow(`${t.schema}.${t.name}`, t.fk[t.fk.length - 1]);
+    if (!p || !c) return;
+    (byParent[`${t.parent_schema}.${t.parent}`] ||= { p, kids: [], fk: t.fk }).kids.push(c);
+  });
+  Object.values(byParent).forEach(({ p, kids, fk }) => {
+    const pr = p.getBoundingClientRect();
+    const x1 = pr.right - box.left, y1 = pr.top + pr.height / 2 - box.top;
+    const firstLeft = kids[0].getBoundingClientRect().left - box.left;
+    const midX = x1 + (firstLeft - x1) / 2;
+    // parent side: exactly one
+    add('path', { class: 'ln', d: `M${x1} ${y1}H${midX}M${x1 + 10} ${y1 - 6}V${y1 + 6}M${x1 + 15} ${y1 - 6}V${y1 + 6}` });
+    kids.forEach((li) => {
+      const r = li.getBoundingClientRect();
+      const x2 = r.left - box.left, y2 = r.top + r.height / 2 - box.top;
+      add('path', { class: 'ln', d: `M${midX} ${y1}V${y2}H${x2}` });
+      // child side: zero or many (circle + crow's foot)
+      add('path', { class: 'ln', d: `M${x2} ${y2 - 7}L${x2 - 12} ${y2}L${x2} ${y2 + 7}` });
+      add('circle', { class: 'ln', cx: x2 - 20, cy: y2, r: 4, fill: 'var(--panel)' });
+    });
+    // Label in the gap between the levels, shortened to fit it
+    const label = fk.join(' + ');
+    const fits = Math.max(6, Math.floor((firstLeft - x1 - 26) / 6));
+    const t = add('text', { class: 'lbl', x: x1 + 22, y: y1 - 10 });
+    t.textContent = label.length > fits ? label.slice(0, fits - 1) + '…' : label;
+    const tip = document.createElementNS(NS, 'title');
+    tip.textContent = label;
+    t.appendChild(tip);
+  });
+}
+
+function filter() {
+  const q = $('q').value.trim().toLowerCase();
+  let hits = 0;
+  document.querySelectorAll('.rows li').forEach((li) => {
+    const txt = li.querySelector('.txt'), raw = txt.textContent, at = li.dataset.name.indexOf(q);
+    if (!q || at < 0) { li.classList.toggle('dim', !!q); txt.innerHTML = esc(raw); return; }
+    hits++; li.classList.remove('dim');
+    txt.innerHTML = esc(raw.slice(0, at)) + '<mark>' + esc(raw.slice(at, at + q.length)) + '</mark>' + esc(raw.slice(at + q.length));
+  });
+  if (q) {
+    document.querySelectorAll('.body').forEach((b) => { const m = b.querySelector('li:not(.dim)'); if (m) b.scrollTop = m.offsetTop - b.firstElementChild.offsetTop - 4; });
+  }
+  $('hits').textContent = q ? `${hits} match${hits === 1 ? '' : 'es'}` : '';
+}
+
+document.querySelectorAll('.layers button').forEach((b) => b.addEventListener('click', () => {
+  layer = b.dataset.layer;
+  try { history.replaceState(null, '', '#' + layer); } catch (e) {}
+  render();
+}));
+$('q').addEventListener('input', filter);
+$('full').addEventListener('change', (e) => { $('canvas').classList.toggle('full', e.target.checked); requestAnimationFrame(drawRels); });
+window.addEventListener('resize', () => requestAnimationFrame(drawRels));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(drawRels));
+const h = location.hash.replace('#', '');
+if (['bronze', 'silver', 'gold'].includes(h)) layer = h;
+
+DATA = {"catalogs":["eha_ghi_sarmaan_dev","eha_ghi_sarmaan_prod"],"page_title":"SARMAAN Mortality ERD","title":"Mortality physical data model","eyebrow":"Databricks \u00b7 catalogs <span class=\"mono\">eha_ghi_sarmaan_dev</span> / <span class=\"mono\">eha_ghi_sarmaan_prod</span> \u00b7 Mortality survey","pending":"<b>Keys pending the key spike.</b> Every table is keyed on the Kobo <span class=\"mono\">rootUuid</span>, which stays the same when a submission is edited. Women add their mother code and pregnancies their pregnancy code; a pregnancy points at its woman on rootUuid + mother code. <b>To confirm on the first export:</b> <span class=\"mono\">state</span> and <span class=\"mono\">settlement_cluster</span> come from questions in an older form version, and columns marked review were never confirmed in the Postgres mapping. Dev and prod catalogs have the same schemas and tables.","about":{"bronze":"<b>bronze</b> \u00b7 every Kobo submission as downloaded (XML headers), all columns STRING, keyed on Kobo rootUuid, with lineage columns <span class=\"mono\">_ingested_at</span>, <span class=\"mono\">_run_id</span>, <span class=\"mono\">_source_system</span>, <span class=\"mono\">_source_asset</span>, <span class=\"mono\">_pipeline_version</span>.","silver":"<b>silver</b> \u00b7 all submissions with the Mortality mapping's names, keyed on <span class=\"mono\">root_uuid</span> (+ mother/pregnancy code), carrying <span class=\"mono\">_run_id</span>.","gold":"<b>gold</b> \u00b7 approved submissions only, typed from the mapping and the form's question types, keyed on <span class=\"mono\">root_uuid</span> (+ mother/pregnancy code), carrying <span class=\"mono\">_run_id</span>. Names, phones, GPS and the interview audio are in <span class=\"mono\">restricted</span>, one row per gold row."},"restricted_note":"<b>restricted</b> \u00b7 identifier columns moved out of gold: names, phone numbers (STRING), GPS and the interview audio recording. Each table has the same key as the gold table it belongs to, one row per gold row (1:1). Access is limited to approved users.","footer":"Generated by mortality/docs/generate_erd.py from the Mortality export columns, the Mortality mapping files and gold_types.csv, with the architecture review decisions in mortality/architecture.py. Primary and foreign keys are informational in Databricks; the loader's checks enforce them.","layers":{"bronze":[{"schema":"bronze","name":"mortality_household","source":"Kobo export, sheet 'household' (XML headers)","note":"","pk":["meta_rootuuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"starttime","type":"STRING"},{"name":"endtime","type":"STRING"},{"name":"username","type":"STRING"},{"name":"phonenumber","type":"STRING"},{"name":"enum_id","type":"STRING"},{"name":"signed_consent","type":"STRING"},{"name":"household_head_consent","type":"STRING"},{"name":"name_parent","type":"STRING"},{"name":"date_of_consent","type":"STRING"},{"name":"witness","type":"STRING"},{"name":"witness_name","type":"STRING"},{"name":"start_time","type":"STRING"},{"name":"states","type":"STRING"},{"name":"lgas","type":"STRING"},{"name":"lga_confirm","type":"STRING"},{"name":"lgas_k","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"wards","type":"STRING"},{"name":"ward_confirm","type":"STRING"},{"name":"community_confirm","type":"STRING"},{"name":"community_name","type":"STRING"},{"name":"check_hh","type":"STRING"},{"name":"settlement_cluster","type":"STRING"},{"name":"female_count","type":"STRING"},{"name":"latitude","type":"STRING"},{"name":"longitude","type":"STRING"},{"name":"hh_category","type":"STRING"},{"name":"unique","type":"STRING"},{"name":"unique_code","type":"STRING"},{"name":"cycle","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"communication_language","type":"STRING"},{"name":"other_communication_language","type":"STRING"},{"name":"household_status","type":"STRING"},{"name":"household_head","type":"STRING"},{"name":"household_headname","type":"STRING"},{"name":"gender_hh","type":"STRING"},{"name":"age_hhead","type":"STRING"},{"name":"name_questionnaire","type":"STRING"},{"name":"live_here","type":"STRING"},{"name":"stay_last_night","type":"STRING"},{"name":"age_hhhead","type":"STRING"},{"name":"gender_phh","type":"STRING"},{"name":"household_relationship","type":"STRING"},{"name":"other_household_relationship","type":"STRING"},{"name":"school","type":"STRING"},{"name":"q_western_quranic","type":"STRING"},{"name":"q_western_western","type":"STRING"},{"name":"hh_education_level","type":"STRING"},{"name":"duration_level_pri","type":"STRING"},{"name":"duration_level_sec","type":"STRING"},{"name":"own_phone","type":"STRING"},{"name":"smart_phone","type":"STRING"},{"name":"phone_no","type":"STRING"},{"name":"television","type":"STRING"},{"name":"electric_iron","type":"STRING"},{"name":"fan","type":"STRING"},{"name":"refrigerator","type":"STRING"},{"name":"electricity","type":"STRING"},{"name":"generator","type":"STRING"},{"name":"bank_account","type":"STRING"},{"name":"watch","type":"STRING"},{"name":"floor_material","type":"STRING"},{"name":"other_floor_material","type":"STRING"},{"name":"cooking_stove","type":"STRING"},{"name":"cooking_stove_others","type":"STRING"},{"name":"water_source","type":"STRING"},{"name":"other_water_source","type":"STRING"},{"name":"water_source2","type":"STRING"},{"name":"other_water_source2","type":"STRING"},{"name":"bedroom","type":"STRING"},{"name":"toilet_facility","type":"STRING"},{"name":"other_toilet_facility","type":"STRING"},{"name":"shared_toilet","type":"STRING"},{"name":"toilet_location","type":"STRING"},{"name":"rubbish","type":"STRING"},{"name":"rubbish_other","type":"STRING"},{"name":"washing_hand","type":"STRING"},{"name":"washing_hand_other","type":"STRING"},{"name":"washing_place","type":"STRING"},{"name":"no_household","type":"STRING"},{"name":"hh_females","type":"STRING"},{"name":"audio","type":"STRING"},{"name":"audio_url","type":"STRING"},{"name":"_submission_time","type":"STRING"},{"name":"_uuid","type":"STRING"},{"name":"_index","type":"STRING"},{"name":"_id","type":"STRING"},{"name":"deviceid","type":"STRING"},{"name":"start_geopoint","type":"STRING"},{"name":"_start_geopoint_latitude","type":"STRING"},{"name":"_start_geopoint_longitude","type":"STRING"},{"name":"_start_geopoint_altitude","type":"STRING"},{"name":"_start_geopoint_precision","type":"STRING"},{"name":"audit","type":"STRING"},{"name":"audit_url","type":"STRING"},{"name":"note_missing_username","type":"STRING"},{"name":"note_missing_phone_number","type":"STRING"},{"name":"note_incorrect_date_and_time","type":"STRING"},{"name":"concat_user","type":"STRING"},{"name":"user_confrim","type":"STRING"},{"name":"concat_enu","type":"STRING"},{"name":"cluster_no","type":"STRING"},{"name":"role","type":"STRING"},{"name":"name_supp","type":"STRING"},{"name":"phone_supp","type":"STRING"},{"name":"name_sup_2","type":"STRING"},{"name":"phone_sup_2","type":"STRING"},{"name":"clus_no","type":"STRING"},{"name":"wrong_login","type":"STRING"},{"name":"gps","type":"STRING"},{"name":"_gps_latitude","type":"STRING"},{"name":"_gps_longitude","type":"STRING"},{"name":"_gps_altitude","type":"STRING"},{"name":"_gps_precision","type":"STRING"},{"name":"area","type":"STRING"},{"name":"first_id_key","type":"STRING"},{"name":"n_corner","type":"STRING"},{"name":"result","type":"STRING"},{"name":"perimeter","type":"STRING"},{"name":"lat_ss","type":"STRING"},{"name":"long_ss","type":"STRING"},{"name":"note_gps_link","type":"STRING"},{"name":"household_no1","type":"STRING"},{"name":"household_no2","type":"STRING"},{"name":"household_no3","type":"STRING"},{"name":"household_no4","type":"STRING"},{"name":"household_no5","type":"STRING"},{"name":"household_no6","type":"STRING"},{"name":"household_no7","type":"STRING"},{"name":"household_no8","type":"STRING"},{"name":"household_no9","type":"STRING"},{"name":"household_no10","type":"STRING"},{"name":"check_location","type":"STRING"},{"name":"note_consent","type":"STRING"},{"name":"note4","type":"STRING"},{"name":"q_western","type":"STRING"},{"name":"note6","type":"STRING"},{"name":"note4400","type":"STRING"},{"name":"consented_females","type":"STRING"},{"name":"consented_counr","type":"STRING"},{"name":"val_comment","type":"STRING"},{"name":"note9001","type":"STRING"},{"name":"audio___transcript__ha_","type":"STRING"},{"name":"audio___transcript__en_","type":"STRING"},{"name":"name_input","type":"STRING"},{"name":"lc_gender","type":"STRING"},{"name":"input_phone","type":"STRING"},{"name":"_validation_status","type":"STRING"},{"name":"_notes","type":"STRING"},{"name":"_status","type":"STRING"},{"name":"_submitted_by","type":"STRING"},{"name":"__version__","type":"STRING"},{"name":"_tags","type":"STRING"},{"name":"meta_rootuuid","type":"STRING"},{"name":"hh_id","type":"STRING"},{"name":"_ingested_at","type":"TIMESTAMP","tag":"metadata"},{"name":"_run_id","type":"STRING","tag":"metadata"},{"name":"_source_system","type":"STRING","tag":"metadata"},{"name":"_source_asset","type":"STRING","tag":"metadata"},{"name":"_pipeline_version","type":"STRING","tag":"metadata"}]},{"schema":"bronze","name":"mortality_female","source":"Kobo export, sheet 'female' (XML headers)","note":"","pk":["_submission_meta_rootuuid","mother_id"],"fk":["_submission_meta_rootuuid"],"parent":"mortality_household","parent_schema":"bronze","parent_pk":["meta_rootuuid"],"card":"many","columns":[{"name":"household_id","type":"STRING"},{"name":"female_position","type":"STRING"},{"name":"mother_id","type":"STRING"},{"name":"female_name","type":"STRING"},{"name":"birth_year","type":"STRING"},{"name":"birth_month","type":"STRING"},{"name":"age","type":"STRING"},{"name":"birth_day","type":"STRING"},{"name":"mothers_age","type":"STRING"},{"name":"school_001","type":"STRING"},{"name":"q_women_western_quranic","type":"STRING"},{"name":"q_women_western_western","type":"STRING"},{"name":"hh_women_education_level","type":"STRING"},{"name":"duration_level_pri_001","type":"STRING"},{"name":"duration_level_sec_001","type":"STRING"},{"name":"living_status","type":"STRING"},{"name":"living_sons","type":"STRING"},{"name":"living_daughter","type":"STRING"},{"name":"living_status1","type":"STRING"},{"name":"living_sons1","type":"STRING"},{"name":"living_daughter1","type":"STRING"},{"name":"birthing_status","type":"STRING"},{"name":"dead_sons","type":"STRING"},{"name":"dead_daughter","type":"STRING"},{"name":"c_alive","type":"STRING"},{"name":"c_dead","type":"STRING"},{"name":"c_count","type":"STRING"},{"name":"birthing_status1","type":"STRING"},{"name":"missed_preg","type":"STRING"},{"name":"misscarraige_count","type":"STRING"},{"name":"p_count","type":"STRING"},{"name":"p_id","type":"STRING"},{"name":"agg_child_still_alive","type":"STRING"},{"name":"agg_child_alive_death","type":"STRING"},{"name":"agg_dead_miscarrage","type":"STRING"},{"name":"preg_status","type":"STRING"},{"name":"preg_report_1","type":"STRING"},{"name":"preg_length_1","type":"STRING"},{"name":"preg_length_2","type":"STRING"},{"name":"preg_decision","type":"STRING"},{"name":"children","type":"STRING"},{"name":"_submission__uuid","type":"STRING"},{"name":"_parent_index","type":"STRING"},{"name":"_index","type":"STRING"},{"name":"_submission__id","type":"STRING"},{"name":"female_info","type":"STRING"},{"name":"note76","type":"STRING"},{"name":"current_year","type":"STRING"},{"name":"current_month","type":"STRING"},{"name":"note1000000","type":"STRING"},{"name":"confirm_1","type":"STRING"},{"name":"confirm_2","type":"STRING"},{"name":"confirm_2_001","type":"STRING"},{"name":"total_live_births1","type":"STRING"},{"name":"confirm","type":"STRING"},{"name":"missed_preg_no","type":"STRING"},{"name":"total_preg_outcome","type":"STRING"},{"name":"confimation","type":"STRING"},{"name":"note99","type":"STRING"},{"name":"checkin","type":"STRING"},{"name":"note7","type":"STRING"},{"name":"aggregate_summary_history","type":"STRING"},{"name":"alive_check","type":"STRING"},{"name":"death_check","type":"STRING"},{"name":"misscarriage_check","type":"STRING"},{"name":"note88","type":"STRING"},{"name":"preg_status_note","type":"STRING"},{"name":"_parent_table_name","type":"STRING"},{"name":"_submission__submission_time","type":"STRING"},{"name":"_submission__validation_status","type":"STRING"},{"name":"_submission__notes","type":"STRING"},{"name":"_submission__status","type":"STRING"},{"name":"_submission__submitted_by","type":"STRING"},{"name":"_submission___version__","type":"STRING"},{"name":"_submission__tags","type":"STRING"},{"name":"_submission_meta_rootuuid","type":"STRING"},{"name":"status_preg","type":"STRING"},{"name":"_ingested_at","type":"TIMESTAMP","tag":"metadata"},{"name":"_run_id","type":"STRING","tag":"metadata"},{"name":"_source_system","type":"STRING","tag":"metadata"},{"name":"_source_asset","type":"STRING","tag":"metadata"},{"name":"_pipeline_version","type":"STRING","tag":"metadata"}]},{"schema":"bronze","name":"mortality_pregnancy","source":"Kobo export, sheet 'pregnancy' (XML headers)","note":"","pk":["_submission_meta_rootuuid","preg_id"],"fk":["_submission_meta_rootuuid","motherid"],"parent":"mortality_female","parent_schema":"bronze","parent_pk":["_submission_meta_rootuuid","mother_id"],"card":"many","columns":[{"name":"householdid","type":"STRING"},{"name":"motherid","type":"STRING"},{"name":"c_id","type":"STRING"},{"name":"preg_id","type":"STRING"},{"name":"q113_pregnancy_type","type":"STRING"},{"name":"q114_pregnancy_outcome","type":"STRING"},{"name":"q115_live_signs_at_birth","type":"STRING"},{"name":"q116_child_name","type":"STRING"},{"name":"q117_child_sex","type":"STRING"},{"name":"q117_child_sex_dup","type":"STRING"},{"name":"q118_child_age_category","type":"STRING"},{"name":"q119ai_dob_child_month_less_1","type":"STRING"},{"name":"q119aii_dob_child_day_less_1","type":"STRING"},{"name":"q119aiv_dob_child_less_1","type":"STRING"},{"name":"date_birth12_year","type":"STRING"},{"name":"date_birth12_month","type":"STRING"},{"name":"date_birth12_day","type":"STRING"},{"name":"date_birth12","type":"STRING"},{"name":"q119aiii_dob_child_year_1_11m","type":"STRING"},{"name":"q119aii_dob_child_month_1_11m","type":"STRING"},{"name":"q119ai_dob_child_day_1_11m","type":"STRING"},{"name":"q119aiv_dob_child_1_11m","type":"STRING"},{"name":"q119aiii_dob_child_12_59m","type":"STRING"},{"name":"q119aii_dob_child_12_59m","type":"STRING"},{"name":"q119ai_dob_child_12_59m","type":"STRING"},{"name":"q119aiv_dob_child_12_59m","type":"STRING"},{"name":"q119aiii_dob_child_greaterthan5","type":"STRING"},{"name":"q119aii_dob_child_greaterthan5","type":"STRING"},{"name":"q119ai_dob_child_greaterthan5","type":"STRING"},{"name":"q120i_pregnancy_end_year","type":"STRING"},{"name":"q120ii_pregnancy_end_month","type":"STRING"},{"name":"q120iii_pregnancy_end_day","type":"STRING"},{"name":"q121_pregnancy_duration_type","type":"STRING"},{"name":"q122_pregnancy_duration_weeks","type":"STRING"},{"name":"q122_pregnancy_duration_months","type":"STRING"},{"name":"less_1_11ms","type":"STRING"},{"name":"less_less_5","type":"STRING"},{"name":"greater_greater_5","type":"STRING"},{"name":"q124_child_alive","type":"STRING"},{"name":"q123_age_months_last_birthday","type":"STRING"},{"name":"q125_age_at_last_birthday_month","type":"STRING"},{"name":"q126_age_at_death_exact","type":"STRING"},{"name":"q127a_age_at_death_months","type":"STRING"},{"name":"q127a_age_at_death_days_1","type":"STRING"},{"name":"q127a_age_at_death_days_2","type":"STRING"},{"name":"q128_had_first_birthday","type":"STRING"},{"name":"q129a_age_at_death_months_dup","type":"STRING"},{"name":"q129a_age_at_death_days_dup","type":"STRING"},{"name":"q129a_age_at_death_years","type":"STRING"},{"name":"q129a_age_at_death_months_dup_dup","type":"STRING"},{"name":"q130_child_living_with_respondent","type":"STRING"},{"name":"q131_child_ever_vaccinated","type":"STRING"},{"name":"q131_child_ever_vaccinated_dup","type":"STRING"},{"name":"child_still_alive","type":"STRING"},{"name":"child_alive_death","type":"STRING"},{"name":"birth_form_dead","type":"STRING"},{"name":"birth_form_miscarriage","type":"STRING"},{"name":"_index","type":"STRING"},{"name":"_parent_index","type":"STRING"},{"name":"_submission__uuid","type":"STRING"},{"name":"_submission__id","type":"STRING"},{"name":"twin_note","type":"STRING"},{"name":"twin_note3","type":"STRING"},{"name":"q119a_dob_child_less_1","type":"STRING"},{"name":"q119ai_dob_child_day_less_1","type":"STRING"},{"name":"q121_pregnancy_miscarriage_duration_type","type":"STRING"},{"name":"q122_pregnancy_miscarriage_duration_weeks","type":"STRING"},{"name":"q122_pregnancy_miscarriage_duration_months","type":"STRING"},{"name":"less_less_1","type":"STRING"},{"name":"q123_age_days_last_birthday","type":"STRING"},{"name":"q123_age_less_5_last_birthday","type":"STRING"},{"name":"q123_age_years_last_birthday","type":"STRING"},{"name":"_parent_table_name","type":"STRING"},{"name":"_submission__submission_time","type":"STRING"},{"name":"_submission__validation_status","type":"STRING"},{"name":"_submission__notes","type":"STRING"},{"name":"_submission__status","type":"STRING"},{"name":"_submission__submitted_by","type":"STRING"},{"name":"_submission___version__","type":"STRING"},{"name":"_submission__tags","type":"STRING"},{"name":"_submission_meta_rootuuid","type":"STRING"},{"name":"child_id","type":"STRING"},{"name":"pregnancy_id","type":"STRING"},{"name":"q125_age_at_last_birthday","type":"STRING"},{"name":"_ingested_at","type":"TIMESTAMP","tag":"metadata"},{"name":"_run_id","type":"STRING","tag":"metadata"},{"name":"_source_system","type":"STRING","tag":"metadata"},{"name":"_source_asset","type":"STRING","tag":"metadata"},{"name":"_pipeline_version","type":"STRING","tag":"metadata"}]}],"silver":[{"schema":"silver","name":"mortality_household","source":"map/mortality/household_map.csv (all submissions)","note":"","pk":["root_uuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"start_time","type":"STRING"},{"name":"end_time","type":"STRING"},{"name":"enumerator_name","type":"STRING","tag":"identifier"},{"name":"enumerator_phone_number","type":"STRING","tag":"identifier"},{"name":"enum_id","type":"STRING"},{"name":"consent","type":"STRING"},{"name":"household_head_consent","type":"STRING"},{"name":"household_consent_name","type":"STRING","tag":"identifier"},{"name":"date_of_consent","type":"STRING"},{"name":"witness","type":"STRING"},{"name":"witness_name","type":"STRING","tag":"identifier"},{"name":"start_timme","type":"STRING"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"settlement_cluster","type":"STRING"},{"name":"women_15_49","type":"STRING"},{"name":"latitude","type":"STRING","tag":"identifier"},{"name":"longitude","type":"STRING","tag":"identifier"},{"name":"household_no_category","type":"STRING"},{"name":"household_number","type":"STRING"},{"name":"household_code","type":"STRING"},{"name":"cycle","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"language_communication","type":"STRING"},{"name":"other_language_communication","type":"STRING"},{"name":"household_status","type":"STRING"},{"name":"head_household","type":"STRING"},{"name":"household_name","type":"STRING","tag":"identifier"},{"name":"gender_head_household","type":"STRING"},{"name":"household_age","type":"STRING"},{"name":"related_to_head_household_name","type":"STRING","tag":"identifier"},{"name":"related_to_head_household_live","type":"STRING"},{"name":"related_to_head_household_stay","type":"STRING"},{"name":"related_to_head_household_age","type":"STRING"},{"name":"related_to_head_household_gender","type":"STRING"},{"name":"related_to_head_household","type":"STRING"},{"name":"related_to_head_household_others","type":"STRING"},{"name":"education","type":"STRING"},{"name":"education_type_quranic","type":"STRING"},{"name":"education_type_western","type":"STRING"},{"name":"school_level","type":"STRING"},{"name":"school_level_primary","type":"STRING"},{"name":"school_level_secondary","type":"STRING"},{"name":"own_mobile_phone","type":"STRING"},{"name":"smart_mobile_phone","type":"STRING"},{"name":"respondent_phone_number","type":"STRING","tag":"identifier"},{"name":"television","type":"STRING"},{"name":"electric_iron","type":"STRING"},{"name":"fan","type":"STRING"},{"name":"refrigerator","type":"STRING"},{"name":"electricity","type":"STRING"},{"name":"generator","type":"STRING"},{"name":"bank_account","type":"STRING"},{"name":"watch","type":"STRING"},{"name":"floor_material","type":"STRING"},{"name":"floor_material_others","type":"STRING"},{"name":"cooking_stove","type":"STRING"},{"name":"cooking_stove_others","type":"STRING"},{"name":"drinking_water_source","type":"STRING"},{"name":"drinking_water_source_others","type":"STRING"},{"name":"cooking_water_source","type":"STRING"},{"name":"cooking_water_source_others","type":"STRING"},{"name":"no_sleeping_rooms","type":"STRING"},{"name":"toilet_facility_type","type":"STRING"},{"name":"toilet_facility_type_others","type":"STRING"},{"name":"shared_toilet_facility","type":"STRING"},{"name":"toilet_facility_location","type":"STRING"},{"name":"waste_disposal","type":"STRING"},{"name":"waste_disposal_others","type":"STRING"},{"name":"household_handwash_use","type":"STRING"},{"name":"household_handwash_use_others","type":"STRING"},{"name":"household_handwash_observed","type":"STRING"},{"name":"total_no_persons_household","type":"STRING"},{"name":"current_women_10_55","type":"STRING"},{"name":"end_timme","type":"STRING"},{"name":"audio","type":"STRING","tag":"identifier"},{"name":"audio_url","type":"STRING","tag":"identifier"},{"name":"household_uuid","type":"STRING"},{"name":"index","type":"STRING"},{"name":"submission_id","type":"STRING"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"silver","name":"mortality_female","source":"map/mortality/female_map.csv (all submissions)","note":"","pk":["root_uuid","mother_code"],"fk":["root_uuid"],"parent":"mortality_household","parent_schema":"silver","parent_pk":["root_uuid"],"card":"many","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"household_code","type":"STRING"},{"name":"female_id","type":"STRING"},{"name":"mother_code","type":"STRING"},{"name":"female_name","type":"STRING","tag":"identifier"},{"name":"birth_year","type":"STRING"},{"name":"birth_month","type":"STRING"},{"name":"female_age","type":"STRING"},{"name":"female_dob","type":"STRING"},{"name":"education","type":"STRING"},{"name":"school_level_quranic","type":"STRING"},{"name":"school_level_western","type":"STRING"},{"name":"school_level_cat","type":"STRING"},{"name":"school_level_attained_primary_secondary","type":"STRING"},{"name":"school_level_attained_higher","type":"STRING"},{"name":"birthing_status","type":"STRING"},{"name":"children_living_together","type":"STRING"},{"name":"sons_living_together","type":"STRING"},{"name":"daughters_living_together","type":"STRING"},{"name":"children_living_elsewhere","type":"STRING"},{"name":"sons_living_elsewhere","type":"STRING"},{"name":"daughters_living_elsewhere","type":"STRING"},{"name":"children_alive_later_died","type":"STRING"},{"name":"boys_alive_later_died","type":"STRING"},{"name":"girls_alive_later_died","type":"STRING"},{"name":"sum_children_alive","type":"STRING"},{"name":"sum_children_dead","type":"STRING"},{"name":"sum_alive_dead_children","type":"STRING"},{"name":"confirm_birthing_no","type":"STRING"},{"name":"miscarriage_abortion_pregnancy","type":"STRING"},{"name":"miscarriage_abortion_count","type":"STRING"},{"name":"miscarriage_count","type":"STRING"},{"name":"total_pregnancies","type":"STRING"},{"name":"pregnancy_id","type":"STRING"},{"name":"agg_child_still_alive","type":"STRING"},{"name":"agg_child_alive_death","type":"STRING"},{"name":"agg_dead_miscarrage","type":"STRING"},{"name":"pregnancy_status","type":"STRING"},{"name":"pregnancy_report","type":"STRING"},{"name":"pregnancy_length_weeks","type":"STRING"},{"name":"pregnancy_length_months","type":"STRING"},{"name":"pregnancy_decision","type":"STRING"},{"name":"future_pregnancies","type":"STRING"},{"name":"female_uuid","type":"STRING"},{"name":"parent_index","type":"STRING"},{"name":"index","type":"STRING"},{"name":"submission_id","type":"STRING"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"silver","name":"mortality_pregnancy","source":"map/mortality/pregnancy_map.csv (all submissions)","note":"","pk":["root_uuid","pregnancy_code"],"fk":["root_uuid","mother_code"],"parent":"mortality_female","parent_schema":"silver","parent_pk":["root_uuid","mother_code"],"card":"many","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"household_code","type":"STRING"},{"name":"mother_code","type":"STRING"},{"name":"pregnancy_id","type":"STRING"},{"name":"pregnancy_code","type":"STRING"},{"name":"pregnancy_form","type":"STRING"},{"name":"birth_form","type":"STRING"},{"name":"birth_status","type":"STRING"},{"name":"child_alive_name","type":"STRING","tag":"identifier"},{"name":"child_alive_gender","type":"STRING"},{"name":"child_alive_later_died_gender","type":"STRING"},{"name":"child_age_category","type":"STRING"},{"name":"child_month_less_1_month","type":"STRING"},{"name":"child_day_less_1_month","type":"STRING"},{"name":"child_dob_less_1_month","type":"STRING"},{"name":"child_year_alive_later_died","type":"STRING"},{"name":"child_month_alive_later_died","type":"STRING"},{"name":"child_day_alive_later_died","type":"STRING"},{"name":"child_dob_alive_later_died","type":"STRING"},{"name":"child_year_1_11_month","type":"STRING"},{"name":"child_month_1_11_month","type":"STRING"},{"name":"child_day_1_11_month","type":"STRING"},{"name":"child_dob_1_11_month","type":"STRING"},{"name":"child_year_12_59_month","type":"STRING"},{"name":"child_month_12_59_month","type":"STRING"},{"name":"child_day_12_59_month","type":"STRING"},{"name":"child_dob_12_59_month","type":"STRING"},{"name":"child_year_greater_5_years","type":"STRING"},{"name":"child_month_greater_5_years","type":"STRING"},{"name":"child_day_greater_5_years","type":"STRING"},{"name":"year_pregnancy_ended","type":"STRING"},{"name":"month_pregnancy_ended","type":"STRING"},{"name":"day_pregnancy_ended","type":"STRING"},{"name":"pregnancy_report","type":"STRING","tag":"empty"},{"name":"miscarriage_pregnancy_report","type":"STRING"},{"name":"pregnancy_report_length_weeks","type":"STRING","tag":"empty"},{"name":"pregnancy_report_length_months","type":"STRING","tag":"empty"},{"name":"miscarriage_pregnancy_length_weeks","type":"STRING"},{"name":"miscarriage_pregnancy_length_months","type":"STRING"},{"name":"child_age_less_1_month","type":"STRING"},{"name":"child_age_less_1_11_month","type":"STRING"},{"name":"child_age_less_12_59_month","type":"STRING"},{"name":"child_age_greater_5_years","type":"STRING"},{"name":"child_still_alive","type":"STRING"},{"name":"child_age_1_11_last_birthday","type":"STRING"},{"name":"child_age_1_to_more_than_5_years_last_birthday","type":"STRING"},{"name":"child_age_alive_later_died_category","type":"STRING"},{"name":"child_age_months_alive_later_died","type":"STRING"},{"name":"child_age_alive_later_died_less_1_month","type":"STRING"},{"name":"child_age_days_alive_later_died","type":"STRING"},{"name":"first_birthday","type":"STRING"},{"name":"child_age_alive_later_died_less_1_year","type":"STRING"},{"name":"child_age_alive_later_died_1_less_month","type":"STRING"},{"name":"child_age_alive_later_died_greater_1_year","type":"STRING"},{"name":"child_age_alive_later_died_less_2_year","type":"STRING"},{"name":"child_living_together","type":"STRING"},{"name":"child_vaccinated","type":"STRING"},{"name":"child_ever_vaccinated","type":"STRING"},{"name":"child_alive_still","type":"STRING"},{"name":"child_alive_death","type":"STRING"},{"name":"birth_form_dead","type":"STRING"},{"name":"birth_form_miscarriage","type":"STRING"},{"name":"index","type":"STRING"},{"name":"parent_index","type":"STRING"},{"name":"pregnancy_uuid","type":"STRING"},{"name":"submission_id","type":"STRING"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]}],"gold":[{"schema":"gold","name":"mortality_household","source":"map/mortality/household_map.csv (approved only)","note":"","pk":["root_uuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"start_time","type":"TIMESTAMP_NTZ"},{"name":"end_time","type":"TIMESTAMP_NTZ"},{"name":"enum_id","type":"STRING"},{"name":"consent","type":"STRING"},{"name":"household_head_consent","type":"STRING"},{"name":"date_of_consent","type":"DATE"},{"name":"witness","type":"STRING"},{"name":"start_timme","type":"STRING"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"settlement_cluster","type":"STRING"},{"name":"women_15_49","type":"INT"},{"name":"household_no_category","type":"STRING"},{"name":"household_number","type":"INT"},{"name":"household_code","type":"STRING"},{"name":"cycle","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"language_communication","type":"STRING"},{"name":"other_language_communication","type":"STRING"},{"name":"household_status","type":"STRING"},{"name":"head_household","type":"STRING"},{"name":"gender_head_household","type":"STRING"},{"name":"household_age","type":"INT"},{"name":"related_to_head_household_live","type":"STRING"},{"name":"related_to_head_household_stay","type":"STRING"},{"name":"related_to_head_household_age","type":"INT"},{"name":"related_to_head_household_gender","type":"STRING"},{"name":"related_to_head_household","type":"STRING"},{"name":"related_to_head_household_others","type":"STRING"},{"name":"education","type":"STRING"},{"name":"education_type_quranic","type":"STRING"},{"name":"education_type_western","type":"STRING"},{"name":"school_level","type":"STRING"},{"name":"school_level_primary","type":"INT"},{"name":"school_level_secondary","type":"INT"},{"name":"own_mobile_phone","type":"STRING"},{"name":"smart_mobile_phone","type":"STRING"},{"name":"television","type":"STRING"},{"name":"electric_iron","type":"STRING"},{"name":"fan","type":"STRING"},{"name":"refrigerator","type":"STRING"},{"name":"electricity","type":"STRING"},{"name":"generator","type":"STRING"},{"name":"bank_account","type":"STRING"},{"name":"watch","type":"STRING"},{"name":"floor_material","type":"STRING"},{"name":"floor_material_others","type":"STRING"},{"name":"cooking_stove","type":"STRING"},{"name":"cooking_stove_others","type":"STRING"},{"name":"drinking_water_source","type":"STRING"},{"name":"drinking_water_source_others","type":"STRING"},{"name":"cooking_water_source","type":"STRING"},{"name":"cooking_water_source_others","type":"STRING"},{"name":"no_sleeping_rooms","type":"INT"},{"name":"toilet_facility_type","type":"STRING"},{"name":"toilet_facility_type_others","type":"STRING"},{"name":"shared_toilet_facility","type":"STRING"},{"name":"toilet_facility_location","type":"STRING"},{"name":"waste_disposal","type":"STRING"},{"name":"waste_disposal_others","type":"STRING"},{"name":"household_handwash_use","type":"STRING"},{"name":"household_handwash_use_others","type":"STRING"},{"name":"household_handwash_observed","type":"STRING"},{"name":"total_no_persons_household","type":"INT"},{"name":"current_women_10_55","type":"INT"},{"name":"end_timme","type":"TIMESTAMP_NTZ"},{"name":"household_uuid","type":"STRING"},{"name":"index","type":"INT"},{"name":"submission_id","type":"BIGINT"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"gold","name":"mortality_female","source":"map/mortality/female_map.csv (approved only)","note":"","pk":["root_uuid","mother_code"],"fk":["root_uuid"],"parent":"mortality_household","parent_schema":"gold","parent_pk":["root_uuid"],"card":"many","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"household_code","type":"STRING"},{"name":"female_id","type":"INT"},{"name":"mother_code","type":"STRING"},{"name":"birth_year","type":"STRING"},{"name":"birth_month","type":"STRING"},{"name":"female_age","type":"STRING"},{"name":"female_dob","type":"STRING"},{"name":"education","type":"STRING"},{"name":"school_level_quranic","type":"STRING"},{"name":"school_level_western","type":"STRING"},{"name":"school_level_cat","type":"STRING"},{"name":"school_level_attained_primary_secondary","type":"INT"},{"name":"school_level_attained_higher","type":"INT"},{"name":"birthing_status","type":"STRING"},{"name":"children_living_together","type":"STRING"},{"name":"sons_living_together","type":"INT"},{"name":"daughters_living_together","type":"INT"},{"name":"children_living_elsewhere","type":"STRING"},{"name":"sons_living_elsewhere","type":"INT"},{"name":"daughters_living_elsewhere","type":"INT"},{"name":"children_alive_later_died","type":"STRING"},{"name":"boys_alive_later_died","type":"INT"},{"name":"girls_alive_later_died","type":"INT"},{"name":"sum_children_alive","type":"INT"},{"name":"sum_children_dead","type":"INT"},{"name":"sum_alive_dead_children","type":"INT"},{"name":"confirm_birthing_no","type":"STRING"},{"name":"miscarriage_abortion_pregnancy","type":"STRING"},{"name":"miscarriage_abortion_count","type":"INT"},{"name":"miscarriage_count","type":"INT"},{"name":"total_pregnancies","type":"INT"},{"name":"pregnancy_id","type":"INT"},{"name":"agg_child_still_alive","type":"INT"},{"name":"agg_child_alive_death","type":"INT"},{"name":"agg_dead_miscarrage","type":"INT"},{"name":"pregnancy_status","type":"STRING"},{"name":"pregnancy_report","type":"STRING"},{"name":"pregnancy_length_weeks","type":"INT"},{"name":"pregnancy_length_months","type":"INT"},{"name":"pregnancy_decision","type":"STRING"},{"name":"future_pregnancies","type":"STRING"},{"name":"female_uuid","type":"STRING"},{"name":"parent_index","type":"INT"},{"name":"index","type":"INT"},{"name":"submission_id","type":"BIGINT"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"gold","name":"mortality_pregnancy","source":"map/mortality/pregnancy_map.csv (approved only)","note":"","pk":["root_uuid","pregnancy_code"],"fk":["root_uuid","mother_code"],"parent":"mortality_female","parent_schema":"gold","parent_pk":["root_uuid","mother_code"],"card":"many","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"community","type":"STRING"},{"name":"household_code","type":"STRING"},{"name":"mother_code","type":"STRING"},{"name":"pregnancy_id","type":"INT"},{"name":"pregnancy_code","type":"STRING"},{"name":"pregnancy_form","type":"STRING"},{"name":"birth_form","type":"STRING"},{"name":"birth_status","type":"STRING"},{"name":"child_alive_gender","type":"STRING"},{"name":"child_alive_later_died_gender","type":"STRING"},{"name":"child_age_category","type":"STRING"},{"name":"child_month_less_1_month","type":"STRING"},{"name":"child_day_less_1_month","type":"STRING"},{"name":"child_dob_less_1_month","type":"STRING"},{"name":"child_year_alive_later_died","type":"STRING"},{"name":"child_month_alive_later_died","type":"STRING"},{"name":"child_day_alive_later_died","type":"STRING"},{"name":"child_dob_alive_later_died","type":"DATE"},{"name":"child_year_1_11_month","type":"INT"},{"name":"child_month_1_11_month","type":"INT"},{"name":"child_day_1_11_month","type":"INT"},{"name":"child_dob_1_11_month","type":"STRING"},{"name":"child_year_12_59_month","type":"INT"},{"name":"child_month_12_59_month","type":"INT"},{"name":"child_day_12_59_month","type":"INT"},{"name":"child_dob_12_59_month","type":"STRING"},{"name":"child_year_greater_5_years","type":"STRING"},{"name":"child_month_greater_5_years","type":"STRING"},{"name":"child_day_greater_5_years","type":"STRING"},{"name":"year_pregnancy_ended","type":"INT"},{"name":"month_pregnancy_ended","type":"STRING"},{"name":"day_pregnancy_ended","type":"INT"},{"name":"pregnancy_report","type":"STRING","tag":"empty"},{"name":"miscarriage_pregnancy_report","type":"STRING"},{"name":"pregnancy_report_length_weeks","type":"STRING","tag":"empty"},{"name":"pregnancy_report_length_months","type":"STRING","tag":"empty"},{"name":"miscarriage_pregnancy_length_weeks","type":"INT"},{"name":"miscarriage_pregnancy_length_months","type":"INT"},{"name":"child_age_less_1_month","type":"INT"},{"name":"child_age_less_1_11_month","type":"STRING"},{"name":"child_age_less_12_59_month","type":"STRING"},{"name":"child_age_greater_5_years","type":"STRING"},{"name":"child_still_alive","type":"STRING"},{"name":"child_age_1_11_last_birthday","type":"STRING"},{"name":"child_age_1_to_more_than_5_years_last_birthday","type":"INT"},{"name":"child_age_alive_later_died_category","type":"STRING"},{"name":"child_age_months_alive_later_died","type":"INT"},{"name":"child_age_alive_later_died_less_1_month","type":"INT"},{"name":"child_age_days_alive_later_died","type":"INT"},{"name":"first_birthday","type":"STRING"},{"name":"child_age_alive_later_died_less_1_year","type":"INT"},{"name":"child_age_alive_later_died_1_less_month","type":"INT"},{"name":"child_age_alive_later_died_greater_1_year","type":"INT"},{"name":"child_age_alive_later_died_less_2_year","type":"INT"},{"name":"child_living_together","type":"STRING"},{"name":"child_vaccinated","type":"STRING"},{"name":"child_ever_vaccinated","type":"STRING"},{"name":"child_alive_still","type":"STRING"},{"name":"child_alive_death","type":"STRING"},{"name":"birth_form_dead","type":"STRING"},{"name":"birth_form_miscarriage","type":"STRING"},{"name":"index","type":"INT"},{"name":"parent_index","type":"INT"},{"name":"pregnancy_uuid","type":"STRING"},{"name":"submission_id","type":"BIGINT"},{"name":"concatenated_id","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"restricted","name":"mortality_household_identifiers","source":"moved out of gold.mortality_household","note":"one row per gold.mortality_household row; access restricted","pk":["root_uuid"],"fk":["root_uuid"],"parent":"mortality_household","parent_schema":"gold","parent_pk":["root_uuid"],"card":"one","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"enumerator_name","type":"STRING","tag":"identifier"},{"name":"enumerator_phone_number","type":"STRING","tag":"identifier"},{"name":"household_consent_name","type":"STRING","tag":"identifier"},{"name":"witness_name","type":"STRING","tag":"identifier"},{"name":"household_name","type":"STRING","tag":"identifier"},{"name":"related_to_head_household_name","type":"STRING","tag":"identifier"},{"name":"respondent_phone_number","type":"STRING","tag":"identifier"},{"name":"latitude","type":"DOUBLE","tag":"identifier"},{"name":"longitude","type":"DOUBLE","tag":"identifier"},{"name":"audio","type":"STRING","tag":"identifier"},{"name":"audio_url","type":"STRING","tag":"identifier"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"restricted","name":"mortality_female_identifiers","source":"moved out of gold.mortality_female","note":"one row per gold.mortality_female row; access restricted","pk":["root_uuid","mother_code"],"fk":["root_uuid","mother_code"],"parent":"mortality_female","parent_schema":"gold","parent_pk":["root_uuid","mother_code"],"card":"one","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"mother_code","type":"STRING","tag":"key"},{"name":"female_name","type":"STRING","tag":"identifier"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"restricted","name":"mortality_pregnancy_identifiers","source":"moved out of gold.mortality_pregnancy","note":"one row per gold.mortality_pregnancy row; access restricted","pk":["root_uuid","pregnancy_code"],"fk":["root_uuid","pregnancy_code"],"parent":"mortality_pregnancy","parent_schema":"gold","parent_pk":["root_uuid","pregnancy_code"],"card":"one","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"pregnancy_code","type":"STRING","tag":"key"},{"name":"child_alive_name","type":"STRING","tag":"identifier"},{"name":"_run_id","type":"STRING","tag":"metadata"}]}]}};
+document.title = DATA.page_title;
+$('eyebrow').innerHTML = DATA.eyebrow;
+$('title').textContent = DATA.title;
+$('pending').innerHTML = DATA.pending;
+$('footer').textContent = DATA.footer;
+render();
+</script>
+
+</body>
+</html>
