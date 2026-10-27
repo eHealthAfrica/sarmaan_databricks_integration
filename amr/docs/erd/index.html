@@ -31,7 +31,7 @@ body[data-layer="gold"] { --layer: var(--gold); --layer-soft: var(--gold-soft); 
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
-.wrap { max-width: 1440px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 18px; }
+.wrap { max-width: 1680px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 18px; }
 header { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; justify-content: space-between; }
 .eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
 .eyebrow .mono { text-transform: none; letter-spacing: 0; }
@@ -107,7 +107,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .ent .ft { font-size: 11px; color: var(--muted); padding: 4px 10px; border-top: 1px solid var(--line); }
 
 .rels .ln { stroke: var(--fg); stroke-width: 1.4; fill: none; }
-.rels .lbl { fill: var(--muted); font: 500 11px var(--mono); }
+.rels .lbl { fill: var(--muted); font: 500 11px var(--mono); pointer-events: auto; cursor: help; }
 .status { color: var(--muted); padding: 40px; }
 footer { color: var(--muted); font-size: 12.5px; max-width: 90ch; }
 @media (max-width: 560px) { h1 { font-size: 23px; } }
@@ -216,8 +216,10 @@ function render() {
   const solo = main.filter((t) => !t.pk.length);
   const lv = levels(main);
   const canvas = $('canvas');
-  canvas.style.gridTemplateColumns = lv.map(() => 'minmax(340px, 1fr)').join(' 170px ');
-  canvas.style.minWidth = `${lv.length * 400 + (lv.length - 1) * 170}px`;
+  // The levels share the page width, so the diagram fits without scrolling
+  // sideways; only screens narrower than minWidth (about 900px) scroll.
+  canvas.style.gridTemplateColumns = lv.map(() => 'minmax(0, 1fr)').join(' clamp(56px, 6vw, 110px) ');
+  canvas.style.minWidth = `${lv.length * 260 + (lv.length - 1) * 56}px`;
   canvas.innerHTML = `<svg class="rels" aria-hidden="true"></svg>
     ${lv.map((ts, i) => `<div class="level" style="grid-column:${i * 2 + 1}">${ts.map(entity).join('')}</div>`).join('')}
     ${solo.length ? `<div class="solo"><span class="band-note">Standalone table, no relationships</span>${solo.map(entity).join('')}</div>` : ''}
@@ -255,9 +257,14 @@ function drawRels() {
       add('path', { class: 'ln', d: `M${x2} ${y2 - 7}L${x2 - 12} ${y2}L${x2} ${y2 + 7}` });
       add('circle', { class: 'ln', cx: x2 - 20, cy: y2, r: 4, fill: 'var(--panel)' });
     });
+    // Label in the gap between the levels, shortened to fit it
     const label = fk.join(' + ');
+    const fits = Math.max(6, Math.floor((firstLeft - x1 - 26) / 6));
     const t = add('text', { class: 'lbl', x: x1 + 22, y: y1 - 10 });
-    t.textContent = label.length > 30 ? label.slice(0, 29) + '…' : label;
+    t.textContent = label.length > fits ? label.slice(0, fits - 1) + '…' : label;
+    const tip = document.createElementNS(NS, 'title');
+    tip.textContent = label;
+    t.appendChild(tip);
   });
 }
 
