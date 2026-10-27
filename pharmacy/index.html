@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SARMAAN Pharmacy ERD</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+/* Layout: physical ERD canvas — one column per level of the hierarchy (parent, child, grandchild),
+   crow's-foot connectors drawn between key rows; restricted identifier tables in a band below */
+:root {
+  --bg: #f3f5f8; --panel: #ffffff; --fg: #15202c; --muted: #5a6575; --line: #d6dce4; --grid: #e6eaf0;
+  --accent: #0b6fb8; --accent-soft: #e2eef8; --mark: #fff1a8; --pk: #8a6a00; --pk-soft: #f7efd2;
+  --bronze: #9a5a1f; --bronze-soft: #f6ebe0; --silver: #56626f; --silver-soft: #e9edf1; --gold: #8a6a00; --gold-soft: #f7efd2;
+  --restricted: #b42318; --restricted-soft: #fdecea; --meta: #5b4bb7; --meta-soft: #eeebfa;
+  --sans: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif; --mono: 'IBM Plex Mono', Consolas, monospace;
+  --layer: var(--gold); --layer-soft: var(--gold-soft);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10151c; --panel: #18202a; --fg: #e5eaf1; --muted: #9aa6b5; --line: #2e3947; --grid: #1a222c; --accent: #5cb2ff; --accent-soft: #15304a; --mark: #5a4d0f; --pk: #e6c350; --pk-soft: #3a3217;
+  --bronze: #e0a067; --bronze-soft: #3a2a1b; --silver: #b7c2ce; --silver-soft: #28313b; --gold: #e6c350; --gold-soft: #3a3217;
+  --restricted: #ff8a7a; --restricted-soft: #3d1f1c; --meta: #b4a8ff; --meta-soft: #2a2546; color-scheme: dark; }
+body[data-layer="bronze"] { --layer: var(--bronze); --layer-soft: var(--bronze-soft); }
+body[data-layer="silver"] { --layer: var(--silver); --layer-soft: var(--silver-soft); }
+body[data-layer="gold"] { --layer: var(--gold); --layer-soft: var(--gold-soft); }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1680px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; justify-content: space-between; }
+.eyebrow { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
+.eyebrow .mono { text-transform: none; letter-spacing: 0; }
+h1 { font-size: 28px; font-weight: 600; margin: 4px 0 0; line-height: 1.2; text-wrap: balance; }
+.mono { font-family: var(--mono); }
+.layers { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.layers button { font: inherit; font-weight: 600; background: none; border: 0; color: var(--muted); padding: 8px 16px; cursor: pointer; display: grid; text-align: left; gap: 1px; }
+.layers button span { font-size: 11.5px; font-weight: 400; }
+.layers button + button { border-left: 1px solid var(--line); }
+.layers button[aria-pressed="true"] { background: var(--layer-soft); color: var(--layer); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pending { background: var(--pk-soft); color: var(--fg); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 0; }
+.pending b { color: var(--pk); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.bar input[type=search] { font: inherit; padding: 7px 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--fg); width: min(100%, 300px); }
+.bar label { display: inline-flex; gap: 6px; align-items: center; color: var(--fg); cursor: pointer; }
+.bar .about { color: var(--muted); flex: 1 1 320px; min-width: 0; }
+.bar .about b { color: var(--layer); }
+#hits { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-size: 12.5px; align-items: center; }
+.legend svg { vertical-align: middle; margin-right: 6px; }
+
+/* Canvas: one grid column per level, a connector gutter between levels */
+.canvas-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px;
+  background-color: var(--panel); background-image: radial-gradient(var(--grid) 1px, transparent 1px); background-size: 18px 18px; }
+.canvas { position: relative; padding: 28px; display: grid; column-gap: 0; row-gap: 28px; align-items: start; }
+.canvas > svg.rels { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.level { grid-row: 1; display: grid; gap: 22px; align-content: start; }
+.solo { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(340px, 460px); gap: 8px; }
+.band-note { color: var(--muted); font-size: 12.5px; max-width: 95ch; }
+.band-note b { color: var(--restricted); font-family: var(--mono); }
+.restricted { grid-column: 1 / -1; display: grid; gap: 10px; border-top: 2px dashed var(--restricted); padding-top: 16px; }
+.rgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; align-items: start; }
+
+.ent { background: var(--panel); border: 1.5px solid var(--layer); border-radius: 6px; box-shadow: 0 1px 3px rgba(20,30,45,.08); position: relative; z-index: 1; min-width: 0; }
+.ent .hd { background: var(--layer); color: var(--panel); padding: 7px 10px; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; border-radius: 4px 4px 0 0; }
+.ent .hd .nm { font-family: var(--mono); font-weight: 600; font-size: 13px; overflow-wrap: anywhere; }
+.ent .hd .ct { font-size: 11.5px; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ent .src { font-size: 11.5px; color: var(--muted); padding: 4px 10px; border-bottom: 1px solid var(--line); background: var(--layer-soft); }
+.ent.r { border-color: var(--restricted); }
+.ent.r .hd { background: var(--restricted); }
+.ent.r .src, .ent.r .keys li { background: var(--restricted-soft); }
+.ent.r .keys { border-bottom-color: var(--restricted); }
+.rows { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 12px; }
+.rows li { display: grid; grid-template-columns: 40px 1fr auto; gap: 6px; align-items: baseline; padding: 2.5px 10px; border-bottom: 1px solid var(--grid); }
+.rows li:last-child { border-bottom: 0; }
+.rows .k { font-family: var(--sans); font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-align: center; border-radius: 3px; padding: 0 2px; white-space: nowrap; }
+.rows .k.pk { background: var(--pk-soft); color: var(--pk); }
+.rows .k.fk { background: var(--accent-soft); color: var(--accent); }
+.rows .k.pkfk { background: linear-gradient(90deg, var(--pk-soft) 50%, var(--accent-soft) 50%); color: var(--fg); }
+.rows .k.n { color: var(--muted); font-weight: 400; font-family: var(--mono); font-size: 10px; text-align: right; }
+.rows .c { overflow-wrap: anywhere; min-width: 0; }
+.rows .t { color: var(--muted); font-size: 10.5px; text-transform: uppercase; white-space: nowrap; }
+.tag { font-family: var(--sans); font-size: 9.5px; font-weight: 600; border-radius: 3px; padding: 0 4px; margin-left: 6px; white-space: nowrap; }
+.tag.meta { background: var(--meta-soft); color: var(--meta); }
+.tag.pii { background: var(--restricted-soft); color: var(--restricted); }
+.tag.empty { background: var(--grid); color: var(--muted); }
+.keys { border-bottom: 2px solid var(--layer); }
+.keys li { background: var(--layer-soft); }
+.keys .c { font-weight: 600; }
+.ref { display: block; font-size: 10.5px; color: var(--accent); font-weight: 400; }
+.body { overflow-y: auto; }
+.level .body { max-height: 420px; }
+.level:first-of-type .body { max-height: 640px; }
+.solo .body { max-height: 240px; }
+.restricted .body { max-height: none; }
+.canvas.full .body { max-height: none; }
+.rows li.dim { opacity: .22; }
+.rows mark { background: var(--mark); color: inherit; border-radius: 2px; }
+.ent .ft { font-size: 11px; color: var(--muted); padding: 4px 10px; border-top: 1px solid var(--line); }
+
+.rels .ln { stroke: var(--fg); stroke-width: 1.4; fill: none; }
+.rels .lbl { fill: var(--muted); font: 500 11px var(--mono); pointer-events: auto; cursor: help; }
+.status { color: var(--muted); padding: 40px; }
+footer { color: var(--muted); font-size: 12.5px; max-width: 90ch; }
+@media (max-width: 560px) { h1 { font-size: 23px; } }
+@media (prefers-reduced-motion: no-preference) { .rows li { transition: opacity .15s; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="title"></h1>
+    </div>
+    <div class="layers" role="group" aria-label="Schema">
+      <button type="button" data-layer="bronze" aria-pressed="false">bronze<span>raw + lineage</span></button>
+      <button type="button" data-layer="silver" aria-pressed="false">silver<span>renamed, keyed</span></button>
+      <button type="button" data-layer="gold" aria-pressed="true">gold<span>approved, typed</span></button>
+    </div>
+  </header>
+
+  <p class="pending" id="pending"></p>
+
+  <div class="bar">
+    <input id="q" type="search" aria-label="Search columns" placeholder="Find a column, e.g. root_uuid or pharmacy_code" autocomplete="off">
+    <label><input id="full" type="checkbox"> Expand every table</label>
+    <span id="hits"></span>
+    <span class="about" id="about"></span>
+  </div>
+
+  <div class="legend" aria-label="Legend">
+    <span><b class="mono" style="color:var(--pk)">PK</b> primary key (two PK rows = composite key)</span>
+    <span><b class="mono" style="color:var(--accent)">FK</b> foreign key → parent key</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M6 2V12M10 2V12" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>exactly one (parent)</span>
+    <span><svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true"><path d="M0 7H46M46 1L36 7L46 13M30 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>zero or many (child)</span>
+    <span><span class="tag meta" style="margin:0 6px 0 0">metadata</span>lineage column</span>
+    <span><span class="tag pii" style="margin:0 6px 0 0">identifier</span>name, phone, GPS, signature or shop photo; restricted</span>
+    <span><span class="tag empty" style="margin:0 6px 0 0">no source</span>no question in this form; always empty</span>
+  </div>
+
+  <div class="canvas-scroll">
+    <div class="canvas" id="canvas"><p class="status">Loading the data model…</p></div>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+let DATA = null, layer = 'gold';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const TAGS = { metadata: '<span class="tag meta">metadata</span>', identifier: '<span class="tag pii">identifier</span>', empty: '<span class="tag empty">no source</span>' };
+const BADGE = { pk: '<span class="k pk">PK</span>', fk: '<span class="k fk">FK</span>', pkfk: '<span class="k pkfk">PK FK</span>' };
+const isMain = (t) => t.schema === layer;
+
+function row(c, kind, extra) {
+  const k = kind ? BADGE[kind] : `<span class="k n">${c.pos}</span>`;
+  return `<li data-name="${esc(c.name.toLowerCase())}"${kind ? ` data-key="${kind}"` : ''}>${k}<span class="c"><span class="txt">${esc(c.name)}</span>${TAGS[c.tag] || ''}${extra || ''}</span><span class="t">${esc(c.type)}</span></li>`;
+}
+
+function entity(t) {
+  const cols = t.columns.map((c, i) => ({ ...c, pos: i + 1 }));
+  const keyNames = [...t.pk, ...t.fk.filter((f) => !t.pk.includes(f))];
+  const keys = keyNames.map((n) => {
+    const c = cols.find((x) => x.name === n);
+    const isPk = t.pk.includes(n), isFk = t.fk.includes(n);
+    const ref = isFk ? `<span class="ref">→ ${esc(t.parent_schema)}.${esc(t.parent)}.${esc(t.parent_pk[t.fk.indexOf(n)])}${t.card === 'one' ? ' (1:1)' : ''}</span>` : '';
+    return row(c, isPk && isFk ? 'pkfk' : isPk ? 'pk' : 'fk', ref);
+  });
+  const rest = cols.filter((c) => !keyNames.includes(c.name)).map((c) => row(c)).join('');
+  const parentName = t.parent ? `${esc(t.parent_schema)}.${esc(t.parent)}` : '';
+  const foot = t.card === 'many' ? `zero or many rows per ${parentName} row`
+    : t.card === 'one' ? `one row per ${parentName} row`
+    : t.pk.length ? 'one row per Kobo submission' : 'no keys · not related to other tables';
+  return `<div class="ent${isMain(t) ? '' : ' r'}" data-id="${esc(t.schema)}.${esc(t.name)}">
+    <div class="hd"><span class="nm">${esc(t.schema)}.${esc(t.name)}</span><span class="ct">${cols.length} cols</span></div>
+    <div class="src">${esc(t.source || '')}${t.note ? ' · ' + esc(t.note) : ''}</div>
+    ${keys.length ? `<ul class="rows keys">${keys.join('')}</ul>` : ''}
+    <div class="body"><ul class="rows">${rest}</ul></div>
+    <div class="ft">${foot}</div>
+  </div>`;
+}
+
+function levels(main) {
+  // level 0: tables with keys and no parent; level n: parent at level n-1
+  const out = [main.filter((t) => t.pk.length && !t.fk.length)];
+  let placed = new Set(out[0].map((t) => t.name));
+  for (;;) {
+    const next = main.filter((t) => t.fk.length && !placed.has(t.name) && placed.has(t.parent));
+    if (!next.length) break;
+    out.push(next);
+    next.forEach((t) => placed.add(t.name));
+  }
+  return out;
+}
+
+function render() {
+  document.body.dataset.layer = layer;
+  document.querySelectorAll('.layers button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layer === layer)));
+  if (!DATA) return;
+  $('about').innerHTML = DATA.about[layer];
+  const all = DATA.layers[layer];
+  const main = all.filter(isMain);
+  const restricted = all.filter((t) => !isMain(t));
+  const solo = main.filter((t) => !t.pk.length);
+  const lv = levels(main);
+  const canvas = $('canvas');
+  // The levels share the page width, so the diagram fits without scrolling
+  // sideways; only screens narrower than minWidth (about 900px) scroll.
+  // A single table (no relationships) keeps a readable width instead of
+  // stretching across the page.
+  canvas.style.gridTemplateColumns = lv.length === 1
+    ? 'minmax(0, 760px)'
+    : lv.map(() => 'minmax(0, 1fr)').join(' clamp(56px, 6vw, 110px) ');
+  canvas.style.minWidth = `${lv.length * 260 + (lv.length - 1) * 56}px`;
+  canvas.innerHTML = `<svg class="rels" aria-hidden="true"></svg>
+    ${lv.map((ts, i) => `<div class="level" style="grid-column:${i * 2 + 1}">${ts.map(entity).join('')}</div>`).join('')}
+    ${solo.length ? `<div class="solo"><span class="band-note">Standalone table, no relationships</span>${solo.map(entity).join('')}</div>` : ''}
+    ${restricted.length ? `<div class="restricted"><span class="band-note">${DATA.restricted_note}</span><div class="rgrid">${restricted.map(entity).join('')}</div></div>` : ''}`;
+  filter();
+  requestAnimationFrame(drawRels);
+}
+
+function drawRels() {
+  const cv = $('canvas'), svg = cv.querySelector('svg.rels');
+  if (!svg || !DATA) return;
+  svg.replaceChildren();
+  const box = cv.getBoundingClientRect();
+  const add = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  const keyRow = (id, name) => cv.querySelector(`.ent[data-id="${id}"] .keys li[data-name="${name.toLowerCase()}"]`);
+  const byParent = {};
+  DATA.layers[layer].filter((t) => isMain(t) && t.card === 'many').forEach((t) => {
+    const p = keyRow(`${t.parent_schema}.${t.parent}`, t.parent_pk[t.parent_pk.length - 1]);
+    const c = keyRow(`${t.schema}.${t.name}`, t.fk[t.fk.length - 1]);
+    if (!p || !c) return;
+    (byParent[`${t.parent_schema}.${t.parent}`] ||= { p, kids: [], fk: t.fk }).kids.push(c);
+  });
+  Object.values(byParent).forEach(({ p, kids, fk }) => {
+    const pr = p.getBoundingClientRect();
+    const x1 = pr.right - box.left, y1 = pr.top + pr.height / 2 - box.top;
+    const firstLeft = kids[0].getBoundingClientRect().left - box.left;
+    const midX = x1 + (firstLeft - x1) / 2;
+    // parent side: exactly one
+    add('path', { class: 'ln', d: `M${x1} ${y1}H${midX}M${x1 + 10} ${y1 - 6}V${y1 + 6}M${x1 + 15} ${y1 - 6}V${y1 + 6}` });
+    kids.forEach((li) => {
+      const r = li.getBoundingClientRect();
+      const x2 = r.left - box.left, y2 = r.top + r.height / 2 - box.top;
+      add('path', { class: 'ln', d: `M${midX} ${y1}V${y2}H${x2}` });
+      // child side: zero or many (circle + crow's foot)
+      add('path', { class: 'ln', d: `M${x2} ${y2 - 7}L${x2 - 12} ${y2}L${x2} ${y2 + 7}` });
+      add('circle', { class: 'ln', cx: x2 - 20, cy: y2, r: 4, fill: 'var(--panel)' });
+    });
+    // Label in the gap between the levels, shortened to fit it
+    const label = fk.join(' + ');
+    const fits = Math.max(6, Math.floor((firstLeft - x1 - 26) / 6));
+    const t = add('text', { class: 'lbl', x: x1 + 22, y: y1 - 10 });
+    t.textContent = label.length > fits ? label.slice(0, fits - 1) + '…' : label;
+    const tip = document.createElementNS(NS, 'title');
+    tip.textContent = label;
+    t.appendChild(tip);
+  });
+}
+
+function filter() {
+  const q = $('q').value.trim().toLowerCase();
+  let hits = 0;
+  document.querySelectorAll('.rows li').forEach((li) => {
+    const txt = li.querySelector('.txt'), raw = txt.textContent, at = li.dataset.name.indexOf(q);
+    if (!q || at < 0) { li.classList.toggle('dim', !!q); txt.innerHTML = esc(raw); return; }
+    hits++; li.classList.remove('dim');
+    txt.innerHTML = esc(raw.slice(0, at)) + '<mark>' + esc(raw.slice(at, at + q.length)) + '</mark>' + esc(raw.slice(at + q.length));
+  });
+  if (q) {
+    document.querySelectorAll('.body').forEach((b) => { const m = b.querySelector('li:not(.dim)'); if (m) b.scrollTop = m.offsetTop - b.firstElementChild.offsetTop - 4; });
+  }
+  $('hits').textContent = q ? `${hits} match${hits === 1 ? '' : 'es'}` : '';
+}
+
+document.querySelectorAll('.layers button').forEach((b) => b.addEventListener('click', () => {
+  layer = b.dataset.layer;
+  try { history.replaceState(null, '', '#' + layer); } catch (e) {}
+  render();
+}));
+$('q').addEventListener('input', filter);
+$('full').addEventListener('change', (e) => { $('canvas').classList.toggle('full', e.target.checked); requestAnimationFrame(drawRels); });
+window.addEventListener('resize', () => requestAnimationFrame(drawRels));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(drawRels));
+const h = location.hash.replace('#', '');
+if (['bronze', 'silver', 'gold'].includes(h)) layer = h;
+
+DATA = {"catalogs":["eha_ghi_sarmaan_dev","eha_ghi_sarmaan_prod"],"page_title":"SARMAAN Pharmacy ERD","title":"Pharmacy physical data model","eyebrow":"Databricks \u00b7 catalogs <span class=\"mono\">eha_ghi_sarmaan_dev</span> / <span class=\"mono\">eha_ghi_sarmaan_prod</span> \u00b7 Pharmacy survey","pending":"<b>Key pending the key spike.</b> One row per pharmacy or drug shop, keyed on the Kobo <span class=\"mono\">rootUuid</span>, which stays the same when a submission is edited. The form has no repeats, so there is one table per layer. <span class=\"mono\">cycle</span> has no question in the form: the pipeline fills it from the round. Dev and prod catalogs have the same schemas and tables.","about":{"bronze":"<b>bronze</b> \u00b7 every Kobo submission as downloaded (XML headers), all columns STRING, keyed on Kobo rootUuid, with lineage columns <span class=\"mono\">_ingested_at</span>, <span class=\"mono\">_run_id</span>, <span class=\"mono\">_source_system</span>, <span class=\"mono\">_source_asset</span>, <span class=\"mono\">_pipeline_version</span>.","silver":"<b>silver</b> \u00b7 all submissions with the Pharmacy mapping's names, keyed on <span class=\"mono\">root_uuid</span>, carrying <span class=\"mono\">_run_id</span>.","gold":"<b>gold</b> \u00b7 approved submissions only, typed from the form's question types, keyed on <span class=\"mono\">root_uuid</span>, carrying <span class=\"mono\">_run_id</span>. Names, phones, GPS, the signature and the shop photo are in <span class=\"mono\">restricted</span>, one row per gold row."},"restricted_note":"<b>restricted</b> \u00b7 identifier columns moved out of gold: names, phone numbers (STRING), GPS, the pharmacist's signature and the shop photo (it shows the shop's name). Same key as the gold table, one row per gold row (1:1). Access is limited to approved users.","footer":"Generated by pharmacy/docs/generate_erd.py from the Pharmacy export columns, the Pharmacy mapping file and gold_types.csv, with the architecture review decisions in pharmacy/architecture.py. Primary and foreign keys are informational in Databricks; the loader's checks enforce them.","layers":{"bronze":[{"schema":"bronze","name":"pharmacy","source":"Kobo export, sheet 'pharmacy' (XML headers)","note":"","pk":["meta_rootuuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"starttime","type":"STRING"},{"name":"endtime","type":"STRING"},{"name":"username","type":"STRING"},{"name":"phonenumber","type":"STRING"},{"name":"photo_001_url","type":"STRING"},{"name":"signed_consent","type":"STRING"},{"name":"name_pharmacist","type":"STRING"},{"name":"consent_sign_url","type":"STRING"},{"name":"date_of_consent","type":"STRING"},{"name":"witness","type":"STRING"},{"name":"witness_name","type":"STRING"},{"name":"start_time","type":"STRING"},{"name":"states","type":"STRING"},{"name":"lgas","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"_gps_latitude","type":"STRING"},{"name":"_gps_longitude","type":"STRING"},{"name":"pharmacy_no","type":"STRING"},{"name":"unique","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"age","type":"STRING"},{"name":"gender","type":"STRING"},{"name":"religion","type":"STRING"},{"name":"other_religion","type":"STRING"},{"name":"education","type":"STRING"},{"name":"ethnicity","type":"STRING"},{"name":"other_ethnicity","type":"STRING"},{"name":"drug_shop","type":"STRING"},{"name":"other_shop","type":"STRING"},{"name":"training","type":"STRING"},{"name":"training_type","type":"STRING"},{"name":"other_type","type":"STRING"},{"name":"experience","type":"STRING"},{"name":"antibiotics","type":"STRING"},{"name":"antibiotic_meaning_medicines_used_to_treat_chest_infections","type":"STRING"},{"name":"antibiotic_meaning_medicines_used_to_treat_sexually_transmitted_infections","type":"STRING"},{"name":"antibiotic_meaning_medicines_used_to_treat_malaria","type":"STRING"},{"name":"antibiotic_meaning_medicines_that_can_kill_germs_in_the_body","type":"STRING"},{"name":"antibiotic_meaning_others","type":"STRING"},{"name":"other_meaning","type":"STRING"},{"name":"rational_use","type":"STRING"},{"name":"training_institute","type":"STRING"},{"name":"other_training_institute","type":"STRING"},{"name":"training_year","type":"STRING"},{"name":"selling","type":"STRING"},{"name":"selling_reason_the_law_says_that_i_must_insist_on_prescriptions_for_antibiotics","type":"STRING"},{"name":"selling_reason_i_want_to_discourage_misuse_of_antibiotics_which_may_lead_to_antimicrobial_resistance","type":"STRING"},{"name":"selling_reason_insisting_on_having_prescriptions_will_protect_life_and_preserve_antibiotic_options_for_later_use","type":"STRING"},{"name":"selling_reason_i_have_no_reason_for_insisting_on_having_prescriptions","type":"STRING"},{"name":"selling_reason_i_earn_more_money_when_i_dispense_based_on_prescriptions","type":"STRING"},{"name":"selling_reason2_no_reason","type":"STRING"},{"name":"selling_reason2_there_are_no_doctors_in_my_location_to_write_prescriptions","type":"STRING"},{"name":"selling_reason2_i_prefer_to_give_my_clients_whatever_they_desire_without_asking_questions","type":"STRING"},{"name":"selling_reason2_i_can_recommend_antibiotics_and_therefore_do_not_require_any_prescription","type":"STRING"},{"name":"selling_reason2_asking_for_prescriptions_will_drive_away_my_clients","type":"STRING"},{"name":"selling_reason2_others","type":"STRING"},{"name":"other_s_reason","type":"STRING"},{"name":"no_people","type":"STRING"},{"name":"no_people2","type":"STRING"},{"name":"no_people3","type":"STRING"},{"name":"no_sold","type":"STRING"},{"name":"disease_diarrhea_running_stomach","type":"STRING"},{"name":"disease_any_abdominal_pain","type":"STRING"},{"name":"disease_urinary_tract_infectiondifficulty_in_passing_urine","type":"STRING"},{"name":"disease_sexually_transmitted_disease","type":"STRING"},{"name":"disease_respiratory_tract_infection","type":"STRING"},{"name":"disease_boil","type":"STRING"},{"name":"disease_any_episode_of_febrile_illness","type":"STRING"},{"name":"disease_headaches","type":"STRING"},{"name":"disease_catarrhnasal_congestion","type":"STRING"},{"name":"disease_others","type":"STRING"},{"name":"other_disease","type":"STRING"},{"name":"effectiveness","type":"STRING"},{"name":"no_mixed","type":"STRING"},{"name":"prevention","type":"STRING"},{"name":"antibiotic_type","type":"STRING"},{"name":"other_antibiotic_type","type":"STRING"},{"name":"injections","type":"STRING"},{"name":"injection_type_ampiclox_andor_ampicilline","type":"STRING"},{"name":"injection_type_amoxicillin_andor_amoxiclav__augmentin_","type":"STRING"},{"name":"injection_type_flagylmetronidazole","type":"STRING"},{"name":"injection_type_ciprofloxacin","type":"STRING"},{"name":"injection_type_ceftriaxone_injection","type":"STRING"},{"name":"injection_type_cefuroxime_injection","type":"STRING"},{"name":"injection_type_gentamycin_injection","type":"STRING"},{"name":"injection_type_amikacin_injection","type":"STRING"},{"name":"injection_type_water_for_injection","type":"STRING"},{"name":"injection_type_others","type":"STRING"},{"name":"other_injection_type","type":"STRING"},{"name":"consumption_days","type":"STRING"},{"name":"stock_ampiciox_andor_ampicilline","type":"STRING"},{"name":"stock_amoxicillin_andor_amoxiclav__augmentin_","type":"STRING"},{"name":"stock_tetracycline_andor_teramycin","type":"STRING"},{"name":"stock_septrin_cotrimoxazole","type":"STRING"},{"name":"stock_azithromycin","type":"STRING"},{"name":"stock_erythromycin","type":"STRING"},{"name":"stock_doxycycline","type":"STRING"},{"name":"stock_flagylmetronidazole","type":"STRING"},{"name":"stock_ciprofloxacinciprotab","type":"STRING"},{"name":"stock_thalazole","type":"STRING"},{"name":"stock_others","type":"STRING"},{"name":"other_stock","type":"STRING"},{"name":"_uuid","type":"STRING"},{"name":"_id","type":"STRING"},{"name":"_index","type":"STRING"},{"name":"start_geopoint","type":"STRING"},{"name":"_start_geopoint_latitude","type":"STRING"},{"name":"_start_geopoint_longitude","type":"STRING"},{"name":"_start_geopoint_altitude","type":"STRING"},{"name":"_start_geopoint_precision","type":"STRING"},{"name":"deviceid","type":"STRING"},{"name":"concat_user","type":"STRING"},{"name":"note_missing_username","type":"STRING"},{"name":"note_missing_phone_number","type":"STRING"},{"name":"note_incorrect_date_and_time","type":"STRING"},{"name":"user_confrim","type":"STRING"},{"name":"concat_enu","type":"STRING"},{"name":"enum_id","type":"STRING"},{"name":"note_incorrect_date_and_time_001","type":"STRING"},{"name":"wrong_login","type":"STRING"},{"name":"note1","type":"STRING"},{"name":"note2","type":"STRING"},{"name":"photo_001","type":"STRING"},{"name":"consent_sign","type":"STRING"},{"name":"note3","type":"STRING"},{"name":"gps","type":"STRING"},{"name":"_gps_altitude","type":"STRING"},{"name":"_gps_precision","type":"STRING"},{"name":"pharm_id","type":"STRING"},{"name":"note3_001","type":"STRING"},{"name":"note5","type":"STRING"},{"name":"antibiotic_meaning","type":"STRING"},{"name":"selling_reason","type":"STRING"},{"name":"selling_reason2","type":"STRING"},{"name":"no_mixed2","type":"STRING"},{"name":"disease","type":"STRING"},{"name":"injection_type","type":"STRING"},{"name":"stock","type":"STRING"},{"name":"lgac","type":"STRING"},{"name":"_submission_time","type":"STRING"},{"name":"_validation_status","type":"STRING"},{"name":"_notes","type":"STRING"},{"name":"_status","type":"STRING"},{"name":"_submitted_by","type":"STRING"},{"name":"__version__","type":"STRING"},{"name":"_tags","type":"STRING"},{"name":"meta_rootuuid","type":"STRING"},{"name":"_ingested_at","type":"TIMESTAMP","tag":"metadata"},{"name":"_run_id","type":"STRING","tag":"metadata"},{"name":"_source_system","type":"STRING","tag":"metadata"},{"name":"_source_asset","type":"STRING","tag":"metadata"},{"name":"_pipeline_version","type":"STRING","tag":"metadata"}]}],"silver":[{"schema":"silver","name":"pharmacy","source":"map/pharmacy/zamfara_pharmacy_map.csv (all submissions)","note":"","pk":["root_uuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"start_time","type":"STRING"},{"name":"end_time","type":"STRING"},{"name":"enumerator_name","type":"STRING","tag":"identifier"},{"name":"enumerator_phone_number","type":"STRING","tag":"identifier"},{"name":"pharmacy_photo_url","type":"STRING","tag":"identifier"},{"name":"consent","type":"STRING"},{"name":"pharmacist_name","type":"STRING","tag":"identifier"},{"name":"pharmacist_signature_url","type":"STRING","tag":"identifier"},{"name":"date_of_consent","type":"STRING"},{"name":"witness","type":"STRING"},{"name":"witness_name","type":"STRING","tag":"identifier"},{"name":"start_timme","type":"STRING"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"latitude","type":"STRING","tag":"identifier"},{"name":"longitude","type":"STRING","tag":"identifier"},{"name":"pharmacy_number","type":"STRING"},{"name":"pharmacy_code","type":"STRING"},{"name":"cycle","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"pharmacist_age","type":"STRING"},{"name":"pharmacist_gender","type":"STRING"},{"name":"pharmacist_religion","type":"STRING"},{"name":"pharmacist_religion_other","type":"STRING"},{"name":"education_type","type":"STRING"},{"name":"ethnicity_type","type":"STRING"},{"name":"ethnicity_type_other","type":"STRING"},{"name":"drug_shop_category","type":"STRING"},{"name":"drug_shop_category_other","type":"STRING"},{"name":"prescription_training","type":"STRING"},{"name":"training_type","type":"STRING"},{"name":"training_type_other","type":"STRING"},{"name":"experience_years","type":"STRING"},{"name":"know_antibiotics","type":"STRING"},{"name":"define_antibiotics_chest_infections","type":"STRING"},{"name":"define_antibiotics_treat_sti","type":"STRING"},{"name":"define_antibiotics_treat_malaria","type":"STRING"},{"name":"define_antibiotics_kill_germs","type":"STRING"},{"name":"define_antibiotics_others","type":"STRING"},{"name":"define_antibiotics_others_specified","type":"STRING"},{"name":"trained_antibiotics_use","type":"STRING"},{"name":"trained_antibiotics_use_institution","type":"STRING"},{"name":"trained_antibiotics_use_institution_specified","type":"STRING"},{"name":"training_year","type":"STRING"},{"name":"prescriptions_before_antibiotics","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_law","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_discourage_misuse","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_protect_life","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_no_reason","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_earn_money","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_no_reason","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_no_doctors","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_desire","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_recommend","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_drive_away_clients","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_others","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_others_specified","type":"STRING"},{"name":"people_count_ask_antibitoics","type":"STRING"},{"name":"people_count_sell_antibitoics_with_prescription","type":"STRING"},{"name":"people_count_sell_antibitoics_no_prescription","type":"STRING"},{"name":"sell_less_than_required_antibiotics","type":"STRING"},{"name":"suspected_conditions_antibiotics_diarrhea","type":"STRING"},{"name":"suspected_conditions_antibiotics_pain","type":"STRING"},{"name":"suspected_conditions_antibiotics_uti","type":"STRING"},{"name":"suspected_conditions_antibiotics_std","type":"STRING"},{"name":"suspected_conditions_antibiotics_rti","type":"STRING"},{"name":"suspected_conditions_antibiotics_boil","type":"STRING"},{"name":"suspected_conditions_antibiotics_fever","type":"STRING"},{"name":"suspected_conditions_antibiotics_headache","type":"STRING"},{"name":"suspected_conditions_antibiotics_catarrh","type":"STRING"},{"name":"suspected_conditions_antibiotics_others","type":"STRING"},{"name":"suspected_conditions_antibiotics_others_specified","type":"STRING"},{"name":"combine_antibiotics","type":"STRING"},{"name":"combine_antibiotics_count","type":"STRING"},{"name":"antibiotics_prevent_infection","type":"STRING"},{"name":"specify_antibiotics_prevent_infection","type":"STRING"},{"name":"specify_other_antibiotics_prevent_infection","type":"STRING"},{"name":"administer_antibiotic_injections","type":"STRING"},{"name":"administer_antibiotic_injections_name_amp","type":"STRING"},{"name":"administer_antibiotic_injections_name_amo","type":"STRING"},{"name":"administer_antibiotic_injections_name_flagyl","type":"STRING"},{"name":"administer_antibiotic_injections_name_cipro","type":"STRING"},{"name":"administer_antibiotic_injections_name_ceftr","type":"STRING"},{"name":"administer_antibiotic_injections_name_cefur","type":"STRING"},{"name":"administer_antibiotic_injections_name_genta","type":"STRING"},{"name":"administer_antibiotic_injections_name_ami","type":"STRING"},{"name":"administer_antibiotic_injections_name_water","type":"STRING"},{"name":"administer_antibiotic_injections_name_other","type":"STRING"},{"name":"administer_antibiotic_injections_name_other_specified","type":"STRING"},{"name":"days_antibiotics_injection","type":"STRING"},{"name":"antibiotics_in_shop_amp","type":"STRING"},{"name":"antibiotics_in_shop_amo","type":"STRING"},{"name":"antibiotics_in_shop_tetra","type":"STRING"},{"name":"antibiotics_in_shop_sept","type":"STRING"},{"name":"antibiotics_in_shop_azith","type":"STRING"},{"name":"antibiotics_in_shop_eryth","type":"STRING"},{"name":"antibiotics_in_shop_doxy","type":"STRING"},{"name":"antibiotics_in_shop_flagyl","type":"STRING"},{"name":"antibiotics_in_shop_cipro","type":"STRING"},{"name":"antibiotics_in_shop_thala","type":"STRING"},{"name":"antibiotics_in_shop_other","type":"STRING"},{"name":"antibiotics_in_shop_other_specified","type":"STRING"},{"name":"pharmacy_uuid","type":"STRING"},{"name":"submission_id","type":"STRING"},{"name":"concatenated_id","type":"STRING"},{"name":"index","type":"STRING"},{"name":"_run_id","type":"STRING","tag":"metadata"}]}],"gold":[{"schema":"gold","name":"pharmacy","source":"map/pharmacy/zamfara_pharmacy_map.csv (approved only)","note":"","pk":["root_uuid"],"fk":[],"parent":null,"parent_schema":null,"parent_pk":[],"card":null,"columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"start_time","type":"TIMESTAMP_NTZ"},{"name":"end_time","type":"TIMESTAMP_NTZ"},{"name":"consent","type":"STRING"},{"name":"date_of_consent","type":"DATE"},{"name":"witness","type":"STRING"},{"name":"start_timme","type":"STRING"},{"name":"state","type":"STRING"},{"name":"lga","type":"STRING"},{"name":"ward","type":"STRING"},{"name":"pharmacy_number","type":"STRING"},{"name":"pharmacy_code","type":"STRING"},{"name":"cycle","type":"STRING"},{"name":"settlement_type","type":"STRING"},{"name":"pharmacist_age","type":"INT"},{"name":"pharmacist_gender","type":"STRING"},{"name":"pharmacist_religion","type":"STRING"},{"name":"pharmacist_religion_other","type":"STRING"},{"name":"education_type","type":"STRING"},{"name":"ethnicity_type","type":"STRING"},{"name":"ethnicity_type_other","type":"STRING"},{"name":"drug_shop_category","type":"STRING"},{"name":"drug_shop_category_other","type":"STRING"},{"name":"prescription_training","type":"STRING"},{"name":"training_type","type":"STRING"},{"name":"training_type_other","type":"STRING"},{"name":"experience_years","type":"INT"},{"name":"know_antibiotics","type":"STRING"},{"name":"define_antibiotics_chest_infections","type":"STRING"},{"name":"define_antibiotics_treat_sti","type":"STRING"},{"name":"define_antibiotics_treat_malaria","type":"STRING"},{"name":"define_antibiotics_kill_germs","type":"STRING"},{"name":"define_antibiotics_others","type":"STRING"},{"name":"define_antibiotics_others_specified","type":"STRING"},{"name":"trained_antibiotics_use","type":"STRING"},{"name":"trained_antibiotics_use_institution","type":"STRING"},{"name":"trained_antibiotics_use_institution_specified","type":"STRING"},{"name":"training_year","type":"DATE"},{"name":"prescriptions_before_antibiotics","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_law","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_discourage_misuse","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_protect_life","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_no_reason","type":"STRING"},{"name":"prescriptions_before_antibiotics_reason_earn_money","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_no_reason","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_no_doctors","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_desire","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_recommend","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_drive_away_clients","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_others","type":"STRING"},{"name":"prescriptions_before_antibiotics_no_reason_others_specified","type":"STRING"},{"name":"people_count_ask_antibitoics","type":"INT"},{"name":"people_count_sell_antibitoics_with_prescription","type":"INT"},{"name":"people_count_sell_antibitoics_no_prescription","type":"INT"},{"name":"sell_less_than_required_antibiotics","type":"STRING"},{"name":"suspected_conditions_antibiotics_diarrhea","type":"STRING"},{"name":"suspected_conditions_antibiotics_pain","type":"STRING"},{"name":"suspected_conditions_antibiotics_uti","type":"STRING"},{"name":"suspected_conditions_antibiotics_std","type":"STRING"},{"name":"suspected_conditions_antibiotics_rti","type":"STRING"},{"name":"suspected_conditions_antibiotics_boil","type":"STRING"},{"name":"suspected_conditions_antibiotics_fever","type":"STRING"},{"name":"suspected_conditions_antibiotics_headache","type":"STRING"},{"name":"suspected_conditions_antibiotics_catarrh","type":"STRING"},{"name":"suspected_conditions_antibiotics_others","type":"STRING"},{"name":"suspected_conditions_antibiotics_others_specified","type":"STRING"},{"name":"combine_antibiotics","type":"STRING"},{"name":"combine_antibiotics_count","type":"STRING"},{"name":"antibiotics_prevent_infection","type":"STRING"},{"name":"specify_antibiotics_prevent_infection","type":"STRING"},{"name":"specify_other_antibiotics_prevent_infection","type":"STRING"},{"name":"administer_antibiotic_injections","type":"STRING"},{"name":"administer_antibiotic_injections_name_amp","type":"STRING"},{"name":"administer_antibiotic_injections_name_amo","type":"STRING"},{"name":"administer_antibiotic_injections_name_flagyl","type":"STRING"},{"name":"administer_antibiotic_injections_name_cipro","type":"STRING"},{"name":"administer_antibiotic_injections_name_ceftr","type":"STRING"},{"name":"administer_antibiotic_injections_name_cefur","type":"STRING"},{"name":"administer_antibiotic_injections_name_genta","type":"STRING"},{"name":"administer_antibiotic_injections_name_ami","type":"STRING"},{"name":"administer_antibiotic_injections_name_water","type":"STRING"},{"name":"administer_antibiotic_injections_name_other","type":"STRING"},{"name":"administer_antibiotic_injections_name_other_specified","type":"STRING"},{"name":"days_antibiotics_injection","type":"INT"},{"name":"antibiotics_in_shop_amp","type":"STRING"},{"name":"antibiotics_in_shop_amo","type":"STRING"},{"name":"antibiotics_in_shop_tetra","type":"STRING"},{"name":"antibiotics_in_shop_sept","type":"STRING"},{"name":"antibiotics_in_shop_azith","type":"STRING"},{"name":"antibiotics_in_shop_eryth","type":"STRING"},{"name":"antibiotics_in_shop_doxy","type":"STRING"},{"name":"antibiotics_in_shop_flagyl","type":"STRING"},{"name":"antibiotics_in_shop_cipro","type":"STRING"},{"name":"antibiotics_in_shop_thala","type":"STRING"},{"name":"antibiotics_in_shop_other","type":"STRING"},{"name":"antibiotics_in_shop_other_specified","type":"STRING"},{"name":"pharmacy_uuid","type":"STRING"},{"name":"submission_id","type":"BIGINT"},{"name":"concatenated_id","type":"STRING"},{"name":"index","type":"INT"},{"name":"_run_id","type":"STRING","tag":"metadata"}]},{"schema":"restricted","name":"pharmacy_identifiers","source":"moved out of gold.pharmacy","note":"one row per gold.pharmacy row; access restricted","pk":["root_uuid"],"fk":["root_uuid"],"parent":"pharmacy","parent_schema":"gold","parent_pk":["root_uuid"],"card":"one","columns":[{"name":"root_uuid","type":"STRING","tag":"key"},{"name":"enumerator_name","type":"STRING","tag":"identifier"},{"name":"enumerator_phone_number","type":"STRING","tag":"identifier"},{"name":"pharmacist_name","type":"STRING","tag":"identifier"},{"name":"witness_name","type":"STRING","tag":"identifier"},{"name":"latitude","type":"DOUBLE","tag":"identifier"},{"name":"longitude","type":"DOUBLE","tag":"identifier"},{"name":"pharmacy_photo_url","type":"STRING","tag":"identifier"},{"name":"pharmacist_signature_url","type":"STRING","tag":"identifier"},{"name":"_run_id","type":"STRING","tag":"metadata"}]}]}};
+document.title = DATA.page_title;
+$('eyebrow').innerHTML = DATA.eyebrow;
+$('title').textContent = DATA.title;
+$('pending').innerHTML = DATA.pending;
+$('footer').textContent = DATA.footer;
+render();
+</script>
+
+</body>
+</html>
