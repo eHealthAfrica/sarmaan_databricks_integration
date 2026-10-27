@@ -182,7 +182,7 @@ function entity(t) {
   const parentName = t.parent ? `${esc(t.parent_schema)}.${esc(t.parent)}` : '';
   const foot = t.card === 'many' ? `zero or many rows per ${parentName} row`
     : t.card === 'one' ? `one row per ${parentName} row`
-    : t.pk.length ? 'one row per household submission' : 'no keys · not related to other tables';
+    : t.pk.length ? 'one row per Kobo submission' : 'no keys · not related to other tables';
   return `<div class="ent${isMain(t) ? '' : ' r'}" data-id="${esc(t.schema)}.${esc(t.name)}">
     <div class="hd"><span class="nm">${esc(t.schema)}.${esc(t.name)}</span><span class="ct">${cols.length} cols</span></div>
     <div class="src">${esc(t.source || '')}${t.note ? ' · ' + esc(t.note) : ''}</div>
@@ -218,7 +218,11 @@ function render() {
   const canvas = $('canvas');
   // The levels share the page width, so the diagram fits without scrolling
   // sideways; only screens narrower than minWidth (about 900px) scroll.
-  canvas.style.gridTemplateColumns = lv.map(() => 'minmax(0, 1fr)').join(' clamp(56px, 6vw, 110px) ');
+  // A single table (no relationships) keeps a readable width instead of
+  // stretching across the page.
+  canvas.style.gridTemplateColumns = lv.length === 1
+    ? 'minmax(0, 760px)'
+    : lv.map(() => 'minmax(0, 1fr)').join(' clamp(56px, 6vw, 110px) ');
   canvas.style.minWidth = `${lv.length * 260 + (lv.length - 1) * 56}px`;
   canvas.innerHTML = `<svg class="rels" aria-hidden="true"></svg>
     ${lv.map((ts, i) => `<div class="level" style="grid-column:${i * 2 + 1}">${ts.map(entity).join('')}</div>`).join('')}
