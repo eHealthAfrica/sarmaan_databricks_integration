@@ -42,8 +42,12 @@ coverage:
 amr:
   zamfara_c1:  { asset_uid: "aks5TQaYbfgGvhCigjGAvp", export_settings_id: "" }
 
+# Mortality: read by mortality/pipeline. The saved export must use XML values
+# and headers. `state` fills the state column when the export leaves it blank
+# (the current form has no state question).
+mortality:
+  yobe_potiskum: { asset_uid: "aMaahuu5VANkY6o4QyQ8uC", export_settings_id: "esVRqDjSZ6UdHozvskTbBga", state: "Yobe" }
+
 # Not read by these pipelines yet; listed so every stream's forms live here.
 pharmacy:
-  zamfara:     { asset_uid: "" }
-mortality:
   zamfara:     { asset_uid: "" }
