@@ -22,6 +22,10 @@ Values, as in mortality/stager_auditor_mortality.py:
     household; concatenated_id as in Postgres.
 Columns and gold types come from map/mortality/gold_types.csv (Postgres order).
 
+Pregnancies take their woman's mother_code through Kobo's own link
+(_parent_index -> her _index); a typed Women ID that is blank or different is
+a warning (see _link_pregnancies).
+
 Checks: a key that is blank or repeated, a woman without her household, or a
 pregnancy without its woman BLOCKS the run (nothing is loaded). Mapped columns
 missing from the export and values that do not fit their gold type are
@@ -267,6 +271,8 @@ def _silver(export, roots, types, run: RunInfo, default_state: str, issues: list
         out.insert(0, arch.ROOT_UUID, roots[s])
         frames[s] = out
 
+    _link_pregnancies(frames, run, issues)
+
     # Location is only on the household sheet
     hh = frames["household"].drop_duplicates(arch.ROOT_UUID).set_index(arch.ROOT_UUID)
     for s in ("female", "pregnancy"):
@@ -282,6 +288,36 @@ def _silver(export, roots, types, run: RunInfo, default_state: str, issues: list
         frames[s] = frames[s][cols].copy()
         frames[s][arch.RUN_ID] = run.run_id
     return frames
+
+
+def _link_pregnancies(frames: dict[str, pd.DataFrame], run: RunInfo, issues: list) -> None:
+    """Give each pregnancy its woman's mother_code.
+
+    The pregnancy repeat sits inside the female repeat, so Kobo records which
+    woman each pregnancy belongs to: its _parent_index is her row's _index (the
+    Postgres stager links them the same way, in concatenated_id). The "Women
+    ID" typed into the pregnancy (motherid) is sometimes blank or different
+    from her mother_id, so the structural link is used, and every row where
+    the two disagree is reported as a warning for the data team to correct in
+    Kobo. A pregnancy whose parent row does not exist keeps its motherid and is
+    caught by the parent check (blocking)."""
+    women, preg = frames["female"], frames["pregnancy"]
+    code_of = {i: c for i, c in zip(women["index"], women["mother_code"]) if i and c}
+    parent = preg["parent_index"].map(code_of)
+    typed = preg["mother_code"]
+    differs = parent.notna() & (typed.isna() | (typed != parent))
+    if differs.any():
+        blank = int((differs & typed.isna()).sum())
+        examples = sorted({f"{r} | {t} -> {p}" for r, t, p in
+                           zip(preg.loc[differs, arch.ROOT_UUID], typed[differs], parent[differs])})[:5]
+        issues.append(_issue(run, arch.TABLES["pregnancy"], "silver", "mother_code_from_parent", False,
+                             None, "mother_code", None,
+                             f"{int(differs.sum())} pregnancy row(s) had a Women ID (motherid) that was blank "
+                             f"({blank}) or different from their woman's mother_id ({int(differs.sum()) - blank}); "
+                             f"the woman's code was used. Correct motherid in Kobo. Examples: {examples}"))
+        logger.warning(f"  [pregnancy] {int(differs.sum())} row(s): motherid blank or different from the "
+                       f"woman's mother_id — used the woman's code")
+    preg["mother_code"] = parent.where(parent.notna(), typed)
 
 
 def _typed(value, sql_type: str):
@@ -396,10 +432,13 @@ def _check_parents(tables: list[Table], run, issues: list) -> None:
             continue
         parent = by_name[(t.layer, t.parent)]
         parent_keys = set(map(tuple, parent.df[t.parent_pk].itertuples(index=False, name=None)))
+        orphans: dict[tuple, int] = {}
         for key in t.df[t.fk].itertuples(index=False, name=None):
             if tuple(key) not in parent_keys:
-                issues.append(_issue(run, t.name, t.layer, "no_parent", True, _key_text(key), ", ".join(t.fk),
-                                     None, f"No row in {t.layer}.{t.parent} with this key"))
+                orphans[tuple(key)] = orphans.get(tuple(key), 0) + 1
+        for key, n in sorted(orphans.items(), key=lambda kv: str(kv[0])):
+            issues.append(_issue(run, t.name, t.layer, "no_parent", True, _key_text(key), ", ".join(t.fk),
+                                 None, f"{n} row(s) with no row in {t.layer}.{t.parent} for this key"))
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────

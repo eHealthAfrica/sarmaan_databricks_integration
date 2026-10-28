@@ -40,7 +40,7 @@ def export_columns() -> dict[str, list[str]]:
     return sheets
 
 
-def fake_export(preg_mother="B-1_01", second_woman_code="B-2_01") -> dict[str, pd.DataFrame]:
+def fake_export(preg_mother="B-1_01", second_woman_code="B-2_01", preg_parent="1") -> dict[str, pd.DataFrame]:
     """Two households (A approved, B not), one woman each, one pregnancy each."""
     cols = export_columns()
 
@@ -71,7 +71,7 @@ def fake_export(preg_mother="B-1_01", second_woman_code="B-2_01") -> dict[str, p
          "household_id": "B-2", "mother_id": second_woman_code, "female_position": "1"},
     ])
     pr = frame("pregnancy", [
-        {"_submission__uuid": "ua", "_submission_meta/rootUuid": "uuid:ra", "_index": "1", "_parent_index": "1",
+        {"_submission__uuid": "ua", "_submission_meta/rootUuid": "uuid:ra", "_index": "1", "_parent_index": preg_parent,
          "_submission__id": "101", "householdid": "B-1", "motherid": preg_mother, "preg_id": "B-1_01_01",
          "c_id": "1.0", "q114_pregnancy_outcome": "alive", "q113_pregnancy_type": "2.0",
          "q116_child_name": "Child A", "q120iii_pregnancy_end_day": "99"},
@@ -161,9 +161,27 @@ class BuildTests(unittest.TestCase):
         self.assertTrue(g["pregnancy_report"].isna().all())
 
 
+class WomenIdTests(unittest.TestCase):
+    """The typed Women ID (motherid) is blank or wrong in some real submissions:
+    the pregnancy takes its woman's code through Kobo's own parent link."""
+
+    def _check(self, typed):
+        built = build(fake_export(preg_mother=typed), RUN, "Yobe")
+        self.assertTrue(built.blocking.empty, built.blocking.to_string())
+        p = tables(built)["gold.mortality_pregnancy"].df.iloc[0]
+        self.assertEqual(p["mother_code"], "B-1_01")
+        self.assertIn("mother_code_from_parent", set(built.issues["check_type"]))
+
+    def test_blank_women_id_takes_the_womans_code(self):
+        self._check("")
+
+    def test_wrong_women_id_takes_the_womans_code(self):
+        self._check("B-11_14_8_6_053_01")
+
+
 class BlockingTests(unittest.TestCase):
     def test_pregnancy_without_its_woman_blocks(self):
-        built = build(fake_export(preg_mother="B-1_09"), RUN, "Yobe")
+        built = build(fake_export(preg_parent="9", preg_mother="B-1_09"), RUN, "Yobe")  # no parent row, no matching Women ID
         self.assertIn("no_parent", set(built.blocking["check_type"]))
 
     def test_repeated_woman_code_blocks(self):
@@ -202,7 +220,7 @@ class RunTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValidationFailed):
                 run(self._settings(), landing_dir=tmp,
-                    export_file=str(self._export_file(tmp, fake_export(preg_mother="B-1_09"))))
+                    export_file=str(self._export_file(tmp, fake_export(preg_parent="9", preg_mother="B-1_09"))))
 
 
 if __name__ == "__main__":

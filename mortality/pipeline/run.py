@@ -26,6 +26,7 @@ from .settings import MORTALITY_DIR, Settings
 from .transform import RunInfo, build
 
 logger = logging.getLogger("mortality")
+LOG_PER_CHECK = 20
 
 
 class ValidationFailed(RuntimeError):
@@ -91,10 +92,16 @@ def run(settings: Settings, spark=None, landing_dir: str | None = None,
             logger.info(f"  {name:<45} {rows:>7} rows")
         if not built.issues.empty:
             built.issues.to_csv(out_dir / "issues.csv", index=False)
-            for _, i in built.issues.iterrows():
-                level = logging.ERROR if i["blocking"] == "true" else logging.WARNING
-                logger.log(level, f"  [{i['layer']}.{i['table_name']}] {i['check_type']}: {i['issue']}"
-                                  + (f" (key {i['row_key']})" if i["row_key"] else ""))
+            # At most LOG_PER_CHECK lines per table and check; the rest are in issues.csv
+            for (layer, table, check), group in built.issues.groupby(
+                    ["layer", "table_name", "check_type"], sort=False):
+                for _, i in group.head(LOG_PER_CHECK).iterrows():
+                    level = logging.ERROR if i["blocking"] == "true" else logging.WARNING
+                    logger.log(level, f"  [{layer}.{table}] {check}: {i['issue']}"
+                                      + (f" (key {i['row_key']})" if i["row_key"] else ""))
+                if len(group) > LOG_PER_CHECK:
+                    logger.warning(f"  [{layer}.{table}] {check}: … and {len(group) - LOG_PER_CHECK} more "
+                                   f"(all {len(group)} in issues.csv)")
 
         # 4. Blocking issues stop the run
         if not built.blocking.empty:
