@@ -105,6 +105,30 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(s.loc[s[arch.ROOT_UUID] == "uuid:ub", "lga"].iloc[0], "Bakura")
 
 
+class ApprovalTests(unittest.TestCase):
+    """Pharmacy marks only rejected submissions: with blank_status_is_approved,
+    a blank status goes to gold; 'not approved' and 'on hold' never do."""
+
+    def _gold_roots(self, statuses, blank_is_approved):
+        export = fake_export()
+        df = next(iter(export.values()))
+        df = pd.concat([df] * 2, ignore_index=True)          # four pharmacies
+        df["_uuid"] = ["u1", "u2", "u3", "u4"]
+        df["meta/rootUuid"] = ""
+        df["_validation_status"] = statuses
+        built = build({"sheet": df}, RUN, "Year 1", blank_is_approved)
+        self.assertTrue(built.blocking.empty, built.blocking.to_string())
+        return tables(built)["gold.pharmacy"].df[arch.ROOT_UUID].tolist()
+
+    STATUSES = ["", APPROVED, "validation_status_not_approved", "validation_status_on_hold"]
+
+    def test_blank_counts_as_approved_when_configured(self):
+        self.assertEqual(self._gold_roots(self.STATUSES, True), ["uuid:u1", "uuid:u2"])
+
+    def test_blank_stays_out_by_default(self):
+        self.assertEqual(self._gold_roots(self.STATUSES, False), ["uuid:u2"])
+
+
 class BlockingTests(unittest.TestCase):
     def test_repeated_root_uuid_blocks(self):
         built = build(fake_export(second_root="uuid:ra"), RUN, "Year 1")

@@ -86,7 +86,7 @@ def run(settings: Settings, spark=None, landing_dir: str | None = None,
         sheets = read_export(landed.read_bytes())
 
         # 3. Build and check
-        built = build(sheets, info, settings.cycle)
+        built = build(sheets, info, settings.cycle, settings.blank_status_is_approved)
         summary = {f"{t.schema}.{t.name}": len(t.df) for t in built.tables}
         for name, rows in summary.items():
             logger.info(f"  {name:<45} {rows:>7} rows")

@@ -54,6 +54,7 @@ class Settings:
     kobo_export_settings_id: str
     kobo_token: str
     cycle: str = ""
+    blank_status_is_approved: bool = False
     export_wait_minutes: float = 60
     pipeline_version: str = "unknown"
 
@@ -76,6 +77,7 @@ class Settings:
             kobo_export_settings_id=entry.get("export_settings_id") or "",
             kobo_token=_kobo_token(dbutils),
             cycle=entry.get("cycle", ""),
+            blank_status_is_approved=bool(entry.get("blank_status_is_approved", False)),
             export_wait_minutes=export_wait_minutes,
             pipeline_version=pipeline_version or "unknown",
         )
