@@ -176,7 +176,7 @@ Table gold.mortality_pregnancy {
   child_day_greater_5_years string
   year_pregnancy_ended int
   month_pregnancy_ended string
-  day_pregnancy_ended int
+  day_pregnancy_ended string
   pregnancy_report string [note: 'no question in this form']
   miscarriage_pregnancy_report string
   pregnancy_report_length_weeks string [note: 'no question in this form']

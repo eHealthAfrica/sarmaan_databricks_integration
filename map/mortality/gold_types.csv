@@ -168,7 +168,7 @@ pregnancy,child_month_greater_5_years,STRING,q119aii_dob_child_greaterThan5,sele
 pregnancy,child_day_greater_5_years,STRING,q119ai_dob_child_greaterThan5,select_one,q119ai_dob_child_greaterThan5,none,,review
 pregnancy,year_pregnancy_ended,INT,q120i_pregnancy_end_year,select_one,q120i_pregnancy_end_year,int_cast,,keep
 pregnancy,month_pregnancy_ended,STRING,q120ii_pregnancy_end_month,select_one,q120ii_pregnancy_end_month,label_recode:month_name,,keep
-pregnancy,day_pregnancy_ended,INT,q120iii_pregnancy_end_day,select_one,q120iii_pregnancy_end_day,int_cast_dk99,,keep
+pregnancy,day_pregnancy_ended,STRING,q120iii_pregnancy_end_day,select_one,q120iii_pregnancy_end_day,int_cast_dk99,,keep
 pregnancy,pregnancy_report,STRING,,derived by the pipeline (no Kobo column),,none,,review
 pregnancy,miscarriage_pregnancy_report,STRING,q121_pregnancy_duration_type,select_one,q121_pregnancy_duration_type,simple_capitalize,,keep
 pregnancy,pregnancy_report_length_weeks,STRING,,derived by the pipeline (no Kobo column),,none,,review
