@@ -1,6 +1,6 @@
 table,db_name,type,kobo_field,kobo_type,export_column
-pharmacy,start_time,TIMESTAMP_NTZ,starttime,start,starttime
-pharmacy,end_time,TIMESTAMP_NTZ,endtime,end,endtime
+pharmacy,start_time,DATE,starttime,start,starttime
+pharmacy,end_time,DATE,endtime,end,endtime
 pharmacy,enumerator_name,STRING,username,username,username
 pharmacy,enumerator_phone_number,STRING,phonenumber,phonenumber,phonenumber
 pharmacy,pharmacy_photo_url,STRING,photo_001_URL,media link,photo_001_URL

@@ -4,8 +4,8 @@
 
 Table gold.pharmacy {
   root_uuid string [pk]
-  start_time timestamp_ntz
-  end_time timestamp_ntz
+  start_time date
+  end_time date
   consent string
   date_of_consent date
   witness string

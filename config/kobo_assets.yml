@@ -48,6 +48,7 @@ amr:
 mortality:
   yobe_potiskum: { asset_uid: "aMaahuu5VANkY6o4QyQ8uC", export_settings_id: "esVRqDjSZ6UdHozvskTbBga", state: "Yobe" }
 
-# Not read by these pipelines yet; listed so every stream's forms live here.
+# Pharmacy: read by pharmacy/pipeline. The saved export must use XML values
+# and headers. `cycle` fills the cycle column: the form has no cycle question.
 pharmacy:
-  zamfara:     { asset_uid: "" }
+  zamfara_c1:  { asset_uid: "aLcuF4wGExja3LrSZxEEnB", export_settings_id: "esoXu2auPC68oteb2G3UuGA", cycle: "Year 1" }
