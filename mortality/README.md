@@ -25,6 +25,8 @@ The tables follow the Mortality ERD (`docs/erd/`, live at https://ehealthafrica.
 - `state`: when the export leaves it blank (the current form has no state question), it is the round's `state` from `config/kobo_assets.yml` instead of a constant in the code.
 - `start_time`, `end_time`: the time Kobo recorded, stored as a timestamp. The Postgres stager writes the same time with a `+00` suffix although it is local time, not UTC.
 
+**Pregnancy → woman link.** A pregnancy takes its woman's `mother_code` through Kobo's own link (the pregnancy row's `_parent_index` is her row's `_index`, the same link the Postgres `concatenated_id` uses), not from the "Women ID" typed into the pregnancy (`motherid`), which is blank or different in some submissions. Every such row is listed in `issues.csv` (`mother_code_from_parent`) so it can be corrected in Kobo.
+
 Column list and gold types: `map/mortality/gold_types.csv` (Postgres order).
 
 ## Running in Databricks

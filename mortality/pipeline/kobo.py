@@ -57,7 +57,7 @@ class Kobo:
             return dict(DEFAULT_EXPORT_SETTINGS)
         saved = self._request(
             "GET", f"{self.asset_url}/export-settings/{self.s.kobo_export_settings_id}/").json()
-        logger.info(f"Using saved export '{saved.get('name', self.s.kobo_export_settings_id)}'")
+        logger.info(f"Using saved export '{saved.get('name') or self.s.kobo_export_settings_id}'")
         return saved.get("export_settings") or {}
 
     def _matching(self, settings: dict) -> list[dict]:
