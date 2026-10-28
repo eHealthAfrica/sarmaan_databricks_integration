@@ -23,6 +23,8 @@ The form has no repeats: one row per pharmacy or drug shop, one table per layer.
 
 **Key:** `root_uuid`, Kobo's `meta/rootUuid`, which stays the same when a submission is edited.
 
+**Approval.** The Pharmacy data team only marks the submissions they reject, so for `zamfara_c1` a **blank** Kobo validation status counts as approved (`blank_status_is_approved: true` in `config/kobo_assets.yml`). "Not approved" and "on hold" always stay out of gold. Every run logs the count of each status. (Coverage, AMR and Mortality count only an explicit "approved".)
+
 **Values match Postgres.** Each column is filled the way `pharmacy_stager_auditor zamfara.py` fills it: yes/no answers as `Yes`/`No`, settlement type and gender capitalised, multiple-choice option columns `0`/`1` → `No`/`Yes`, numeric LGA codes from older form versions → LGA name (`map/pharmacy/zamfara_pharmacy_lga_lookup.csv`), and `start_time`, `end_time`, `date_of_consent`, `training_year` stored as dates. `cycle` has no question in the form: it is the round's `cycle` from `config/kobo_assets.yml` (`Year 1`) instead of a constant in the code.
 
 Column list and gold types: `map/pharmacy/gold_types.csv` (Postgres order).

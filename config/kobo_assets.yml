@@ -50,5 +50,8 @@ mortality:
 
 # Pharmacy: read by pharmacy/pipeline. The saved export must use XML values
 # and headers. `cycle` fills the cycle column: the form has no cycle question.
+# blank_status_is_approved: the Pharmacy data team only marks the submissions
+# they reject ("not approved"), so a blank validation status counts as
+# approved for gold. "Not approved" and "on hold" always stay out.
 pharmacy:
-  zamfara_c1:  { asset_uid: "aLcuF4wGExja3LrSZxEEnB", export_settings_id: "esoXu2auPC68oteb2G3UuGA", cycle: "Year 1" }
+  zamfara_c1:  { asset_uid: "aLcuF4wGExja3LrSZxEEnB", export_settings_id: "esoXu2auPC68oteb2G3UuGA", cycle: "Year 1", blank_status_is_approved: true }

@@ -9,7 +9,9 @@ layer (the rules are in pharmacy/architecture.py; see the Pharmacy ERD):
               Appended on every run, never updated.
   silver      every submission, the Postgres column names and values, all
               STRING, keyed on root_uuid.
-  gold        approved submissions only, typed, no identifier columns.
+  gold        approved submissions only, typed, no identifier columns. For a
+              round with blank_status_is_approved (config), a submission
+              with a blank status also counts as approved.
   restricted  the identifier columns of the gold rows, same key as gold.
 
 Values, as in "pharmacy/pharmacy_stager_auditor zamfara.py" (keep the two in
@@ -168,6 +170,15 @@ def pick_sheet(sheets: dict[str, pd.DataFrame]) -> pd.DataFrame:
     name, df = found[0]
     logger.info(f"  pharmacy: sheet '{name}', {len(df)} rows")
     return _text(df)
+
+
+def approved_roots(roots, statuses, blank_status_is_approved: bool) -> set:
+    """Submissions that go to gold: Kobo status 'approved', and, when the
+    round's config sets blank_status_is_approved, a blank status too (the
+    Pharmacy data team only marks the submissions they reject; 'not approved'
+    and 'on hold' always stay out)."""
+    return {r for r, st in zip(roots, statuses)
+            if r and (st == APPROVED or (blank_status_is_approved and _blank(st)))}
 
 
 # ── Layers ────────────────────────────────────────────────────────────────────
@@ -330,14 +341,18 @@ def _check_keys(t: Table, run, issues: list) -> None:
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
-def build(sheets: dict[str, pd.DataFrame], run: RunInfo, cycle: str = "") -> Built:
+def build(sheets: dict[str, pd.DataFrame], run: RunInfo, cycle: str = "",
+          blank_status_is_approved: bool = False) -> Built:
     src = pick_sheet(sheets)
     types = gold_types()
     roots = _roots(src)
     if STATUS not in src.columns:
         raise ValueError(f"Pharmacy sheet has no '{STATUS}' column: cannot tell which submissions are approved")
-    approved = {r for r, st in zip(roots, src[STATUS]) if r and st == APPROVED}
-    logger.info(f"  {len(approved)} of {len(src)} submission(s) approved")
+    approved = approved_roots(roots, src[STATUS], blank_status_is_approved)
+    counts = src[STATUS].map(lambda v: "(blank)" if _blank(v) else v).value_counts()
+    logger.info(f"  Validation status: {', '.join(f'{k} {n}' for k, n in counts.items())}")
+    logger.info(f"  {len(approved)} of {len(src)} submission(s) go to gold"
+                + (" (blank status counts as approved for this round)" if blank_status_is_approved else ""))
 
     issues: list[dict] = []
     silver = _silver(src, roots, types, run, cycle, issues)
